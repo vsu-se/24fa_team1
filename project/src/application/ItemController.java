@@ -72,6 +72,15 @@ public class ItemController {
                     return;
                 }
 
+                if (endDateTime.isBefore(startDate)) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Warning");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The end date and time cannot be before the current date and time.");
+                    alert.showAndWait();
+                    return;
+                }
+
                 Double buyItNowPrice = null;
                 if (!buyItNowPriceText.isEmpty()) {
                     try {
