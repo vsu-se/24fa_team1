@@ -23,6 +23,7 @@ public class ItemController {
             public void handle(ActionEvent event) {
                 String title = view.getTitleInput().getText();
                 String weight = view.getWeightInput().getText();
+                String weightUnit = view.getWeightUnitComboBox().getValue();
                 String description = view.getDescriptionInput().getText();
                 Category category = view.getCategoryComboBox().getValue();
                 String condition = view.getConditionComboBox().getValue();
@@ -30,7 +31,7 @@ public class ItemController {
                 String tag2 = view.getTag2Input().getText();
                 String tag3 = view.getTag3Input().getText();
 
-                if (title.isEmpty() || weight.isEmpty() || description.isEmpty() || category == null || condition == null) {
+                if (title.isEmpty() || weight.isEmpty() || weightUnit == null || description.isEmpty() || category == null || condition == null) {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Warning");
                     alert.setHeaderText(null);
@@ -39,7 +40,18 @@ public class ItemController {
                     return;
                 }
 
-                Item newItem = new Item(title, weight, description, category, condition, tag1, tag2, tag3);
+                try {
+                    Double.parseDouble(weight);
+                } catch (NumberFormatException e) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Warning");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please enter a valid number for the weight.");
+                    alert.showAndWait();
+                    return;
+                }
+
+                Item newItem = new Item(title, weight + " " + weightUnit, description, category, condition, tag1, tag2, tag3);
                 // Logic to handle the created item (e.g., add to a list, database, etc.)
 
                 // Close the "Create Item" tab

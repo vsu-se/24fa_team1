@@ -32,7 +32,7 @@ public class Main extends Application {
             view.getTabPane().getSelectionModel().select(createItemTab);
         });
 
-        Scene scene = new Scene(view.getTabPane(), 400, 300);
+        Scene scene = new Scene(view.getTabPane(), 600, 400); // Increased window size
 
         primaryStage.setTitle("JavaFX TabPane Example");
         primaryStage.setScene(scene);

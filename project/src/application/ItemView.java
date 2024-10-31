@@ -1,12 +1,14 @@
 package application;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class ItemView {
     private VBox layout;
     private TextField titleInput;
     private TextField weightInput;
+    private ComboBox<String> weightUnitComboBox;
     private TextArea descriptionInput;
     private ComboBox<Category> categoryComboBox;
     private ComboBox<String> conditionComboBox;
@@ -23,6 +25,10 @@ public class ItemView {
 
         weightInput = new TextField();
         weightInput.setPromptText("Enter item weight");
+
+        weightUnitComboBox = new ComboBox<>();
+        weightUnitComboBox.getItems().addAll("oz", "g", "lbs", "kg");
+        weightUnitComboBox.setPromptText("Select unit");
 
         descriptionInput = new TextArea();
         descriptionInput.setPromptText("Enter item description");
@@ -48,7 +54,7 @@ public class ItemView {
 
         createItemButton = new Button("Create Item");
 
-        layout.getChildren().addAll(titleInput, weightInput, descriptionInput, categoryComboBox, conditionComboBox, tag1Input, tag2Input, tag3Input, createItemButton);
+        layout.getChildren().addAll(titleInput, new HBox(10, weightInput, weightUnitComboBox), descriptionInput, categoryComboBox, conditionComboBox, tag1Input, tag2Input, tag3Input, createItemButton);
     }
 
     public VBox getLayout() {
@@ -61,6 +67,10 @@ public class ItemView {
 
     public TextField getWeightInput() {
         return weightInput;
+    }
+
+    public ComboBox<String> getWeightUnitComboBox() {
+        return weightUnitComboBox;
     }
 
     public TextArea getDescriptionInput() {
