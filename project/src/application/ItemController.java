@@ -6,6 +6,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 public class ItemController {
     private ItemView view;
     private ObservableList<Category> categories;
@@ -30,8 +35,11 @@ public class ItemController {
                 String tag1 = view.getTag1Input().getText();
                 String tag2 = view.getTag2Input().getText();
                 String tag3 = view.getTag3Input().getText();
+                LocalDate endDate = view.getEndDatePicker().getValue();
+                String endTime = view.getEndTimeInput().getText();
+                String buyItNowPriceText = view.getBuyItNowPriceInput().getText();
 
-                if (title.isEmpty() || weight.isEmpty() || weightUnit == null || description.isEmpty() || category == null || condition == null) {
+                if (title.isEmpty() || weight.isEmpty() || weightUnit == null || description.isEmpty() || category == null || condition == null || endDate == null || endTime.isEmpty()) {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Warning");
                     alert.setHeaderText(null);
@@ -51,7 +59,34 @@ public class ItemController {
                     return;
                 }
 
-                Item newItem = new Item(title, weight + " " + weightUnit, description, category, condition, tag1, tag2, tag3);
+                LocalDateTime startDate = LocalDateTime.now();
+                LocalDateTime endDateTime;
+                try {
+                    endDateTime = LocalDateTime.of(endDate, LocalTime.parse(endTime, DateTimeFormatter.ofPattern("HH:mm")));
+                } catch (Exception e) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Warning");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please enter a valid end time in the format HH:mm.");
+                    alert.showAndWait();
+                    return;
+                }
+
+                Double buyItNowPrice = null;
+                if (!buyItNowPriceText.isEmpty()) {
+                    try {
+                        buyItNowPrice = Double.parseDouble(buyItNowPriceText);
+                    } catch (NumberFormatException e) {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Warning");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Please enter a valid number for the Buy it now price.");
+                        alert.showAndWait();
+                        return;
+                    }
+                }
+
+                Item newItem = new Item(title, weight + " " + weightUnit, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice);
                 // Logic to handle the created item (e.g., add to a list, database, etc.)
 
                 // Close the "Create Item" tab

@@ -1,4 +1,5 @@
 package application;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -32,7 +33,7 @@ public class Main extends Application {
             view.getTabPane().getSelectionModel().select(createItemTab);
         });
 
-        Scene scene = new Scene(view.getTabPane(), 600, 400); // Increased window size
+        Scene scene = new Scene(view.getTabPane(), 800, 600); // Significantly increased window size
 
         primaryStage.setTitle("JavaFX TabPane Example");
         primaryStage.setScene(scene);

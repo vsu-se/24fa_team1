@@ -4,6 +4,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class ItemView {
     private VBox layout;
     private TextField titleInput;
@@ -15,6 +18,10 @@ public class ItemView {
     private TextField tag1Input;
     private TextField tag2Input;
     private TextField tag3Input;
+    private DatePicker endDatePicker;
+    private TextField endTimeInput;
+    private TextField buyItNowPriceInput;
+    private Label startDateLabel;
     private Button createItemButton;
 
     public ItemView(ObservableList<Category> categories) {
@@ -52,9 +59,20 @@ public class ItemView {
         tag3Input.setPromptText("Enter tag 3 (optional)");
         tag3Input.setMaxWidth(2 * 400 / 3);
 
+        startDateLabel = new Label("Start Date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+
+        endDatePicker = new DatePicker();
+        endDatePicker.setPromptText("Select end date");
+
+        endTimeInput = new TextField();
+        endTimeInput.setPromptText("Enter end time (HH:mm)");
+
+        buyItNowPriceInput = new TextField();
+        buyItNowPriceInput.setPromptText("Enter Buy it now price (USD)");
+
         createItemButton = new Button("Create Item");
 
-        layout.getChildren().addAll(titleInput, new HBox(10, weightInput, weightUnitComboBox), descriptionInput, categoryComboBox, conditionComboBox, tag1Input, tag2Input, tag3Input, createItemButton);
+        layout.getChildren().addAll(titleInput, new HBox(10, weightInput, weightUnitComboBox), descriptionInput, categoryComboBox, conditionComboBox, tag1Input, tag2Input, tag3Input, startDateLabel, new HBox(10, endDatePicker, endTimeInput), buyItNowPriceInput, createItemButton);
     }
 
     public VBox getLayout() {
@@ -95,6 +113,22 @@ public class ItemView {
 
     public TextField getTag3Input() {
         return tag3Input;
+    }
+
+    public DatePicker getEndDatePicker() {
+        return endDatePicker;
+    }
+
+    public TextField getEndTimeInput() {
+        return endTimeInput;
+    }
+
+    public TextField getBuyItNowPriceInput() {
+        return buyItNowPriceInput;
+    }
+
+    public Label getStartDateLabel() {
+        return startDateLabel;
     }
 
     public Button getCreateItemButton() {

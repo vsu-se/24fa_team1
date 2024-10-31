@@ -1,5 +1,7 @@
 package application;
 
+import java.time.LocalDateTime;
+
 public class Item {
     private String title;
     private String weight;
@@ -9,8 +11,11 @@ public class Item {
     private String tag1;
     private String tag2;
     private String tag3;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private Double buyItNowPrice;
 
-    public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3) {
+    public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice) {
         this.title = title;
         this.weight = weight;
         this.description = description;
@@ -19,6 +24,9 @@ public class Item {
         this.tag1 = tag1;
         this.tag2 = tag2;
         this.tag3 = tag3;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.buyItNowPrice = buyItNowPrice;
     }
 
     // Getters and setters for all fields
@@ -84,5 +92,29 @@ public class Item {
 
     public void setTag3(String tag3) {
         this.tag3 = tag3;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public Double getBuyItNowPrice() {
+        return buyItNowPrice;
+    }
+
+    public void setBuyItNowPrice(Double buyItNowPrice) {
+        this.buyItNowPrice = buyItNowPrice;
     }
 }
