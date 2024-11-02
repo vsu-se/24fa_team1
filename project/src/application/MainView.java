@@ -1,5 +1,4 @@
 package application;
-
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -17,6 +16,7 @@ public class MainView {
     private Button setCommissionButton;
     private Label buyerPremiumLabel;
     private Label sellerCommissionLabel;
+    private Button listItemButton;
 
     public MainView(ObservableList<Category> categories) {
         tabPane = new TabPane();
@@ -54,7 +54,9 @@ public class MainView {
         buyerPremiumLabel = new Label("Buyer's Premium: Not set");
         sellerCommissionLabel = new Label("Seller's Commission: Not set");
 
-        VBox userInterfaceContent = new VBox(10, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel);
+        listItemButton = new Button("List Item for Sale");
+
+        VBox userInterfaceContent = new VBox(10, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton);
         Tab userInterfaceTab = new Tab("User Interface", userInterfaceContent);
         userInterfaceTab.setClosable(false);
 
@@ -107,5 +109,9 @@ public class MainView {
 
     public Label getSellerCommissionLabel() {
         return sellerCommissionLabel;
+    }
+
+    public Button getListItemButton() {
+        return listItemButton;
     }
 }
