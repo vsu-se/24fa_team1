@@ -1,4 +1,4 @@
-package project.src.application;
+package application;
 
 public class Auction {
     private String itemName;
