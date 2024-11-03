@@ -1,27 +1,34 @@
 package application;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.HBox;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 
 public class ItemController {
     private ItemView view;
     private ObservableList<Category> categories;
     private TabPane tabPane;
     private Tab createItemTab;
+    private ObservableList<Item> items;
+    private MainController mainController;
 
-    public ItemController(ItemView view, ObservableList<Category> categories, TabPane tabPane, Tab createItemTab) {
+    public ItemController(ItemView view, ObservableList<Category> categories, TabPane tabPane, Tab createItemTab, ObservableList<Item> items, MainController mainController) {
         this.view = view;
         this.categories = categories;
         this.tabPane = tabPane;
         this.createItemTab = createItemTab;
+        this.items = items;
+        this.mainController = mainController;
 
         view.getCreateItemButton().setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -96,10 +103,13 @@ public class ItemController {
                 }
 
                 Item newItem = new Item(title, weight + " " + weightUnit, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice);
-                // Logic to handle the created item (e.g., add to a list, database, etc.)
+                items.add(newItem);
 
                 // Close the "Create Item" tab
                 tabPane.getTabs().remove(createItemTab);
+
+                // Update the items display in the MainController
+                mainController.updateItemsDisplay();
             }
         });
     }

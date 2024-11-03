@@ -14,6 +14,7 @@ public class Item {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Double buyItNowPrice;
+    private Double currentBid;
 
     public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice) {
         this.title = title;
@@ -27,6 +28,7 @@ public class Item {
         this.startDate = startDate;
         this.endDate = endDate;
         this.buyItNowPrice = buyItNowPrice;
+        this.currentBid = 0.0; // Initialize current bid to 0.0
     }
 
     // Getters and setters for all fields
@@ -116,5 +118,17 @@ public class Item {
 
     public void setBuyItNowPrice(Double buyItNowPrice) {
         this.buyItNowPrice = buyItNowPrice;
+    }
+
+    public Double getCurrentBid() {
+        return currentBid;
+    }
+
+    public void setCurrentBid(Double currentBid) {
+        this.currentBid = currentBid;
+    }
+
+    public boolean isActive() {
+        return LocalDateTime.now().isBefore(endDate);
     }
 }

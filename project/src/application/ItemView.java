@@ -1,11 +1,8 @@
 package application;
+
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class ItemView {
     private VBox layout;
@@ -19,10 +16,11 @@ public class ItemView {
     private TextField tag2Input;
     private TextField tag3Input;
     private DatePicker endDatePicker;
-    private TextField endTimeInput;
+    private TextField endTimeInput; 
     private TextField buyItNowPriceInput;
-    private Label startDateLabel;
     private Button createItemButton;
+    private VBox userInterfaceItemsBox; 
+    private VBox myProfileItemsBox; 
 
     public ItemView(ObservableList<Category> categories) {
         layout = new VBox(10);
@@ -34,8 +32,8 @@ public class ItemView {
         weightInput.setPromptText("Enter item weight");
 
         weightUnitComboBox = new ComboBox<>();
-        weightUnitComboBox.getItems().addAll("oz", "g", "lbs", "kg");
-        weightUnitComboBox.setPromptText("Select unit");
+        weightUnitComboBox.getItems().addAll("kg", "lb");
+        weightUnitComboBox.setPromptText("Select weight unit");
 
         descriptionInput = new TextArea();
         descriptionInput.setPromptText("Enter item description");
@@ -59,20 +57,21 @@ public class ItemView {
         tag3Input.setPromptText("Enter tag 3 (optional)");
         tag3Input.setMaxWidth(2 * 400 / 3);
 
-        startDateLabel = new Label("Start Date: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-
         endDatePicker = new DatePicker();
         endDatePicker.setPromptText("Select end date");
 
-        endTimeInput = new TextField();
+        endTimeInput = new TextField(); 
         endTimeInput.setPromptText("Enter end time (HH:mm)");
 
         buyItNowPriceInput = new TextField();
-        buyItNowPriceInput.setPromptText("Enter Buy it now price (USD)");
+        buyItNowPriceInput.setPromptText("Enter buy-it-now price (optional)");
 
         createItemButton = new Button("Create Item");
 
-        layout.getChildren().addAll(titleInput, new HBox(10, weightInput, weightUnitComboBox), descriptionInput, categoryComboBox, conditionComboBox, tag1Input, tag2Input, tag3Input, startDateLabel, new HBox(10, endDatePicker, endTimeInput), buyItNowPriceInput, createItemButton);
+        userInterfaceItemsBox = new VBox(10);
+        myProfileItemsBox = new VBox(10);
+
+        layout.getChildren().addAll(titleInput, weightInput, weightUnitComboBox, descriptionInput, categoryComboBox, conditionComboBox, tag1Input, tag2Input, tag3Input, endDatePicker, endTimeInput, buyItNowPriceInput, createItemButton);
     }
 
     public VBox getLayout() {
@@ -127,11 +126,15 @@ public class ItemView {
         return buyItNowPriceInput;
     }
 
-    public Label getStartDateLabel() {
-        return startDateLabel;
-    }
-
     public Button getCreateItemButton() {
         return createItemButton;
+    }
+
+    public VBox getUserInterfaceItemsBox() {
+        return userInterfaceItemsBox;
+    }
+
+    public VBox getMyProfileItemsBox() {
+        return myProfileItemsBox;
     }
 }

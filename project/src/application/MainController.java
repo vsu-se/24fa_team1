@@ -1,13 +1,19 @@
 package application;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.layout.HBox;
+
+import java.util.Comparator;
 
 public class MainController {
     private ObservableList<Category> categories;
+    private ObservableList<Item> items;
     private MainView view;
     private double buyerPremium;
     private double sellerCommission;
@@ -15,6 +21,7 @@ public class MainController {
     public MainController(MainView view) {
         this.view = view;
         categories = FXCollections.observableArrayList();
+        items = FXCollections.observableArrayList();
 
         // Set up event handler for the add button
         view.getAddButton().setOnAction(new EventHandler<ActionEvent>() {
@@ -39,7 +46,11 @@ public class MainController {
                     view.getPremiumInput().clear();
                     view.getBuyerPremiumLabel().setText("Buyer's Premium: " + buyerPremium + "%");
                 } catch (NumberFormatException e) {
-                    System.out.println("Invalid premium value");
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Warning");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Invalid premium value");
+                    alert.showAndWait();
                 }
             }
         });
@@ -54,7 +65,11 @@ public class MainController {
                     view.getCommissionInput().clear();
                     view.getSellerCommissionLabel().setText("Seller's Commission: " + sellerCommission + "%");
                 } catch (NumberFormatException e) {
-                    System.out.println("Invalid commission value");
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Warning");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Invalid commission value");
+                    alert.showAndWait();
                 }
             }
         });
@@ -72,87 +87,28 @@ public class MainController {
                     return;
                 }
 
-                Tab createItemTab = new Tab("Create Item");
-                VBox createItemContent = new VBox(10);
+                ItemView itemView = new ItemView(categories);
+                Tab createItemTab = new Tab("Create Item", itemView.getLayout());
+                createItemTab.setClosable(true);
 
-                TextField titleInput = new TextField();
-                titleInput.setPromptText("Enter item title");
+                new ItemController(itemView, categories, view.getTabPane(), createItemTab, items, MainController.this);
 
-                TextField weightInput = new TextField();
-                weightInput.setPromptText("Enter item weight");
-
-                TextArea descriptionInput = new TextArea();
-                descriptionInput.setPromptText("Enter item description");
-
-                ComboBox<Category> categoryComboBox = new ComboBox<>(categories);
-                categoryComboBox.setPromptText("Select category");
-
-                ComboBox<String> conditionComboBox = new ComboBox<>();
-                conditionComboBox.getItems().addAll("New", "Used");
-                conditionComboBox.setPromptText("Select condition");
-
-                TextField tag1Input = new TextField();
-                tag1Input.setPromptText("Enter tag 1 (optional)");
-                tag1Input.setMaxWidth(2 * 400 / 3);
-
-                TextField tag2Input = new TextField();
-                tag2Input.setPromptText("Enter tag 2 (optional)");
-                tag2Input.setMaxWidth(2 * 400 / 3);
-
-                TextField tag3Input = new TextField();
-                tag3Input.setPromptText("Enter tag 3 (optional)");
-                tag3Input.setMaxWidth(2 * 400 / 3);
-
-                Button createItemButton = new Button("Create Item");
-
-                createItemButton.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        String title = titleInput.getText();
-                        String weight = weightInput.getText();
-                        String description = descriptionInput.getText();
-                        Category category = categoryComboBox.getValue();
-                        String condition = conditionComboBox.getValue();
-                        String tag1 = tag1Input.getText();
-                        String tag2 = tag2Input.getText();
-                        String tag3 = tag3Input.getText();
-
-                        if (title.isEmpty() || weight.isEmpty() || description.isEmpty() || category == null || condition == null) {
-                            Alert alert = new Alert(Alert.AlertType.WARNING);
-                            alert.setTitle("Warning");
-                            alert.setHeaderText(null);
-                            alert.setContentText("Please fill in all required fields.");
-                            alert.showAndWait();
-                            return;
-                        }
-
-                        // Logic to create the item
-                        // For now, we just print the item details to the console
-                        System.out.println("Item created:");
-                        System.out.println("Title: " + title);
-                        System.out.println("Weight: " + weight);
-                        System.out.println("Description: " + description);
-                        System.out.println("Category: " + category.getName());
-                        System.out.println("Condition: " + condition);
-                        System.out.println("Tag 1: " + tag1);
-                        System.out.println("Tag 2: " + tag2);
-                        System.out.println("Tag 3: " + tag3);
-
-                        // Close the "Create Item" tab
-                        view.getTabPane().getTabs().remove(createItemTab);
-                    }
-                });
-
-                createItemContent.getChildren().addAll(titleInput, weightInput, descriptionInput, categoryComboBox, conditionComboBox, tag1Input, tag2Input, tag3Input, createItemButton);
-                createItemTab.setContent(createItemContent);
                 view.getTabPane().getTabs().add(createItemTab);
                 view.getTabPane().getSelectionModel().select(createItemTab);
             }
         });
 
+        // Add listener to the category combo box in the user interface tab
+        view.getCategoryComboBoxUserInterface().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            updateItemsDisplay();
+        });
+
         // Bind the categories list to the ComboBoxes
         view.getCategoryComboBoxSystemAdmin().setItems(categories);
         view.getCategoryComboBoxUserInterface().setItems(categories);
+
+        // Initial display update
+        updateItemsDisplay();
     }
 
     public ObservableList<Category> getCategories() {
@@ -165,5 +121,58 @@ public class MainController {
 
     public double getSellerCommission() {
         return sellerCommission;
+    }
+
+    public ObservableList<Item> getItems() {
+        return items;
+    }
+
+    public void addItem(Item item) {
+        items.add(item);
+        updateItemsDisplay();
+    }
+
+    public void updateItemsDisplay() {
+        items.sort(Comparator.comparing(Item::getEndDate));
+
+        view.getUserInterfaceItemsBox().getChildren().clear();
+        view.getMyProfileItemsBox().getChildren().clear();
+
+        Category selectedCategory = view.getCategoryComboBoxUserInterface().getValue();
+
+        for (Item item : items) {
+            if (selectedCategory == null || item.getCategory().equals(selectedCategory)) {
+                HBox itemBox = new HBox(10);
+                itemBox.getChildren().add(new Label("Title: " + item.getTitle()));
+
+                if (item.getBuyItNowPrice() != null) {
+                    itemBox.getChildren().add(new Label("Buy It Now Price: $" + item.getBuyItNowPrice()));
+                }
+
+                itemBox.getChildren().addAll(
+                    new Label("Weight: " + item.getWeight()),
+                    new Label("Active: " + (item.isActive() ? "Yes" : "No")),
+                    new Label("Current Bid: $" + item.getCurrentBid())
+                );
+
+                view.getUserInterfaceItemsBox().getChildren().add(itemBox);
+            }
+
+            // Always add items to the My Profile tab
+            HBox itemBoxProfile = new HBox(10);
+            itemBoxProfile.getChildren().add(new Label("Title: " + item.getTitle()));
+
+            if (item.getBuyItNowPrice() != null) {
+                itemBoxProfile.getChildren().add(new Label("Buy It Now Price: $" + item.getBuyItNowPrice()));
+            }
+
+            itemBoxProfile.getChildren().addAll(
+                new Label("Weight: " + item.getWeight()), // Assuming weight is used as shipping cost
+                new Label("Active: " + (item.isActive() ? "Yes" : "No")),
+                new Label("Current Bid: $" + item.getCurrentBid())
+            );
+
+            view.getMyProfileItemsBox().getChildren().add(itemBoxProfile);
+        }
     }
 }

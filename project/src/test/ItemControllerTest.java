@@ -1,18 +1,14 @@
 package test;
+
 import application.*;
-
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
-import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,8 +22,10 @@ class ItemControllerTest {
     private ItemView view;
     private ItemController controller;
     private ObservableList<Category> categories;
+    private ObservableList<Item> items; // Add this field
     private TabPane tabPane;
     private Tab createItemTab;
+    private MainController mainController; // Add this field
 
     @BeforeAll
     static void initToolkit() throws Exception {
@@ -42,11 +40,13 @@ class ItemControllerTest {
     @BeforeEach
     void setUp() throws Exception {
         categories = FXCollections.observableArrayList(new Category("Electronics"));
+        items = FXCollections.observableArrayList(); // Initialize this field
         view = new ItemView(categories);
         tabPane = new TabPane();
         createItemTab = new Tab();
+        mainController = new MainController(new MainView(categories)); // Initialize this field
 
-        controller = new ItemController(view, categories, tabPane, createItemTab);
+        controller = new ItemController(view, categories, tabPane, createItemTab, items, mainController); // Pass items and mainController to the constructor
     }
 
     @Test

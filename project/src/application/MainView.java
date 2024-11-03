@@ -17,6 +17,8 @@ public class MainView {
     private Label buyerPremiumLabel;
     private Label sellerCommissionLabel;
     private Button listItemButton;
+    private VBox userInterfaceItemsBox;
+    private VBox myProfileItemsBox;
 
     public MainView(ObservableList<Category> categories) {
         tabPane = new TabPane();
@@ -27,19 +29,19 @@ public class MainView {
 
         categoryInput = new TextField();
         categoryInput.setPromptText("Enter category name");
-        categoryInput.setMaxWidth(2 * 400 / 3); // Set width to 2/3 of the screen length
+        categoryInput.setMaxWidth(2 * 400 / 3);
 
         addButton = new Button("Add Category");
 
         premiumInput = new TextField();
         premiumInput.setPromptText("Enter buyer's premium (%)");
-        premiumInput.setMaxWidth(2 * 400 / 3); // Set width to 2/3 of the screen length
+        premiumInput.setMaxWidth(2 * 400 / 3);
 
         setPremiumButton = new Button("Set Premium");
 
         commissionInput = new TextField();
         commissionInput.setPromptText("Enter seller's commission (%)");
-        commissionInput.setMaxWidth(2 * 400 / 3); // Set width to 2/3 of the screen length
+        commissionInput.setMaxWidth(2 * 400 / 3);
 
         setCommissionButton = new Button("Set Commission");
 
@@ -56,12 +58,20 @@ public class MainView {
 
         listItemButton = new Button("List Item for Sale");
 
-        VBox userInterfaceContent = new VBox(10, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton);
+        userInterfaceItemsBox = new VBox(10);
+        ScrollPane userInterfaceScrollPane = new ScrollPane(userInterfaceItemsBox);        userInterfaceScrollPane.setFitToWidth(true);
+
+        VBox userInterfaceContent = new VBox(10, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton, userInterfaceScrollPane);
         Tab userInterfaceTab = new Tab("User Interface", userInterfaceContent);
         userInterfaceTab.setClosable(false);
 
         // My Profile Tab
-        Tab myProfileTab = new Tab("My Profile", new Label("Content for My Profile"));
+        myProfileItemsBox = new VBox(10);
+        ScrollPane myProfileScrollPane = new ScrollPane(myProfileItemsBox);
+        myProfileScrollPane.setFitToWidth(true);
+
+        VBox myProfileContent = new VBox(10, myProfileScrollPane);
+        Tab myProfileTab = new Tab("My Profile", myProfileContent);
         myProfileTab.setClosable(false);
 
         tabPane.getTabs().addAll(systemAdminTab, userInterfaceTab, myProfileTab);
@@ -113,5 +123,13 @@ public class MainView {
 
     public Button getListItemButton() {
         return listItemButton;
+    }
+
+    public VBox getUserInterfaceItemsBox() {
+        return userInterfaceItemsBox;
+    }
+
+    public VBox getMyProfileItemsBox() {
+        return myProfileItemsBox;
     }
 }
