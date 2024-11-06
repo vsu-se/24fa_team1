@@ -132,4 +132,11 @@ public class MainView {
     public VBox getMyProfileItemsBox() {
         return myProfileItemsBox;
     }
+
+	public Object getAlertMessage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+    
 }
