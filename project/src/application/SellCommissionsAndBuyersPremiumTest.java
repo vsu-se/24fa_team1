@@ -81,7 +81,7 @@ class SellCommissionsAndBuyersPremiumTest {
             assertEquals("-5", view.getCommissionInput().getText(), "Commission input should not be cleared.");
             assertEquals("Seller's Commission: Not set", view.getSellerCommissionLabel().getText(), "Seller's commission label should not be updated.");
             
-            // Add this line to print input content if the test fails
+            // print input content if the test fails
             System.out.println("Commission input text after attempt: " + view.getCommissionInput().getText());
         });
     }
