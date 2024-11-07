@@ -60,18 +60,17 @@ public class MainController {
             @Override
             public void handle(ActionEvent event) {
                 String commissionText = view.getCommissionInput().getText();
-              try {
-              sellerCommission = Double.parseDouble(commissionText);
-              view.getCommissionInput().clear();
-              view.getSellerCommissionLabel().setText("Seller's Commission: " + sellerCommission + "%");
-          } catch (NumberFormatException e) {
-              Alert alert = new Alert(Alert.AlertType.WARNING);
-              alert.setTitle("Warning");
-              alert.setHeaderText(null);
-              alert.setContentText("Invalid commission value");
-              alert.showAndWait();
-          }
-              
+               try {
+            	   sellerCommission = Double.parseDouble(commissionText);
+            	   view.getCommissionInput().clear();
+            	   view.getSellerCommissionLabel().setText("Seller's Commission: " + sellerCommission + "%");
+               	} catch (NumberFormatException e) {
+            	  Alert alert = new Alert(Alert.AlertType.WARNING);
+            	  alert.setTitle("Warning");
+            	  alert.setHeaderText(null);
+            	  alert.setContentText("Invalid commission value");
+            	  alert.showAndWait();
+               	}
             }
         });
 
