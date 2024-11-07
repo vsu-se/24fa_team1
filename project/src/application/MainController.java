@@ -60,17 +60,29 @@ public class MainController {
             @Override
             public void handle(ActionEvent event) {
                 String commissionText = view.getCommissionInput().getText();
+//               try {
+//            	   sellerCommission = Double.parseDouble(commissionText);
+//            	   view.getCommissionInput().clear();
+//            	   view.getSellerCommissionLabel().setText("Seller's Commission: " + sellerCommission + "%");
+//               	} catch (NumberFormatException e) {
+//            	  Alert alert = new Alert(Alert.AlertType.WARNING);
+//            	  alert.setTitle("Warning");
+//            	  alert.setHeaderText(null);
+//            	  alert.setContentText("Invalid commission value");
+//            	  alert.showAndWait();
+//               	}
                try {
-            	   sellerCommission = Double.parseDouble(commissionText);
-            	   view.getCommissionInput().clear();
-            	   view.getSellerCommissionLabel().setText("Seller's Commission: " + sellerCommission + "%");
-               	} catch (NumberFormatException e) {
-            	  Alert alert = new Alert(Alert.AlertType.WARNING);
-            	  alert.setTitle("Warning");
-            	  alert.setHeaderText(null);
-            	  alert.setContentText("Invalid commission value");
-            	  alert.showAndWait();
-               	}
+                   double commission = Double.parseDouble(commissionText);
+                   if (commission < 0) {
+                       throw new IllegalArgumentException("Commission cannot be negative");
+                   }
+                   view.getSellerCommissionLabel().setText("Seller's Commission: " + commission + "%");
+                   view.getCommissionInput().clear();
+               } catch (IllegalArgumentException e) {
+               	Alert alert = new Alert(Alert.AlertType.WARNING);
+               	alert.setContentText("Invalid Commission Value Please enter a valid non-negative number for the commission.");
+                   // Do not clear the input in case of invalid input
+               }
             }
         });
 
