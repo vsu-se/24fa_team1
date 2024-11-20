@@ -34,6 +34,18 @@ public class Main extends Application {
             view.getTabPane().getTabs().add(createItemTab);
             view.getTabPane().getSelectionModel().select(createItemTab);
         });
+        view.getShowReportButton().setOnAction(event -> {
+            SellerReportView reportView = new SellerReportView();
+            new SellerReportController(reportView, controller.getItems());
+
+            Tab reportTab = new Tab("Seller Report", reportView.getLayout());
+            reportTab.setClosable(true);
+
+            view.getTabPane().getTabs().add(reportTab);
+            view.getTabPane().getSelectionModel().select(reportTab);
+        });
+
+
 
         Scene scene = new Scene(view.getTabPane(), 800, 600);
 

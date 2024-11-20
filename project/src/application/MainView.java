@@ -1,4 +1,5 @@
 package application;
+
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -17,6 +18,7 @@ public class MainView {
     private Label buyerPremiumLabel;
     private Label sellerCommissionLabel;
     private Button listItemButton;
+    private Button showReportButton;
     private VBox userInterfaceItemsBox;
     private VBox myProfileItemsBox;
 
@@ -57,11 +59,13 @@ public class MainView {
         sellerCommissionLabel = new Label("Seller's Commission: Not set");
 
         listItemButton = new Button("List Item for Sale");
+        showReportButton = new Button("Show Report");
 
         userInterfaceItemsBox = new VBox(10);
-        ScrollPane userInterfaceScrollPane = new ScrollPane(userInterfaceItemsBox);        userInterfaceScrollPane.setFitToWidth(true);
+        ScrollPane userInterfaceScrollPane = new ScrollPane(userInterfaceItemsBox);
+        userInterfaceScrollPane.setFitToWidth(true);
 
-        VBox userInterfaceContent = new VBox(10, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton, userInterfaceScrollPane);
+        VBox userInterfaceContent = new VBox(10, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton, showReportButton, userInterfaceScrollPane);
         Tab userInterfaceTab = new Tab("User Interface", userInterfaceContent);
         userInterfaceTab.setClosable(false);
 
@@ -123,6 +127,10 @@ public class MainView {
 
     public Button getListItemButton() {
         return listItemButton;
+    }
+
+    public Button getShowReportButton() {
+        return showReportButton;
     }
 
     public VBox getUserInterfaceItemsBox() {
