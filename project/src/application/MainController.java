@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.HBox;
+import javafx.application.Platform;
 
 import java.util.Comparator;
 import java.util.concurrent.Executors;
@@ -30,7 +31,7 @@ public class MainController {
 
         // Initialize the scheduler
         scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(this::checkAndUpdateItems, 0, 1, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(this::checkAndUpdateItems, 0, 1, TimeUnit.SECONDS);
 
         // Add listener to the items list
         items.addListener((ListChangeListener<Item>) change -> {
@@ -141,11 +142,13 @@ public class MainController {
     }
 
     private void checkAndUpdateItems() {
-        boolean itemsRemoved = items.removeIf(item -> !item.isActive());
-        if (itemsRemoved) {
-            updateItemsDisplay();
+        for (Item item : items) {
+            item.checkAndSetInactive();
         }
-        updateProfileItemsDisplay();
+        Platform.runLater(() -> {
+            updateItemsDisplay();
+            updateProfileItemsDisplay();
+        });
     }
 
     private boolean isDuplicateCategory(String categoryName) {
