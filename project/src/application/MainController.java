@@ -224,7 +224,10 @@ private boolean isDuplicateCategory(String categoryName) {
                         try {
                             double bidAmount = Double.parseDouble(bidAmountInput.getText());
                             if (item.placeBid(bidAmount)) {
+                            	item.setHasBidder(true);
                                 updateItemsDisplay();
+                                updateProfileItemsDisplay();
+                                
                                 view.getListItemErrorLabel().setText("Bid placed successfully!");
                             } else {
                                 view.getListItemErrorLabel().setText("Bid amount must be higher than the current bid.");
@@ -254,8 +257,27 @@ private boolean isDuplicateCategory(String categoryName) {
                 new Label("Active: " + (item.isActive() ? "Yes" : "No")),
                 new Label("Current Bid: $" + item.getCurrentBid())
             );
+            
             view.getMyProfileItemsBox().getChildren().add(itemBoxProfile);
         }
+        
+        view.getMyProfileItemsBox().getChildren().add(new Label("Current Bids: "));
+        
+        for (Item item : items) {
+        	if(item.hasBidder()) {
+        		HBox itemBoxProfile = new HBox(10);
+                itemBoxProfile.getChildren().add(new Label("Title: " + item.getTitle()));
+                if (item.getBuyItNowPrice() != null) {
+                    itemBoxProfile.getChildren().add(new Label("Buy It Now Price: $" + item.getBuyItNowPrice()));
+                }
+                itemBoxProfile.getChildren().addAll(
+                    new Label("Weight: " + item.getWeight()),
+                    new Label("Active: " + (item.isActive() ? "Yes" : "No")),
+                    new Label("Current Bid: $" + item.getCurrentBid())
+                );
+                view.getMyProfileItemsBox().getChildren().add(itemBoxProfile);	
+        	}
+        }        
     }
 
     private void updateConcludedAuctionsDisplay() {

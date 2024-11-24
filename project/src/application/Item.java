@@ -16,6 +16,7 @@ public class Item {
     private Double buyItNowPrice;
     private Double currentBid;
     private boolean active;
+    private boolean hasBidder;
 
     public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice, Double initialBid) {
         this.title = title;
@@ -147,5 +148,13 @@ public class Item {
             return true;
         }
         return false;
+    }
+    
+    public boolean hasBidder() {
+    	return hasBidder;
+    }
+    
+    public void setHasBidder(boolean hasBidder) {
+    	this.hasBidder = hasBidder;
     }
 }
