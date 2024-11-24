@@ -47,22 +47,14 @@ public class ItemController {
                 String buyItNowPriceText = view.getBuyItNowPriceInput().getText();
 
                 if (title.isEmpty() || weight.isEmpty() || weightUnit == null || description.isEmpty() || category == null || condition == null || endDate == null || endTime.isEmpty()) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please fill in all required fields.");
-                    alert.showAndWait();
+                    view.getCreateItemErrorLabel().setText("Please fill in all required fields.");
                     return;
                 }
 
                 try {
                     Double.parseDouble(weight);
                 } catch (NumberFormatException e) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please enter a valid number for the weight.");
-                    alert.showAndWait();
+                    view.getCreateItemErrorLabel().setText("Please enter a valid number for the weight.");
                     return;
                 }
 
@@ -71,20 +63,12 @@ public class ItemController {
                 try {
                     endDateTime = LocalDateTime.of(endDate, LocalTime.parse(endTime, DateTimeFormatter.ofPattern("HH:mm")));
                 } catch (Exception e) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please enter a valid end time in the format HH:mm.");
-                    alert.showAndWait();
+                    view.getCreateItemErrorLabel().setText("Please enter a valid end time in the format HH:mm.");
                     return;
                 }
 
                 if (endDateTime.isBefore(startDate)) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText(null);
-                    alert.setContentText("The end date and time cannot be before the current date and time.");
-                    alert.showAndWait();
+                    view.getCreateItemErrorLabel().setText("The end date and time cannot be before the current date and time.");
                     return;
                 }
 
@@ -93,17 +77,16 @@ public class ItemController {
                     try {
                         buyItNowPrice = Double.parseDouble(buyItNowPriceText);
                     } catch (NumberFormatException e) {
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Warning");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Please enter a valid number for the Buy it now price.");
-                        alert.showAndWait();
+                        view.getCreateItemErrorLabel().setText("Please enter a valid number for the Buy it now price.");
                         return;
                     }
                 }
 
                 Item newItem = new Item(title, weight + " " + weightUnit, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice);
                 items.add(newItem);
+
+                // Clear error message
+                view.getCreateItemErrorLabel().setText("");
 
                 // Close the "Create Item" tab
                 tabPane.getTabs().remove(createItemTab);

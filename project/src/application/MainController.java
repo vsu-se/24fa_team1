@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import javafx.application.Platform;
 
@@ -43,82 +44,62 @@ public class MainController {
         });
 
         // Set up event handler for the add button
-        view.getAddButton().setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String categoryName = view.getCategoryInput().getText();
-                if (!categoryName.isEmpty() && !isDuplicateCategory(categoryName)) {
-                    Category newCategory = new Category(categoryName);
-                    categories.add(newCategory);
-                    view.getCategoryInput().clear();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Category already exists or name is empty.");
-                    alert.showAndWait();
-                }
+        view.getAddButton().setOnAction(event -> {
+            clearErrorMessages();
+            String categoryName = view.getCategoryInput().getText();
+            if (!categoryName.isEmpty() && !isDuplicateCategory(categoryName)) {
+                Category newCategory = new Category(categoryName);
+                categories.add(newCategory);
+                view.getCategoryInput().clear();
+                view.getCategoryErrorLabel().setText(""); // Clear error message
+            } else {
+                view.getCategoryErrorLabel().setText("Category already exists or name is empty.");
             }
         });
 
         // Set up event handler for the set premium button
-        view.getSetPremiumButton().setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String premiumText = view.getPremiumInput().getText();
-                try {
-                    double premiumValue = Double.parseDouble(premiumText);
-                    if (premiumValue < 0) {
-                        throw new NumberFormatException("Negative value");
-                    }
-                    buyerPremium = premiumValue;
-                    view.getPremiumInput().clear();
-                    view.getBuyerPremiumLabel().setText("Buyer's Premium: " + buyerPremium + "%");
-                } catch (NumberFormatException e) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Invalid premium value. Please enter a non-negative number.");
-                    alert.showAndWait();
+        view.getSetPremiumButton().setOnAction(event -> {
+            clearErrorMessages();
+            String premiumText = view.getPremiumInput().getText();
+            try {
+                double premiumValue = Double.parseDouble(premiumText);
+                if (premiumValue < 0) {
+                    throw new NumberFormatException("Negative value");
                 }
+                buyerPremium = premiumValue;
+                view.getPremiumInput().clear();
+                view.getBuyerPremiumLabel().setText("Buyer's Premium: " + buyerPremium + "%");
+                view.getPremiumErrorLabel().setText(""); // Clear error message
+            } catch (NumberFormatException e) {
+                view.getPremiumErrorLabel().setText("Invalid premium value. Please enter a non-negative number.");
             }
         });
 
         // Set up event handler for the set commission button
-        view.getSetCommissionButton().setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String commissionText = view.getCommissionInput().getText();
-                try {
-                    double commissionValue = Double.parseDouble(commissionText);
-                    if (commissionValue < 0) {
-                        throw new NumberFormatException("Negative value");
-                    }
-                    sellerCommission = commissionValue;
-                    view.getCommissionInput().clear();
-                    view.getSellerCommissionLabel().setText("Seller's Commission: " + sellerCommission + "%");
-                } catch (NumberFormatException e) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Invalid commission value. Please enter a non-negative number.");
-                    alert.showAndWait();
+        view.getSetCommissionButton().setOnAction(event -> {
+            clearErrorMessages();
+            String commissionText = view.getCommissionInput().getText();
+            try {
+                double commissionValue = Double.parseDouble(commissionText);
+                if (commissionValue < 0) {
+                    throw new NumberFormatException("Negative value");
                 }
+                sellerCommission = commissionValue;
+                view.getCommissionInput().clear();
+                view.getSellerCommissionLabel().setText("Seller's Commission: " + sellerCommission + "%");
+                view.getCommissionErrorLabel().setText(""); // Clear error message
+            } catch (NumberFormatException e) {
+                view.getCommissionErrorLabel().setText("Invalid commission value. Please enter a non-negative number.");
             }
         });
 
         // Set up event handler for the list item button
-        view.getListItemButton().setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if (categories.isEmpty()) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please add a category in the System Admin tab before listing an item.");
-                    alert.showAndWait();
-                    return;
-                }
+        view.getListItemButton().setOnAction(event -> {
+            clearErrorMessages();
+            if (categories.isEmpty()) {
+                view.getListItemErrorLabel().setText("Please add a category in the System Admin tab before listing an item.");
+            } else {
+                view.getListItemErrorLabel().setText(""); // Clear error message
                 ItemView itemView = new ItemView(categories);
                 Tab createItemTab = new Tab("Create Item", itemView.getLayout());
                 createItemTab.setClosable(true);
@@ -131,6 +112,11 @@ public class MainController {
         // Add listener to the category combo box in the user interface tab
         view.getCategoryComboBoxUserInterface().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateItemsDisplay();
+        });
+
+        // Add listener to clear error message when switching tabs
+        view.getTabPane().getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+            clearErrorMessages();
         });
 
         // Bind the categories list to the ComboBoxes
@@ -148,6 +134,7 @@ public class MainController {
         Platform.runLater(() -> {
             updateItemsDisplay();
             updateProfileItemsDisplay();
+            updateConcludedAuctionsDisplay();
         });
     }
 
@@ -218,6 +205,32 @@ public class MainController {
             );
             view.getMyProfileItemsBox().getChildren().add(itemBoxProfile);
         }
+    }
+
+    private void updateConcludedAuctionsDisplay() {
+        view.getConcludedAuctionsBox().getChildren().clear();
+        for (Item item : items) {
+            if (!item.isActive()) {
+                HBox itemBox = new HBox(10);
+                itemBox.getChildren().add(new Label("Title: " + item.getTitle()));
+                if (item.getBuyItNowPrice() != null) {
+                    itemBox.getChildren().add(new Label("Buy It Now Price: $" + item.getBuyItNowPrice()));
+                }
+                itemBox.getChildren().addAll(
+                    new Label("Weight: " + item.getWeight()),
+                    new Label("Active: " + (item.isActive() ? "Yes" : "No")),
+                    new Label("Current Bid: $" + item.getCurrentBid())
+                );
+                view.getConcludedAuctionsBox().getChildren().add(itemBox);
+            }
+        }
+    }
+
+    private void clearErrorMessages() {
+        view.getCategoryErrorLabel().setText("");
+        view.getPremiumErrorLabel().setText("");
+        view.getCommissionErrorLabel().setText("");
+        view.getListItemErrorLabel().setText("");
     }
 
     public void shutdownScheduler() {

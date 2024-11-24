@@ -17,11 +17,7 @@ public class Main extends Application {
 
         view.getListItemButton().setOnAction(event -> {
             if (controller.getCategories().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Warning");
-                alert.setHeaderText(null);
-                alert.setContentText("Please add a category in the System Admin tab before listing an item.");
-                alert.showAndWait();
+                view.getListItemErrorLabel().setText("Please add a category in the System Admin tab before listing an item.");
                 return;
             }
 
@@ -37,7 +33,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(view.getTabPane(), 800, 600);
 
-        primaryStage.setTitle("JavaFX TabPane Example");
+        primaryStage.setTitle("Auction System");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
