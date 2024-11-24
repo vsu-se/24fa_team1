@@ -6,15 +6,20 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.application.Platform;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Comparator;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class MainController {
@@ -24,6 +29,8 @@ public class MainController {
     private double buyerPremium;
     private double sellerCommission;
     private ScheduledExecutorService scheduler;
+    private ScheduledFuture<?> scheduledFuture;
+    private TextField currentBidInput; // Track the current bid input
 
     public MainController(MainView view) {
         this.view = view;
@@ -32,7 +39,6 @@ public class MainController {
 
         // Initialize the scheduler
         scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(this::checkAndUpdateItems, 0, 1, TimeUnit.SECONDS);
 
         // Add listener to the items list
         items.addListener((ListChangeListener<Item>) change -> {
@@ -127,6 +133,29 @@ public class MainController {
         updateProfileItemsDisplay();
     }
 
+    public void scheduleNextUpdate() {
+        if (scheduledFuture != null && !scheduledFuture.isDone()) {
+            scheduledFuture.cancel(false);
+        }
+
+        Item nextExpiringItem = getNextExpiringItem();
+        if (nextExpiringItem != null) {
+            long delay = nextExpiringItem.getEndDate().toEpochSecond(ZoneOffset.UTC) - LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+            if (delay > 0) {
+                scheduledFuture = scheduler.schedule(this::checkAndUpdateItems, delay, TimeUnit.SECONDS);
+            } else {
+                checkAndUpdateItems();
+            }
+        }
+    }
+
+    private Item getNextExpiringItem() {
+        return items.stream()
+                .filter(Item::isActive)
+                .min(Comparator.comparing(Item::getEndDate))
+                .orElse(null);
+    }
+
     private void checkAndUpdateItems() {
         for (Item item : items) {
             item.checkAndSetInactive();
@@ -136,9 +165,10 @@ public class MainController {
             updateProfileItemsDisplay();
             updateConcludedAuctionsDisplay();
         });
+        scheduleNextUpdate();
     }
 
-    private boolean isDuplicateCategory(String categoryName) {
+private boolean isDuplicateCategory(String categoryName) {
         for (Category category : categories) {
             if (category.getName().equalsIgnoreCase(categoryName)) {
                 return true;
@@ -165,6 +195,7 @@ public class MainController {
 
     public void addItem(Item item) {
         items.add(item);
+        scheduleNextUpdate(); // Reschedule when a new item is added
     }
 
     public void updateItemsDisplay() {
@@ -184,6 +215,26 @@ public class MainController {
                         new Label("Active: " + (item.isActive() ? "Yes" : "No")),
                         new Label("Current Bid: $" + item.getCurrentBid())
                     );
+
+                    // Add bid input and button
+                    TextField bidAmountInput = new TextField();
+                    bidAmountInput.setPromptText("Enter bid amount");
+                    Button placeBidButton = new Button("Place Bid");
+                    placeBidButton.setOnAction(event -> {
+                        try {
+                            double bidAmount = Double.parseDouble(bidAmountInput.getText());
+                            if (item.placeBid(bidAmount)) {
+                                updateItemsDisplay();
+                                view.getListItemErrorLabel().setText("Bid placed successfully!");
+                            } else {
+                                view.getListItemErrorLabel().setText("Bid amount must be higher than the current bid.");
+                            }
+                        } catch (NumberFormatException e) {
+                            view.getListItemErrorLabel().setText("Please enter a valid bid amount.");
+                        }
+                    });
+
+                    itemBox.getChildren().addAll(bidAmountInput, placeBidButton);
                     view.getUserInterfaceItemsBox().getChildren().add(itemBox);
                 }
             }

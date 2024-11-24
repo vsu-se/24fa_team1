@@ -139,4 +139,12 @@ public class Item {
             active = false;
         }
     }
+    
+    public boolean placeBid(double bidAmount) {
+        if (bidAmount > currentBid) {
+            currentBid = bidAmount;
+            return true;
+        }
+        return false;
+    }
 }

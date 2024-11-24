@@ -3,7 +3,6 @@ package application;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
@@ -93,6 +92,23 @@ public class ItemController {
 
                 // Update the items display in the MainController
                 mainController.updateItemsDisplay();
+                mainController.scheduleNextUpdate();
+            }
+        });
+
+        view.getPlaceBidButton().setOnAction(event -> {
+            String bidAmountText = view.getBidAmountInput().getText();
+            try {
+                double bidAmount = Double.parseDouble(bidAmountText);
+                if (bidAmount >= 0.00) {
+                    view.getCreateItemErrorLabel().setText("Minimum bid amount Updated!");
+                    view.getBidAmountInput().setText("");
+                    mainController.updateItemsDisplay();
+                } else {
+                    view.getCreateItemErrorLabel().setText("Please enter a valid bid amount.");
+                }
+            } catch (NumberFormatException e) {
+                view.getCreateItemErrorLabel().setText("Please enter a valid bid amount.");
             }
         });
     }

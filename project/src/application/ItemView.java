@@ -16,14 +16,18 @@ public class ItemView {
     private TextField tag2Input;
     private TextField tag3Input;
     private DatePicker endDatePicker;
-    private TextField endTimeInput; 
+    private TextField endTimeInput;
     private TextField buyItNowPriceInput;
     private Button createItemButton;
-    private VBox userInterfaceItemsBox; 
-    private VBox myProfileItemsBox; 
+    private VBox userInterfaceItemsBox;
+    private VBox myProfileItemsBox;
 
     // Error label
     private Label createItemErrorLabel;
+
+    // Bid input and button
+    private TextField bidAmountInput;
+    private Button placeBidButton;
 
     public ItemView(ObservableList<Category> categories) {
         layout = new VBox(10);
@@ -63,7 +67,7 @@ public class ItemView {
         endDatePicker = new DatePicker();
         endDatePicker.setPromptText("Select end date");
 
-        endTimeInput = new TextField(); 
+        endTimeInput = new TextField();
         endTimeInput.setPromptText("Enter end time (HH:mm)");
 
         buyItNowPriceInput = new TextField();
@@ -78,7 +82,13 @@ public class ItemView {
         createItemErrorLabel = new Label();
         createItemErrorLabel.setStyle("-fx-text-fill: red;");
 
-        layout.getChildren().addAll(createItemErrorLabel, titleInput, weightInput, weightUnitComboBox, descriptionInput, categoryComboBox, conditionComboBox, tag1Input, tag2Input, tag3Input, endDatePicker, endTimeInput, buyItNowPriceInput, createItemButton);
+        // Initialize bid input and button
+        bidAmountInput = new TextField();
+        bidAmountInput.setPromptText("Enter intial bid amount");
+
+        placeBidButton = new Button("Place Bid");
+
+        layout.getChildren().addAll(createItemErrorLabel, titleInput, weightInput, weightUnitComboBox, descriptionInput, categoryComboBox, conditionComboBox, tag1Input, tag2Input, tag3Input, endDatePicker, endTimeInput, buyItNowPriceInput, createItemButton, bidAmountInput, placeBidButton);
     }
 
     public VBox getLayout() {
@@ -147,5 +157,13 @@ public class ItemView {
 
     public Label getCreateItemErrorLabel() {
         return createItemErrorLabel;
+    }
+
+    public TextField getBidAmountInput() {
+        return bidAmountInput;
+    }
+
+    public Button getPlaceBidButton() {
+        return placeBidButton;
     }
 }
