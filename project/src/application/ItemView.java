@@ -27,7 +27,6 @@ public class ItemView {
 
     // Bid input and button
     private TextField bidAmountInput;
-    private Button placeBidButton;
 
     public ItemView(ObservableList<Category> categories) {
         layout = new VBox(10);
@@ -86,9 +85,7 @@ public class ItemView {
         bidAmountInput = new TextField();
         bidAmountInput.setPromptText("Enter intial bid amount");
 
-        placeBidButton = new Button("Place Bid");
-
-        layout.getChildren().addAll(createItemErrorLabel, titleInput, weightInput, weightUnitComboBox, descriptionInput, categoryComboBox, conditionComboBox, tag1Input, tag2Input, tag3Input, endDatePicker, endTimeInput, buyItNowPriceInput, createItemButton, bidAmountInput, placeBidButton);
+        layout.getChildren().addAll(createItemErrorLabel, titleInput, weightInput, weightUnitComboBox, descriptionInput, categoryComboBox, conditionComboBox, tag1Input, tag2Input, tag3Input, endDatePicker, endTimeInput, buyItNowPriceInput, bidAmountInput, createItemButton);
     }
 
     public VBox getLayout() {
@@ -161,9 +158,5 @@ public class ItemView {
 
     public TextField getBidAmountInput() {
         return bidAmountInput;
-    }
-
-    public Button getPlaceBidButton() {
-        return placeBidButton;
     }
 }

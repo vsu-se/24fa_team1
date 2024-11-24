@@ -17,7 +17,7 @@ public class Item {
     private Double currentBid;
     private boolean active;
 
-    public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice) {
+    public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice, Double initialBid) {
         this.title = title;
         this.weight = weight;
         this.description = description;
@@ -31,6 +31,7 @@ public class Item {
         this.buyItNowPrice = buyItNowPrice;
         this.currentBid = 0.0;
         this.active = true;
+        this.currentBid = initialBid;
     }
 
     // Getters and setters for all fields

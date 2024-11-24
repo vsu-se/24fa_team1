@@ -50,9 +50,9 @@ public class SystemTest5 extends Application {
         }
 
         // Add mock items
-        items.add(new Item("Item 1", "1 kg", "Description 1", new Category("Category 1"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1), 100.0));
-        items.add(new Item("Item 2", "2 kg", "Description 2", new Category("Category 2"), "Used", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(2), LocalDateTime.now().plusDays(2), 200.0));
-        items.add(new Item("Item 3", "3 kg", "Description 3", new Category("Category 3"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(3), LocalDateTime.now().plusDays(3), 300.0));
+        items.add(new Item("Item 1", "1 kg", "Description 1", new Category("Category 1"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1), 100.0, 0.00));
+        items.add(new Item("Item 2", "2 kg", "Description 2", new Category("Category 2"), "Used", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(2), LocalDateTime.now().plusDays(2), 200.0, 0.00));
+        items.add(new Item("Item 3", "3 kg", "Description 3", new Category("Category 3"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(3), LocalDateTime.now().plusDays(3), 300.0, 0.00));
     }
 
     @Test
@@ -135,7 +135,7 @@ public class SystemTest5 extends Application {
         Platform.runLater(() -> {
             try {
                 items.clear();
-                items.add(new Item("Single Item", "1 kg", "Description", new Category("Category"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), 100.0));
+                items.add(new Item("Single Item", "1 kg", "Description", new Category("Category"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), 100.0, 0.00));
                 mainController.updateItemsDisplay();
                 assertEquals(1, items.size());
                 assertEquals("Single Item", items.get(0).getTitle());
@@ -155,8 +155,8 @@ public class SystemTest5 extends Application {
             try {
                 items.clear();
                 LocalDateTime endDate = LocalDateTime.now().plusDays(1);
-                items.add(new Item("Item 1", "1 kg", "Description 1", new Category("Category 1"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now(), endDate, 100.0));
-                items.add(new Item("Item 2", "2 kg", "Description 2", new Category("Category 2"), "Used", "Tag1", "Tag2", "Tag3", LocalDateTime.now(), endDate, 200.0));
+                items.add(new Item("Item 1", "1 kg", "Description 1", new Category("Category 1"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now(), endDate, 100.0, 0.00));
+                items.add(new Item("Item 2", "2 kg", "Description 2", new Category("Category 2"), "Used", "Tag1", "Tag2", "Tag3", LocalDateTime.now(), endDate, 200.0, 0.00));
                 mainController.updateItemsDisplay();
                 assertEquals(2, items.size());
                 assertEquals("Item 1", items.get(0).getTitle());
@@ -176,7 +176,7 @@ public class SystemTest5 extends Application {
         Platform.runLater(() -> {
             try {
                 items.clear();
-                items.add(new Item("Past Item", "1 kg", "Description", new Category("Category"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(2), LocalDateTime.now().minusDays(1), 100.0));
+                items.add(new Item("Past Item", "1 kg", "Description", new Category("Category"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(2), LocalDateTime.now().minusDays(1), 100.0, 0.00));
                 mainController.updateItemsDisplay();
                 assertFalse(items.get(0).isActive());
             } finally {
@@ -194,7 +194,7 @@ public class SystemTest5 extends Application {
         Platform.runLater(() -> {
             try {
                 items.clear();
-                items.add(new Item("Future Item", "1 kg", "Description", new Category("Category"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), 100.0));
+                items.add(new Item("Future Item", "1 kg", "Description", new Category("Category"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), 100.0, 0.00));
                 mainController.updateItemsDisplay();
                 assertTrue(items.get(0).isActive());
             } finally {
@@ -211,7 +211,7 @@ public class SystemTest5 extends Application {
         CountDownLatch testLatch = new CountDownLatch(1);
         Platform.runLater(() -> {
             try {
-                Item invalidItem = new Item("Invalid Weight Item", "invalid weight", "Description", new Category("Category"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), 100.0);
+                Item invalidItem = new Item("Invalid Weight Item", "invalid weight", "Description", new Category("Category"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), 100.0, 0.00);
                 assertThrows(NumberFormatException.class, () -> {
                     Double.parseDouble(invalidItem.getWeight());
                 });

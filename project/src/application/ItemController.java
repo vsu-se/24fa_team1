@@ -44,8 +44,9 @@ public class ItemController {
                 LocalDate endDate = view.getEndDatePicker().getValue();
                 String endTime = view.getEndTimeInput().getText();
                 String buyItNowPriceText = view.getBuyItNowPriceInput().getText();
+                String bidAmountText = view.getBidAmountInput().getText();
 
-                if (title.isEmpty() || weight.isEmpty() || weightUnit == null || description.isEmpty() || category == null || condition == null || endDate == null || endTime.isEmpty()) {
+                if (title.isEmpty() || weight.isEmpty() || weightUnit == null || description.isEmpty() || category == null || condition == null || endDate == null || endTime.isEmpty() || bidAmountText.isEmpty()) {
                     view.getCreateItemErrorLabel().setText("Please fill in all required fields.");
                     return;
                 }
@@ -80,8 +81,22 @@ public class ItemController {
                         return;
                     }
                 }
+                
+                double bidAmount;
+                try {
+                    bidAmount = Double.parseDouble(bidAmountText);
+                    if (bidAmount >= 0.00) {
+                    	
+                    } else {
+                        view.getCreateItemErrorLabel().setText("Initial bid amount cannot be negative.");
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    view.getCreateItemErrorLabel().setText("Please enter a valid bid amount.");
+                    return;
+                }
 
-                Item newItem = new Item(title, weight + " " + weightUnit, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice);
+                Item newItem = new Item(title, weight + " " + weightUnit, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice, bidAmount);
                 items.add(newItem);
 
                 // Clear error message
@@ -93,22 +108,6 @@ public class ItemController {
                 // Update the items display in the MainController
                 mainController.updateItemsDisplay();
                 mainController.scheduleNextUpdate();
-            }
-        });
-
-        view.getPlaceBidButton().setOnAction(event -> {
-            String bidAmountText = view.getBidAmountInput().getText();
-            try {
-                double bidAmount = Double.parseDouble(bidAmountText);
-                if (bidAmount >= 0.00) {
-                    view.getCreateItemErrorLabel().setText("Minimum bid amount Updated!");
-                    view.getBidAmountInput().setText("");
-                    mainController.updateItemsDisplay();
-                } else {
-                    view.getCreateItemErrorLabel().setText("Please enter a valid bid amount.");
-                }
-            } catch (NumberFormatException e) {
-                view.getCreateItemErrorLabel().setText("Please enter a valid bid amount.");
             }
         });
     }
