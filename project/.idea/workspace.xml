@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a81bf3fc-1fcf-4215-86ad-94bf431c98b4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Test/Test.iml" afterDir="false" />
+    <list default="true" id="a81bf3fc-1fcf-4215-86ad-94bf431c98b4" name="Changes" comment="Added EndedAuctions Controller and View">
       <change afterPath="$PROJECT_DIR$/../test/.idea/workspace.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/Auction.class" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/Category.class" afterDir="false" />
@@ -26,11 +23,7 @@
       <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainTest.class" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainView.class" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../test/out/production/test/module-info.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tests/src/SellerReportViewTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/application/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/application/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/MainView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,6 +122,15 @@
       <option name="presentableId" value="Default" />
       <updated>1732417485507</updated>
     </task>
+    <task id="LOCAL-00001" summary="Added EndedAuctions Controller and View">
+      <option name="closed" value="true" />
+      <created>1732668656119</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1732668656119</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -141,5 +143,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added EndedAuctions Controller and View" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added EndedAuctions Controller and View" />
   </component>
 </project>
