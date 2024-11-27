@@ -21,6 +21,7 @@ public class MainView {
     private Button showReportButton;
     private VBox userInterfaceItemsBox;
     private VBox myProfileItemsBox;
+    private VBox endedAuctionsBox;
 
     public MainView(ObservableList<Category> categories) {
         tabPane = new TabPane();
@@ -78,7 +79,16 @@ public class MainView {
         Tab myProfileTab = new Tab("My Profile", myProfileContent);
         myProfileTab.setClosable(false);
 
-        tabPane.getTabs().addAll(systemAdminTab, userInterfaceTab, myProfileTab);
+        // Ended Auctions Tab
+        endedAuctionsBox = new VBox(10);
+        ScrollPane endedAuctionsScrollPane = new ScrollPane(endedAuctionsBox);
+        endedAuctionsScrollPane.setFitToWidth(true);
+
+        VBox endedAuctionsContent = new VBox(10, endedAuctionsScrollPane);
+        Tab endedAuctionsTab = new Tab("Ended Auctions", endedAuctionsContent);
+        endedAuctionsTab.setClosable(false);
+
+        tabPane.getTabs().addAll(systemAdminTab, userInterfaceTab, myProfileTab, endedAuctionsTab);
     }
 
     public TabPane getTabPane() {
@@ -139,5 +149,9 @@ public class MainView {
 
     public VBox getMyProfileItemsBox() {
         return myProfileItemsBox;
+    }
+
+    public VBox getEndedAuctionsBox() {
+        return endedAuctionsBox;
     }
 }

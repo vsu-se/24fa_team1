@@ -1,19 +1,26 @@
 package application;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
     private MainController controller;
+    private EndedAuctionsController endedAuctionsController;
 
     @Override
     public void start(Stage primaryStage) {
-        MainView view = new MainView(null);
+        ObservableList<Category> categories = FXCollections.observableArrayList();
+        MainView view = new MainView(categories);
         controller = new MainController(view);
+        endedAuctionsController = new EndedAuctionsController(controller.getItems());
 
         view.getListItemButton().setOnAction(event -> {
             if (controller.getCategories().isEmpty()) {
@@ -34,6 +41,7 @@ public class Main extends Application {
             view.getTabPane().getTabs().add(createItemTab);
             view.getTabPane().getSelectionModel().select(createItemTab);
         });
+
         view.getShowReportButton().setOnAction(event -> {
             SellerReportView reportView = new SellerReportView();
             new SellerReportController(reportView, controller.getItems());
@@ -45,7 +53,21 @@ public class Main extends Application {
             view.getTabPane().getSelectionModel().select(reportTab);
         });
 
-
+        // Display ended auctions
+        ObservableList<Item> endedAuctions = endedAuctionsController.getEndedAuctions();
+        for (Item item : endedAuctions) {
+            HBox itemBox = new HBox(10);
+            itemBox.getChildren().add(new Label("Title: " + item.getTitle()));
+            if (item.getBuyItNowPrice() != null) {
+                itemBox.getChildren().add(new Label("Buy It Now Price: $" + item.getBuyItNowPrice()));
+            }
+            itemBox.getChildren().addAll(
+                    new Label("Weight: " + item.getWeight()),
+                    new Label("Active: " + (item.isActive() ? "Yes" : "No")),
+                    new Label("Current Bid: $" + item.getCurrentBid())
+            );
+            view.getEndedAuctionsBox().getChildren().add(itemBox);
+        }
 
         Scene scene = new Scene(view.getTabPane(), 800, 600);
 

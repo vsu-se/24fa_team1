@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a81bf3fc-1fcf-4215-86ad-94bf431c98b4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/Test.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/Auction.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/Category.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/CategoryTest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/Item.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/ItemController$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/ItemController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/ItemView.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/Main.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainController$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainController$2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainController$3.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainController$4$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainController$4.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainTest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainView.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../test/out/production/test/module-info.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tests/src/SellerReportViewTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/MainView.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+        <option value="JavaFXApplication" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;BazilAshfaq&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/vsu-se/24fa_team1.git&quot;,
+    &quot;accountId&quot;: &quot;7c3cebfc-a434-483c-8cb7-3f22bfc00e8f&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2pHKIMFi4jsSCaQaQRCVVKDg22w" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;JUnit.SellerReportTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.SellerReportViewTest.executor&quot;: &quot;Run&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;create.test.in.the.same.root&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#33 on Ashfaq1&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/nargi/OneDrive/Documents/GitHub/24fa_team1/project/Test/src&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\nargi\OneDrive\Documents\GitHub\24fa_team1\project\Test\src" />
+      <recent name="C:\Users\nargi\OneDrive\Documents\GitHub\24fa_team1\project\Tests\src" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="application" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Tests" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Tests" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a81bf3fc-1fcf-4215-86ad-94bf431c98b4" name="Changes" comment="" />
+      <created>1732417485507</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1732417485507</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
