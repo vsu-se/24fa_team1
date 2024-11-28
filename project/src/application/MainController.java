@@ -30,7 +30,7 @@ public class MainController {
     private double sellerCommission;
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> scheduledFuture;
-    private TextField currentBidInput; // Track the current bid input
+    private TextField currentBidInput;
 
     public MainController(MainView view) {
         this.view = view;

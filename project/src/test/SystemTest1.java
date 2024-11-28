@@ -45,16 +45,6 @@ public class SystemTest1 {
         latch.await(5, TimeUnit.SECONDS); // Wait for JavaFX initialization
     }
 
-    private void closeAlertIfPresent() {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                alert.close();
-            }
-        });
-    }
-
     @Test
     public void testAddCategory() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);

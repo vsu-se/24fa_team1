@@ -76,6 +76,7 @@ class SystemTest4 {
                 view.getEndDatePicker().setValue(LocalDate.now().plusDays(1));
                 view.getEndTimeInput().setText("12:00");
                 view.getBuyItNowPriceInput().setText("1500");
+                view.getBidAmountInput().setText("0.00");
 
                 Button createItemButton = view.getCreateItemButton();
                 createItemButton.fire();
@@ -117,6 +118,7 @@ class SystemTest4 {
                     view.getEndDatePicker().setValue(LocalDate.now().plusDays(1));
                     view.getEndTimeInput().setText("12:00");
                     view.getBuyItNowPriceInput().setText("1500");
+                    view.getBidAmountInput().setText("0.00");
 
                     Button createItemButton = view.getCreateItemButton();
                     createItemButton.fire();
@@ -170,6 +172,7 @@ class SystemTest4 {
                 view.getEndDatePicker().setValue(LocalDate.now().plusDays(1));
                 view.getEndTimeInput().setText("12:00");
                 view.getBuyItNowPriceInput().setText("1500");
+                view.getBidAmountInput().setText("0.00");
 
                 Button createItemButton = view.getCreateItemButton();
                 createItemButton.fire();
