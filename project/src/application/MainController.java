@@ -263,8 +263,11 @@ private boolean isDuplicateCategory(String categoryName) {
         
         view.getMyProfileItemsBox().getChildren().add(new Label("Current Bids: "));
         
+        int numMyBids = 0;
         for (Item item : items) {
-        	if(item.hasBidder()) {
+        	
+        	if(item.hasBidder() && item.isActive()) { //Do not show inactive auctions with a bid.
+        		numMyBids++;
         		HBox itemBoxProfile = new HBox(10);
                 itemBoxProfile.getChildren().add(new Label("Title: " + item.getTitle()));
                 if (item.getBuyItNowPrice() != null) {
@@ -273,11 +276,13 @@ private boolean isDuplicateCategory(String categoryName) {
                 itemBoxProfile.getChildren().addAll(
                     new Label("Weight: " + item.getWeight()),
                     new Label("Active: " + (item.isActive() ? "Yes" : "No")),
-                    new Label("Current Bid: $" + item.getCurrentBid())
+                    new Label("Current Bid: $" + item.getCurrentBid()),
+                    new Label("My Bid: $" + item.getCurrentBid()) //currently equal, no profiles yet
                 );
                 view.getMyProfileItemsBox().getChildren().add(itemBoxProfile);	
         	}
-        }        
+        }
+        view.setNumMyBids(numMyBids);
     }
 
     private void updateConcludedAuctionsDisplay() {

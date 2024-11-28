@@ -27,6 +27,7 @@ public class MainView {
     private Label premiumErrorLabel;
     private Label commissionErrorLabel;
     private Label listItemErrorLabel;
+	private int numMyBids;
 
     public MainView(ObservableList<Category> categories) {
         tabPane = new TabPane();
@@ -178,4 +179,13 @@ public class MainView {
     public Label getListItemErrorLabel() {
         return listItemErrorLabel;
     }
+
+	public void setNumMyBids(int numMyBids) {
+		this.numMyBids = numMyBids;
+		
+	}
+	
+	public int getNumMyBids() {
+		return numMyBids;
+	}
 }

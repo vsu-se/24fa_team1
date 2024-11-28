@@ -1,5 +1,7 @@
 package application;
 
+//Will need to be revamped once our classes have been reorganized
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -20,7 +22,7 @@ public class Main extends Application {
                 view.getListItemErrorLabel().setText("Please add a category in the System Admin tab before listing an item.");
                 return;
             }
-
+            
             ItemView itemView = new ItemView(controller.getCategories());
             Tab createItemTab = new Tab("Create Item", itemView.getLayout());
             createItemTab.setClosable(true);
