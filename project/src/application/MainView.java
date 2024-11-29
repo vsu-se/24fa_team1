@@ -1,4 +1,3 @@
-
 package application;
 
 import javafx.collections.ObservableList;
@@ -22,6 +21,7 @@ public class MainView {
     private VBox userInterfaceItemsBox;
     private VBox myProfileItemsBox;
     private VBox concludedAuctionsBox;
+    private VBox sellerReportBox;
 
     // Error labels
     private Label categoryErrorLabel;
@@ -97,7 +97,11 @@ public class MainView {
         ScrollPane myProfileScrollPane = new ScrollPane(myProfileItemsBox);
         myProfileScrollPane.setFitToWidth(true);
 
-        VBox myProfileContent = new VBox(10, myProfileScrollPane);
+        sellerReportBox = new VBox(10);
+        ScrollPane sellerReportScrollPane = new ScrollPane(sellerReportBox);
+        sellerReportScrollPane.setFitToWidth(true);
+
+        VBox myProfileContent = new VBox(10, myProfileScrollPane, new Label("Seller Report:"), sellerReportScrollPane);
         Tab myProfileTab = new Tab("My Profile", myProfileContent);
         myProfileTab.setClosable(false);
 
@@ -164,6 +168,10 @@ public class MainView {
         return concludedAuctionsBox;
     }
 
+    public VBox getSellerReportBox() {
+        return sellerReportBox;
+    }
+
     // Getters for error labels
     public Label getCategoryErrorLabel() {
         return categoryErrorLabel;
@@ -183,7 +191,6 @@ public class MainView {
 
     public void setNumMyBids(int numMyBids) {
         this.numMyBids = numMyBids;
-
     }
 
     public int getNumMyBids() {
