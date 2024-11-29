@@ -287,18 +287,17 @@ public class MainController {
 
     private void updateConcludedAuctionsDisplay() {
         view.getConcludedAuctionsBox().getChildren().clear();
+
+        // Sort items in reverse chronological order by end date
+        items.sort((item1, item2) -> item2.getEndDate().compareTo(item1.getEndDate()));
+
         for (Item item : items) {
             if (!item.isActive()) {
                 HBox itemBox = new HBox(10);
-                itemBox.getChildren().add(new Label("Title: " + item.getTitle()));
-                if (item.getBuyItNowPrice() != null) {
-                    itemBox.getChildren().add(new Label("Buy It Now Price: $" + item.getBuyItNowPrice()));
-                }
-                itemBox.getChildren().addAll(
-                        new Label("Weight: " + item.getWeight()),
-                        new Label("Active: " + (item.isActive() ? "Yes" : "No")),
-                        new Label("Current Bid: $" + item.getCurrentBid())
-                );
+                itemBox.getChildren().add(new Label("Date/Time: " + item.getEndDate().toString()));
+                itemBox.getChildren().add(new Label("Item Name: " + item.getTitle()));
+                itemBox.getChildren().add(new Label("Bought: " + (item.getCurrentBid() > 0 ? "Yes" : "No")));
+                itemBox.getChildren().add(new Label("Price: $" + item.getCurrentBid()));
                 view.getConcludedAuctionsBox().getChildren().add(itemBox);
             }
         }
