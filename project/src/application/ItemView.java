@@ -22,6 +22,12 @@ public class ItemView {
     private VBox userInterfaceItemsBox;
     private VBox myProfileItemsBox;
 
+    // Error label
+    private Label createItemErrorLabel;
+
+    // Bid input and button
+    private TextField bidAmountInput;
+
     public ItemView(ObservableList<Category> categories) {
         layout = new VBox(10);
 
@@ -71,7 +77,15 @@ public class ItemView {
         userInterfaceItemsBox = new VBox(10);
         myProfileItemsBox = new VBox(10);
 
-        layout.getChildren().addAll(titleInput, weightInput, weightUnitComboBox, descriptionInput, categoryComboBox, conditionComboBox, tag1Input, tag2Input, tag3Input, endDatePicker, endTimeInput, buyItNowPriceInput, createItemButton);
+        // Initialize error label
+        createItemErrorLabel = new Label();
+        createItemErrorLabel.setStyle("-fx-text-fill: red;");
+
+        // Initialize bid input and button
+        bidAmountInput = new TextField();
+        bidAmountInput.setPromptText("Enter intial bid amount");
+
+        layout.getChildren().addAll(createItemErrorLabel, titleInput, weightInput, weightUnitComboBox, descriptionInput, categoryComboBox, conditionComboBox, tag1Input, tag2Input, tag3Input, endDatePicker, endTimeInput, buyItNowPriceInput, bidAmountInput, createItemButton);
     }
 
     public VBox getLayout() {
@@ -136,5 +150,13 @@ public class ItemView {
 
     public VBox getMyProfileItemsBox() {
         return myProfileItemsBox;
+    }
+
+    public Label getCreateItemErrorLabel() {
+        return createItemErrorLabel;
+    }
+
+    public TextField getBidAmountInput() {
+        return bidAmountInput;
     }
 }

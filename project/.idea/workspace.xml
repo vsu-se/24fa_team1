@@ -4,26 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a81bf3fc-1fcf-4215-86ad-94bf431c98b4" name="Changes" comment="Added EndedAuctions Controller and View">
-      <change afterPath="$PROJECT_DIR$/../test/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/Auction.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/Category.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/CategoryTest.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/Item.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/ItemController$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/ItemController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/ItemView.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/Main.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainController$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainController$2.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainController$3.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainController$4$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainController$4.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainTest.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/application/MainView.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/out/production/test/module-info.class" afterDir="false" />
+    <list default="true" id="a81bf3fc-1fcf-4215-86ad-94bf431c98b4" name="Changes" comment="Deleted unnecessary file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/EndedAuctionsController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/EndedAuctionsView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/ItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/ItemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/ItemView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/ItemView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/MainView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +120,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732668656119</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Deleted unnecessary file">
+      <option name="closed" value="true" />
+      <created>1732734941027</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1732734941027</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -146,6 +144,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added EndedAuctions Controller and View" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added EndedAuctions Controller and View" />
+    <MESSAGE value="Deleted unnecessary file" />
+    <option name="LAST_COMMIT_MESSAGE" value="Deleted unnecessary file" />
   </component>
 </project>

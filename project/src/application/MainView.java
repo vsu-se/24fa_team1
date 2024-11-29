@@ -18,10 +18,16 @@ public class MainView {
     private Label buyerPremiumLabel;
     private Label sellerCommissionLabel;
     private Button listItemButton;
-    private Button showReportButton;
     private VBox userInterfaceItemsBox;
     private VBox myProfileItemsBox;
-    private VBox endedAuctionsBox;
+    private VBox concludedAuctionsBox;
+
+    // Error labels
+    private Label categoryErrorLabel;
+    private Label premiumErrorLabel;
+    private Label commissionErrorLabel;
+    private Label listItemErrorLabel;
+    private int numMyBids;
 
     public MainView(ObservableList<Category> categories) {
         tabPane = new TabPane();
@@ -48,7 +54,23 @@ public class MainView {
 
         setCommissionButton = new Button("Set Commission");
 
-        VBox systemAdminContent = new VBox(10, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), new HBox(10, premiumInput, setPremiumButton), new HBox(10, commissionInput, setCommissionButton));
+        concludedAuctionsBox = new VBox(10);
+        Label concludedAuctionsLabel = new Label("Concluded Auctions:");
+
+        // Initialize error labels
+        categoryErrorLabel = new Label();
+        categoryErrorLabel.setStyle("-fx-text-fill: red;");
+
+        premiumErrorLabel = new Label();
+        premiumErrorLabel.setStyle("-fx-text-fill: red;");
+
+        commissionErrorLabel = new Label();
+        commissionErrorLabel.setStyle("-fx-text-fill: red;");
+
+        listItemErrorLabel = new Label();
+        listItemErrorLabel.setStyle("-fx-text-fill: red;");
+
+        VBox systemAdminContent = new VBox(10, categoryErrorLabel, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), premiumErrorLabel, new HBox(10, premiumInput, setPremiumButton), commissionErrorLabel, new HBox(10, commissionInput, setCommissionButton), concludedAuctionsLabel, concludedAuctionsBox);
         Tab systemAdminTab = new Tab("System Admin", systemAdminContent);
         systemAdminTab.setClosable(false);
 
@@ -60,13 +82,12 @@ public class MainView {
         sellerCommissionLabel = new Label("Seller's Commission: Not set");
 
         listItemButton = new Button("List Item for Sale");
-        showReportButton = new Button("Show Report");
 
         userInterfaceItemsBox = new VBox(10);
         ScrollPane userInterfaceScrollPane = new ScrollPane(userInterfaceItemsBox);
         userInterfaceScrollPane.setFitToWidth(true);
 
-        VBox userInterfaceContent = new VBox(10, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton, showReportButton, userInterfaceScrollPane);
+        VBox userInterfaceContent = new VBox(10, listItemErrorLabel, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton, userInterfaceScrollPane);
         Tab userInterfaceTab = new Tab("User Interface", userInterfaceContent);
         userInterfaceTab.setClosable(false);
 
@@ -79,16 +100,7 @@ public class MainView {
         Tab myProfileTab = new Tab("My Profile", myProfileContent);
         myProfileTab.setClosable(false);
 
-        // Ended Auctions Tab
-        endedAuctionsBox = new VBox(10);
-        ScrollPane endedAuctionsScrollPane = new ScrollPane(endedAuctionsBox);
-        endedAuctionsScrollPane.setFitToWidth(true);
-
-        VBox endedAuctionsContent = new VBox(10, endedAuctionsScrollPane);
-        Tab endedAuctionsTab = new Tab("Ended Auctions", endedAuctionsContent);
-        endedAuctionsTab.setClosable(false);
-
-        tabPane.getTabs().addAll(systemAdminTab, userInterfaceTab, myProfileTab, endedAuctionsTab);
+        tabPane.getTabs().addAll(systemAdminTab, userInterfaceTab, myProfileTab);
     }
 
     public TabPane getTabPane() {
@@ -139,10 +151,6 @@ public class MainView {
         return listItemButton;
     }
 
-    public Button getShowReportButton() {
-        return showReportButton;
-    }
-
     public VBox getUserInterfaceItemsBox() {
         return userInterfaceItemsBox;
     }
@@ -151,7 +159,33 @@ public class MainView {
         return myProfileItemsBox;
     }
 
-    public VBox getEndedAuctionsBox() {
-        return endedAuctionsBox;
+    public VBox getConcludedAuctionsBox() {
+        return concludedAuctionsBox;
+    }
+
+    // Getters for error labels
+    public Label getCategoryErrorLabel() {
+        return categoryErrorLabel;
+    }
+
+    public Label getPremiumErrorLabel() {
+        return premiumErrorLabel;
+    }
+
+    public Label getCommissionErrorLabel() {
+        return commissionErrorLabel;
+    }
+
+    public Label getListItemErrorLabel() {
+        return listItemErrorLabel;
+    }
+
+    public void setNumMyBids(int numMyBids) {
+        this.numMyBids = numMyBids;
+
+    }
+
+    public int getNumMyBids() {
+        return numMyBids;
     }
 }
