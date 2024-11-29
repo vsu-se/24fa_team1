@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a81bf3fc-1fcf-4215-86ad-94bf431c98b4" name="Changes" comment="Pulled changes from main">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/application/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/application/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/application/MainView.java" beforeDir="false" />
-    </list>
+    <list default="true" id="a81bf3fc-1fcf-4215-86ad-94bf431c98b4" name="Changes" comment="Updated ShowConcludedAuctions" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -132,7 +126,23 @@
       <option name="project" value="LOCAL" />
       <updated>1732841758609</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Updated ShowConcludedAuctions">
+      <option name="closed" value="true" />
+      <created>1732843629229</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1732843629229</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Updated ShowConcludedAuctions">
+      <option name="closed" value="true" />
+      <created>1732843732834</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1732843732834</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -150,6 +160,7 @@
     <MESSAGE value="Added EndedAuctions Controller and View" />
     <MESSAGE value="Deleted unnecessary file" />
     <MESSAGE value="Pulled changes from main" />
-    <option name="LAST_COMMIT_MESSAGE" value="Pulled changes from main" />
+    <MESSAGE value="Updated ShowConcludedAuctions" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated ShowConcludedAuctions" />
   </component>
 </project>
