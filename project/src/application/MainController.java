@@ -45,6 +45,7 @@ public class MainController {
             while (change.next()) {
                 if (change.wasAdded() || change.wasRemoved()) {
                     updateProfileItemsDisplay();
+                    generateSellerReport();
                 }
             }
         });
@@ -131,6 +132,7 @@ public class MainController {
 
         // Initial display update
         updateProfileItemsDisplay();
+        generateSellerReport();
     }
 
     public void scheduleNextUpdate() {
@@ -164,6 +166,7 @@ public class MainController {
             updateItemsDisplay();
             updateProfileItemsDisplay();
             updateConcludedAuctionsDisplay();
+            generateSellerReport();
         });
         scheduleNextUpdate();
     }
@@ -301,6 +304,46 @@ public class MainController {
                 view.getConcludedAuctionsBox().getChildren().add(itemBox);
             }
         }
+    }
+
+    private void generateSellerReport() {
+        view.getSellerReportBox().getChildren().clear();
+
+        double totalWinningBids = 0;
+        double totalShippingCosts = 0;
+        double totalSellerCommissions = 0;
+
+        items.sort((item1, item2) -> item2.getEndDate().compareTo(item1.getEndDate()));
+
+        for (Item item : items) {
+            if (!item.isActive()) {
+                double winningBid = item.getCurrentBid();
+                double shippingCost = item.calculateShippingCost();
+                double sellersCommission = (winningBid * sellerCommission) / 100;
+
+                totalWinningBids += winningBid;
+                totalShippingCosts += shippingCost;
+                totalSellerCommissions += sellersCommission;
+
+                HBox itemBox = new HBox(10);
+                itemBox.getChildren().addAll(
+                        new Label("Name: " + item.getTitle()),
+                        new Label("Price: $" + winningBid),
+                        new Label("Seller's Commission: $" + sellerCommission),
+                        new Label("Shipping: $" + shippingCost)
+                );
+                view.getSellerReportBox().getChildren().add(itemBox);
+            }
+        }
+
+        double totalProfits = totalWinningBids - totalSellerCommissions;
+
+        view.getSellerReportBox().getChildren().addAll(
+                new Label("Total Winning Bids: $" + totalWinningBids),
+                new Label("Total Shipping Costs: $" + totalShippingCosts),
+                new Label("Total Seller’s Commissions: $" + totalSellerCommissions),
+                new Label("Total Profits: $" + totalProfits)
+        );
     }
 
     private void clearErrorMessages() {

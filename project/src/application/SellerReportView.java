@@ -1,6 +1,5 @@
 package application;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -37,6 +36,10 @@ public class SellerReportView {
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("buyItNowPrice"));
 
         reportTable.getColumns().addAll(titleColumn, categoryColumn, conditionColumn, endDateColumn, priceColumn);
+    }
+
+    public void setItems(ObservableList<Item> items) {
+        reportTable.setItems(items);
     }
 
     public TableView<Item> getReportTable() {

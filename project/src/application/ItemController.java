@@ -1,3 +1,4 @@
+// ItemController.java
 package application;
 
 import javafx.collections.ObservableList;
@@ -85,9 +86,7 @@ public class ItemController {
                 double bidAmount;
                 try {
                     bidAmount = Double.parseDouble(bidAmountText);
-                    if (bidAmount >= 0.00) {
-
-                    } else {
+                    if (bidAmount < 0) {
                         view.getCreateItemErrorLabel().setText("Initial bid amount cannot be negative.");
                         return;
                     }

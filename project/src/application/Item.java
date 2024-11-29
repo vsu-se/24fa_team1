@@ -150,6 +150,21 @@ public class Item {
         return false;
     }
 
+    public double calculateShippingCost() {
+        double weightValue = Double.parseDouble(weight.split(" ")[0]);
+        String weightUnit = weight.split(" ")[1];
+        double costPerKg = 5.0; // Example cost per kg
+        double costPerLb = 2.5; // Example cost per lb
+
+        if (weightUnit.equals("kg")) {
+            return weightValue * costPerKg;
+        } else if (weightUnit.equals("lb")) {
+            return weightValue * costPerLb;
+        } else {
+            return 0.0;
+        }
+    }
+
     public boolean hasBidder() {
         return hasBidder;
     }
