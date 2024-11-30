@@ -143,7 +143,7 @@ public class MainController {
 
         Item nextExpiringItem = getNextExpiringItem();
         if (nextExpiringItem != null) {
-            long delay = nextExpiringItem.getEndDate().toEpochSecond(ZoneOffset.UTC) - LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+            long delay = nextExpiringItem.getEndDate().toEpochSecond(ZoneOffset.UTC) - clock.getTime().toEpochSecond(ZoneOffset.UTC);
             if (delay > 0) {
                 scheduledFuture = scheduler.schedule(this::checkAndUpdateItems, delay, TimeUnit.SECONDS);
             } else {
