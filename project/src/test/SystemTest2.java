@@ -23,7 +23,7 @@ class SystemTest2 {
         latch.await();
 
         view = new MainView(FXCollections.observableArrayList());
-        controller = new MainController(view);
+        controller = new MainController(view,  new SystemClock());
     }
 
     @BeforeEach

@@ -40,7 +40,7 @@ public class SystemTest6 extends Application {
         Platform.runLater(() -> {
             try {
                 mainView = new MainView(FXCollections.observableArrayList());
-                mainController = new MainController(mainView);
+                mainController = new MainController(mainView, new SystemClock());
                 items = mainController.getItems();
             } finally {
                 setupLatch.countDown();
@@ -51,10 +51,10 @@ public class SystemTest6 extends Application {
         }
 
         // Add mock items
-        items.add(new Item("Item 1", "1 kg", "Description 1", new Category("Category 1"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1), 100.0, 0.00));
-        items.add(new Item("Item 2", "2 kg", "Description 2", new Category("Category 2"), "Used", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(2), LocalDateTime.now().plusDays(2), 200.0, 0.00));
-        items.add(new Item("Item 3", "3 kg", "Description 3", new Category("Category 3"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(3), LocalDateTime.now().plusDays(3), 300.0, 0.00));
-        items.add(new Item("Expired Item", "1 kg", "Expired Description", new Category("Category 4"), "Used", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(5), LocalDateTime.now().minusDays(1), 50.0, 0.00));
+        items.add(new Item("Item 1", "1 kg", "Description 1", new Category("Category 1"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1), 100.0, 0.00, mainController.getClock()));
+        items.add(new Item("Item 2", "2 kg", "Description 2", new Category("Category 2"), "Used", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(2), LocalDateTime.now().plusDays(2), 200.0, 0.00, mainController.getClock()));
+        items.add(new Item("Item 3", "3 kg", "Description 3", new Category("Category 3"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(3), LocalDateTime.now().plusDays(3), 300.0, 0.00, mainController.getClock()));
+        items.add(new Item("Expired Item", "1 kg", "Expired Description", new Category("Category 4"), "Used", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(5), LocalDateTime.now().minusDays(1), 50.0, 0.00, mainController.getClock()));
     }
 
     @Test

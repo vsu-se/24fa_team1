@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.application.Platform;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Comparator;
@@ -31,9 +32,11 @@ public class MainController {
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> scheduledFuture;
     private TextField currentBidInput;
+    private SystemClock clock;
 
-    public MainController(MainView view) {
+    public MainController(MainView view, SystemClock clock) {
         this.view = view;
+        this.clock = clock;
         categories = FXCollections.observableArrayList();
         items = FXCollections.observableArrayList();
 
@@ -109,7 +112,7 @@ public class MainController {
                 ItemView itemView = new ItemView(categories);
                 Tab createItemTab = new Tab("Create Item", itemView.getLayout());
                 createItemTab.setClosable(true);
-                new ItemController(itemView, categories, view.getTabPane(), createItemTab, items, MainController.this);
+                new ItemController(itemView, categories, view.getTabPane(), createItemTab, items, MainController.this, clock);
                 view.getTabPane().getTabs().add(createItemTab);
                 view.getTabPane().getSelectionModel().select(createItemTab);
             }
@@ -316,4 +319,16 @@ private boolean isDuplicateCategory(String categoryName) {
             scheduler.shutdown();
         }
     }
+    
+    public void setTime(LocalDateTime time) {
+    	this.clock.setTime(time);
+    }
+    
+    public LocalDateTime getTime() {
+    	return clock.getTime();
+    }
+
+	public SystemClock getClock() {
+		return clock;
+	}
 }

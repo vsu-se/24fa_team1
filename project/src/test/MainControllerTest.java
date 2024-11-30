@@ -37,7 +37,7 @@ class MainControllerTest {
     void setUp() throws Exception {
         categories = FXCollections.observableArrayList();
         view = new MainView(categories);
-        controller = new MainController(view);
+        controller = new MainController(view,  new SystemClock());
     }
 
     @Test

@@ -45,7 +45,7 @@ public class SystemTest7 {
             categories = FXCollections.observableArrayList();
             items = FXCollections.observableArrayList();
             mainView = new MainView(categories);
-            mainController = new MainController(mainView);
+            mainController = new MainController(mainView, new SystemClock());
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS);
@@ -58,7 +58,7 @@ public class SystemTest7 {
             Category category = new Category("Electronics");
             categories.add(category);
             //add mock item
-            Item item = new Item("Laptop", "2 kg", "A powerful laptop", category, "New", "tag1", "tag2", "tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), null, 100.0);
+            Item item = new Item("Laptop", "2 kg", "A powerful laptop", category, "New", "tag1", "tag2", "tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), null, 100.0, mainController.getClock());
             items.add(item);
 
             boolean bidPlaced = item.placeBid(150.0);
@@ -77,7 +77,7 @@ public class SystemTest7 {
             Category category = new Category("Electronics");
             categories.add(category);
             //add mock item
-            Item item = new Item("Laptop", "2 kg", "A powerful laptop", category, "New", "tag1", "tag2", "tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), null, 100.0);
+            Item item = new Item("Laptop", "2 kg", "A powerful laptop", category, "New", "tag1", "tag2", "tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), null, 100.0, mainController.getClock());
             items.add(item);
 
             boolean bidPlaced = item.placeBid(50.0);
@@ -95,7 +95,7 @@ public class SystemTest7 {
         Platform.runLater(() -> {
             Category category = new Category("Electronics");
             categories.add(category);
-            Item item = new Item("Laptop", "2 kg", "A powerful laptop", category, "New", "tag1", "tag2", "tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), null, 100.0);
+            Item item = new Item("Laptop", "2 kg", "A powerful laptop", category, "New", "tag1", "tag2", "tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), null, 100.0, mainController.getClock());
             items.add(item);
             
             //assertEquals(mainView.getListItemErrorLabel().getText(), "Please enter a valid bid amount.");

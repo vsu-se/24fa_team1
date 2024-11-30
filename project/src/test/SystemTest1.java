@@ -39,7 +39,7 @@ public class SystemTest1 {
         Platform.runLater(() -> {
             categories = FXCollections.observableArrayList();
             mainView = new MainView(categories);
-            mainController = new MainController(mainView);
+            mainController = new MainController(mainView,  new SystemClock());
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS); // Wait for JavaFX initialization

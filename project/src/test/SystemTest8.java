@@ -32,7 +32,7 @@ public class SystemTest8 {
         Platform.runLater(() -> {
             categories = FXCollections.observableArrayList();
             mainView = new MainView(categories);
-            mainController = new MainController(mainView);
+            mainController = new MainController(mainView, new SystemClock());
             items = mainController.getItems();
             latch.countDown();
         });
@@ -47,9 +47,9 @@ public class SystemTest8 {
             Category category = new Category("Electronics");
             categories.add(category);
             //add mock items
-            Item item1 = new Item("Laptop", "2 kg", "A powerful laptop", category, "New", "tag1", "tag2", "tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), null, 500.0);
-            Item item2 = new Item("PC", "2 kg", "A powerful PC", category, "New", "tag1", "tag2", "tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), null, 1000.0);
-            Item item3 = new Item("Phone", "2 kg", "A powerful Phone", category, "New", "tag1", "tag2", "tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), null, 300.0);
+            Item item1 = new Item("Laptop", "2 kg", "A powerful laptop", category, "New", "tag1", "tag2", "tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), null, 500.0, mainController.getClock());
+            Item item2 = new Item("PC", "2 kg", "A powerful PC", category, "New", "tag1", "tag2", "tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), null, 1000.0, mainController.getClock());
+            Item item3 = new Item("Phone", "2 kg", "A powerful Phone", category, "New", "tag1", "tag2", "tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), null, 300.0, mainController.getClock());
             items.add(item1);
             items.add(item2);
             items.add(item3);
@@ -108,7 +108,7 @@ public class SystemTest8 {
             Category category = new Category("Electronics");
             categories.add(category);
             //add mock items
-            Item item1 = new Item("Laptop", "2 kg", "A powerful laptop", category, "New", "tag1", "tag2", "tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), null, 500.0);
+            Item item1 = new Item("Laptop", "2 kg", "A powerful laptop", category, "New", "tag1", "tag2", "tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), null, 500.0, mainController.getClock());
             items.add(item1);
             
             //Place bid on item1

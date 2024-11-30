@@ -21,7 +21,7 @@ public class ItemController {
     private ObservableList<Item> items;
     private MainController mainController;
 
-    public ItemController(ItemView view, ObservableList<Category> categories, TabPane tabPane, Tab createItemTab, ObservableList<Item> items, MainController mainController) {
+    public ItemController(ItemView view, ObservableList<Category> categories, TabPane tabPane, Tab createItemTab, ObservableList<Item> items, MainController mainController, SystemClock clock) {
         this.view = view;
         this.categories = categories;
         this.tabPane = tabPane;
@@ -58,7 +58,7 @@ public class ItemController {
                     return;
                 }
 
-                LocalDateTime startDate = LocalDateTime.now();
+                LocalDateTime startDate = mainController.getTime();
                 LocalDateTime endDateTime;
                 try {
                     endDateTime = LocalDateTime.of(endDate, LocalTime.parse(endTime, DateTimeFormatter.ofPattern("HH:mm")));
@@ -96,7 +96,7 @@ public class ItemController {
                     return;
                 }
 
-                Item newItem = new Item(title, weight + " " + weightUnit, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice, bidAmount);
+                Item newItem = new Item(title, weight, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice, bidAmount, mainController.getClock());
                 items.add(newItem);
 
                 // Clear error message

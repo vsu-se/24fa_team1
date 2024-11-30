@@ -43,9 +43,9 @@ class SystemTest4 {
         view = new ItemView(categories);
         tabPane = new TabPane();
         createItemTab = new Tab();
-        mainController = new MainController(new MainView(categories));
+        mainController = new MainController(new MainView(categories),  new SystemClock());
 
-        controller = new ItemController(view, categories, tabPane, createItemTab, items, mainController);
+        controller = new ItemController(view, categories, tabPane, createItemTab, items, mainController,  new SystemClock());
     }
     
     @Test

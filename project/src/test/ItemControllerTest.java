@@ -43,9 +43,9 @@ class ItemControllerTest {
         view = new ItemView(categories);
         tabPane = new TabPane();
         createItemTab = new Tab();
-        mainController = new MainController(new MainView(categories)); 
+        mainController = new MainController(new MainView(categories), new SystemClock()); 
 
-        controller = new ItemController(view, categories, tabPane, createItemTab, items, mainController); // Pass items and mainController to the constructor
+        controller = new ItemController(view, categories, tabPane, createItemTab, items, mainController, new SystemClock()); // Pass items and mainController to the constructor
     }
 
     @Test
