@@ -34,6 +34,7 @@ public class MainController {
     private ScheduledFuture<?> scheduledFuture;
     private TextField currentBidInput;
     private SystemClock clock;
+    private Category allAuctions = new Category("All Auctions");
 
     public MainController(MainView view, SystemClock clock) {
         this.view = view;
@@ -131,11 +132,14 @@ public class MainController {
         view.getTabPane().getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             clearErrorMessages();
         });
+        
+        view.getCategoryComboBoxConcludedAuctions().valueProperty().addListener((observable, oldValue, newValue) -> {
+            updateConcludedAuctionsDisplay();
+        });
 
         // Bind the categories list to the ComboBoxes
         view.getCategoryComboBoxSystemAdmin().setItems(categories);
         view.getCategoryComboBoxUserInterface().setItems(categories);
-        Category allAuctions = new Category("All Auctions");
         concludedCategories.add(allAuctions);
         concludedCategories.addAll(categories);
         view.getCategoryComboBoxConcludedAuctions().setItems(concludedCategories);
@@ -299,8 +303,9 @@ private boolean isDuplicateCategory(String categoryName) {
 
     public void updateConcludedAuctionsDisplay() {
         view.getConcludedAuctionsBox().getChildren().clear();
+        Category selectedCategory = view.getCategoryComboBoxConcludedAuctions().getValue();
         for (Item item : items) {
-            if (!item.isActive()) {
+            if (!item.isActive() && !item.isActive() && (item.getCategory().equals(selectedCategory) || selectedCategory.equals(allAuctions))) {
                 HBox itemBox = new HBox(10);
                 itemBox.getChildren().add(new Label("Title: " + item.getTitle()));
                 if (item.getBuyItNowPrice() != null) {
@@ -313,7 +318,7 @@ private boolean isDuplicateCategory(String categoryName) {
                     new Label("End-date: " + item.getEndDate())
                 );
                 view.getConcludedAuctionsBox().getChildren().add(itemBox);
-                itemBox.toBack(); //temporary fix ?, I have no proof that this works long term, but I can't get it to not work
+                itemBox.toBack();
             }
         }
     }
