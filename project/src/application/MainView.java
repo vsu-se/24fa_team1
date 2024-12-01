@@ -185,7 +185,7 @@ public class MainView {
         return sellerReportBox;
     }
     public VBox getBuyerReportBox() {
-        return sellerReportBox;
+        return buyerReportBox;
     }
 
     // Getters for error labels
