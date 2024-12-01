@@ -24,7 +24,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class MainController {
-    private ObservableList<Category> categories;
+	private ObservableList<Category> categories;
+	private ObservableList<Category> concludedCategories;
     private ObservableList<Item> items;
     private MainView view;
     private double buyerPremium;
@@ -38,6 +39,7 @@ public class MainController {
         this.view = view;
         this.clock = clock;
         categories = FXCollections.observableArrayList();
+        concludedCategories = FXCollections.observableArrayList();
         items = FXCollections.observableArrayList();
 
         // Initialize the scheduler
@@ -59,6 +61,7 @@ public class MainController {
             if (!categoryName.isEmpty() && !isDuplicateCategory(categoryName)) {
                 Category newCategory = new Category(categoryName);
                 categories.add(newCategory);
+                concludedCategories.add(newCategory);
                 view.getCategoryInput().clear();
                 view.getCategoryErrorLabel().setText(""); // Clear error message
             } else {
@@ -122,7 +125,8 @@ public class MainController {
         view.getCategoryComboBoxUserInterface().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateItemsDisplay();
         });
-
+        
+        
         // Add listener to clear error message when switching tabs
         view.getTabPane().getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             clearErrorMessages();
@@ -131,6 +135,11 @@ public class MainController {
         // Bind the categories list to the ComboBoxes
         view.getCategoryComboBoxSystemAdmin().setItems(categories);
         view.getCategoryComboBoxUserInterface().setItems(categories);
+        Category allAuctions = new Category("All Auctions");
+        concludedCategories.add(allAuctions);
+        concludedCategories.addAll(categories);
+        view.getCategoryComboBoxConcludedAuctions().setItems(concludedCategories);
+        
 
         // Initial display update
         updateProfileItemsDisplay();
@@ -288,7 +297,7 @@ private boolean isDuplicateCategory(String categoryName) {
         view.setNumMyBids(numMyBids);
     }
 
-    private void updateConcludedAuctionsDisplay() {
+    public void updateConcludedAuctionsDisplay() {
         view.getConcludedAuctionsBox().getChildren().clear();
         for (Item item : items) {
             if (!item.isActive()) {
@@ -300,9 +309,11 @@ private boolean isDuplicateCategory(String categoryName) {
                 itemBox.getChildren().addAll(
                     new Label("Weight: " + item.getWeight()),
                     new Label("Active: " + (item.isActive() ? "Yes" : "No")),
-                    new Label("Current Bid: $" + item.getCurrentBid())
+                    new Label("Current Bid: $" + item.getCurrentBid()),
+                    new Label("End-date: " + item.getEndDate())
                 );
                 view.getConcludedAuctionsBox().getChildren().add(itemBox);
+                itemBox.toBack(); //temporary fix ?, I have no proof that this works long term, but I can't get it to not work
             }
         }
     }

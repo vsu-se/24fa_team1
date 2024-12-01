@@ -9,6 +9,7 @@ public class MainView {
     private TabPane tabPane;
     private ComboBox<Category> categoryComboBoxSystemAdmin;
     private ComboBox<Category> categoryComboBoxUserInterface;
+    private ComboBox<Category> categoryComboBoxConcludedAuctions;
     private TextField categoryInput;
     private Button addButton;
     private TextField premiumInput;
@@ -53,7 +54,10 @@ public class MainView {
         commissionInput.setMaxWidth(2 * 400 / 3);
 
         setCommissionButton = new Button("Set Commission");
-
+        
+        categoryComboBoxConcludedAuctions = new ComboBox<>(categories);
+        categoryComboBoxConcludedAuctions.setPromptText("Select Category");
+        
         concludedAuctionsBox = new VBox(10);
         Label concludedAuctionsLabel = new Label("Concluded Auctions:");
 
@@ -70,7 +74,7 @@ public class MainView {
         listItemErrorLabel = new Label();
         listItemErrorLabel.setStyle("-fx-text-fill: red;");
 
-        VBox systemAdminContent = new VBox(10, categoryErrorLabel, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), premiumErrorLabel, new HBox(10, premiumInput, setPremiumButton), commissionErrorLabel, new HBox(10, commissionInput, setCommissionButton), concludedAuctionsLabel, concludedAuctionsBox);
+        VBox systemAdminContent = new VBox(10, categoryErrorLabel, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), premiumErrorLabel, new HBox(10, premiumInput, setPremiumButton), commissionErrorLabel, new HBox(10, commissionInput, setCommissionButton), concludedAuctionsLabel, categoryComboBoxConcludedAuctions, concludedAuctionsBox);
         Tab systemAdminTab = new Tab("System Admin", systemAdminContent);
         systemAdminTab.setClosable(false);
 
@@ -113,6 +117,10 @@ public class MainView {
 
     public ComboBox<Category> getCategoryComboBoxUserInterface() {
         return categoryComboBoxUserInterface;
+    }
+    
+    public ComboBox<Category> getCategoryComboBoxConcludedAuctions() {
+        return categoryComboBoxConcludedAuctions;
     }
 
     public TextField getCategoryInput() {

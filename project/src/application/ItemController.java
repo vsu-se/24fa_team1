@@ -95,7 +95,7 @@ public class ItemController {
                     view.getCreateItemErrorLabel().setText("Please enter a valid bid amount.");
                     return;
                 }
-
+                
                 Item newItem = new Item(title, weight, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice, bidAmount, mainController.getClock());
                 items.add(newItem);
 

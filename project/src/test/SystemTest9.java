@@ -43,7 +43,7 @@ class SystemTest9 {
     }
     
     @Test
-    public void testEndOneAuctionOneAuctionActive() throws InterruptedException{
+    public void testEndOneAuctionWithOneAuctionActive() throws InterruptedException{
     	CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
         	//add mock category
@@ -72,7 +72,7 @@ class SystemTest9 {
     }
     
     @Test
-    public void testEndOneAuctionMultipleAuctionsActive() throws InterruptedException{
+    public void testEndOneAuctionWithMultipleAuctionsActive() throws InterruptedException{
     	CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
         	//add mock category
@@ -105,7 +105,7 @@ class SystemTest9 {
     }
     
     @Test
-    public void testEndTwoAuctionsMultipleAuctionsActive() throws InterruptedException{
+    public void testEndTwoAuctionsWithMultipleAuctionsActive() throws InterruptedException{
     	CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
         	//add mock category
