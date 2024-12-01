@@ -88,8 +88,7 @@ public class SellerReportViewTest {
         Platform.runLater(() -> {
 
             Category category = new Category("Test Category");
-            Item item = new Item(
-                    "Test Title",
+            Item item = new Item("Test Title",
                     "1kg",
                     "Test Description",
                     category,

@@ -22,6 +22,7 @@ public class MainView {
     private VBox myProfileItemsBox;
     private VBox concludedAuctionsBox;
     private VBox sellerReportBox;
+    private VBox buyerReportBox;
 
     // Error labels
     private Label categoryErrorLabel;
@@ -75,6 +76,8 @@ public class MainView {
         Tab systemAdminTab = new Tab("System Admin", systemAdminContent);
         systemAdminTab.setClosable(false);
 
+
+
         // User Interface Tab
         categoryComboBoxUserInterface = new ComboBox<>(categories);
         categoryComboBoxUserInterface.setPromptText("Category");
@@ -91,6 +94,16 @@ public class MainView {
         VBox userInterfaceContent = new VBox(10, listItemErrorLabel, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton, userInterfaceScrollPane);
         Tab userInterfaceTab = new Tab("User Interface", userInterfaceContent);
         userInterfaceTab.setClosable(false);
+
+        buyerReportBox = new VBox(10);
+        ScrollPane buyerReportScrollPane = new ScrollPane(buyerReportBox);
+        buyerReportScrollPane.setFitToWidth(true);
+
+        userInterfaceContent = new VBox(10, listItemErrorLabel, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton, userInterfaceScrollPane, new Label("Buyer Report:"), buyerReportScrollPane);
+        userInterfaceTab = new Tab("User Interface", userInterfaceContent);
+        userInterfaceTab.setClosable(false);
+
+
 
         // My Profile Tab
         myProfileItemsBox = new VBox(10);
@@ -169,6 +182,9 @@ public class MainView {
     }
 
     public VBox getSellerReportBox() {
+        return sellerReportBox;
+    }
+    public VBox getBuyerReportBox() {
         return sellerReportBox;
     }
 
