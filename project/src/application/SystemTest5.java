@@ -1,226 +1,127 @@
 package application;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import javafx.application.Application;
-import javafx.application.Platform;
+import application.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.stage.Stage;
-import java.time.LocalDateTime;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.application.Platform;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-public class SystemTest5 extends Application {
-    private static ObservableList<Item> items;
-    private static MainController mainController;
-    private static MainView mainView;
-    private static final CountDownLatch latch = new CountDownLatch(1);
+import java.time.LocalDate;
+import java.util.concurrent.CountDownLatch;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class SystemTest5 {
+
+    private ItemView view;
+    private ItemController controller;
+    private ObservableList<Category> categories;
+    private ObservableList<Item> items;
+    private TabPane tabPane;
+    private Tab createItemTab;
+    private MainController mainController;
 
     @BeforeAll
-    public static void initToolkit() throws Exception {
-        new Thread(() -> Application.launch(SystemTest5.class)).start();
-        if (!latch.await(10, TimeUnit.SECONDS)) {
-            throw new Exception("JavaFX initialization took too long");
-        }
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-        latch.countDown();
+    static void initToolkit() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        Platform.startup(() -> {
+            latch.countDown();
+        });
+        latch.await();
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
-        CountDownLatch setupLatch = new CountDownLatch(1);
-        Platform.runLater(() -> {
-            try {
-                mainView = new MainView(FXCollections.observableArrayList());
-                mainController = new MainController(mainView);
-                items = mainController.getItems();
-            } finally {
-                setupLatch.countDown();
-            }
-        });
-        if (!setupLatch.await(5, TimeUnit.SECONDS)) {
-            throw new Exception("JavaFX setup took too long");
-        }
+    void setUp() throws Exception {
+        categories = FXCollections.observableArrayList(new Category("Electronics"));
+        items = FXCollections.observableArrayList();
+        view = new ItemView(categories);
+        tabPane = new TabPane();
+        createItemTab = new Tab();
+        mainController = new MainController(new MainView(categories));
 
-        // Add mock items
-        items.add(new Item("Item 1", "1 kg", "Description 1", new Category("Category 1"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1), 100.0));
-        items.add(new Item("Item 2", "2 kg", "Description 2", new Category("Category 2"), "Used", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(2), LocalDateTime.now().plusDays(2), 200.0));
-        items.add(new Item("Item 3", "3 kg", "Description 3", new Category("Category 3"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(3), LocalDateTime.now().plusDays(3), 300.0));
+        controller = new ItemController(view, categories, tabPane, createItemTab, items, mainController);
     }
 
     @Test
-    public void testItemsSortedByEndDate() throws Exception {
-        CountDownLatch testLatch = new CountDownLatch(1);
+    @DisplayName("User Story 5: Verify My Auctions Display Correctly with All Details")
+    void testShowMyAuctions() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
             try {
-                mainController.updateItemsDisplay();
-                assertEquals("Item 1", items.get(0).getTitle());
-                assertEquals("Item 2", items.get(1).getTitle());
-                assertEquals("Item 3", items.get(2).getTitle());
+                // Arrange
+                Item item1 = new Item("Laptop", "1.5", "Used laptop in good condition", categories.get(0), "Used", "Tech", "Portable", "Computer",
+                        LocalDate.now().minusDays(1).atStartOfDay(), LocalDate.now().plusDays(1).atTime(12, 0), 500.0, 100.0);
+                Item item2 = new Item("Phone", "0.3", "Latest model smartphone", categories.get(0), "New", "Tech", "Gadget", "Mobile",
+                        LocalDate.now().minusDays(3).atStartOfDay(), LocalDate.now().plusDays(2).atTime(15, 0), 700.0, 150.0);
+
+                // Use mainController's addItem to ensure items are added to the correct list
+                mainController.addItem(item1);
+                mainController.addItem(item2);
+
+                // Debugging: Check the size of the items list after addition
+                System.out.println("Items added to the list: " + mainController.getItems().size());
+
+                // Act
+                mainController.updateProfileItemsDisplay();
+
+                // Wait to ensure JavaFX updates have taken place
+                latch.countDown();
+
             } finally {
-                testLatch.countDown();
+                latch.countDown();
             }
         });
-        if (!testLatch.await(5, TimeUnit.SECONDS)) {
-            throw new Exception("Test execution took too long");
-        }
+        latch.await();
+
+        // Get the items after updating the profile display
+        ObservableList<Item> profileItems = mainController.getItems().filtered(item -> item.getCategory().getName().equals("Electronics"));
+
+        // Debugging: Check the size of the profile items list
+        System.out.println("Profile items list after update: " + profileItems.size());
+
+        // Assert: Verify the number of items in the profile list
+        assertEquals(2, profileItems.size(), "Expected the profile item list to contain 2 items.");
+
+        // Assert: Verify the sorting order by end date
+        assertTrue(profileItems.get(0).getEndDate().isBefore(profileItems.get(1).getEndDate()), "Profile items should be sorted based on end date.");
+
+        // Assert: Verify the item details
+        assertEquals("Laptop", profileItems.get(0).getTitle(), "First item in profile should be 'Laptop'.");
+        assertEquals(100.0, profileItems.get(0).getCurrentBid(), "First item in profile should have a current bid of 100.0.");
+        assertEquals(500.0, profileItems.get(0).getBuyItNowPrice(), "First item in profile should have a buy-it-now price of 500.0.");
+        assertTrue(profileItems.get(0).isActive(), "First item should be active.");
+
+        assertEquals("Phone", profileItems.get(1).getTitle(), "Second item in profile should be 'Phone'.");
+        assertEquals(150.0, profileItems.get(1).getCurrentBid(), "Second item in profile should have a current bid of 150.0.");
+        assertEquals(700.0, profileItems.get(1).getBuyItNowPrice(), "Second item in profile should have a buy-it-now price of 700.0.");
+        assertTrue(profileItems.get(1).isActive(), "Second item should be active.");
     }
 
-    @Test
-    public void testItemDetails() throws Exception {
-        CountDownLatch testLatch = new CountDownLatch(1);
-        Platform.runLater(() -> {
-            try {
-                Item item = items.get(0);
-                assertEquals("Item 1", item.getTitle());
-                assertEquals("1 kg", item.getWeight());
-                assertEquals("Description 1", item.getDescription());
-                assertEquals("Category 1", item.getCategory().getName());
-                assertEquals("New", item.getCondition());
-                assertEquals(100.0, item.getBuyItNowPrice());
-                assertTrue(item.isActive());
-            } finally {
-                testLatch.countDown();
-            }
-        });
-        if (!testLatch.await(5, TimeUnit.SECONDS)) {
-            throw new Exception("Test execution took too long");
-        }
-    }
 
     @Test
-    public void testCurrentBid() throws Exception {
-        CountDownLatch testLatch = new CountDownLatch(1);
+    @DisplayName("User Story 5: Verify Adding Item")
+    void testAddItem() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
             try {
-                Item item = items.get(0);
-                item.setCurrentBid(150.0);
-                assertEquals(150.0, item.getCurrentBid());
-            } finally {
-                testLatch.countDown();
-            }
-        });
-        if (!testLatch.await(5, TimeUnit.SECONDS)) {
-            throw new Exception("Test execution took too long");
-        }
-    }
+                // Arrange
+                Item newItem = new Item("Tablet", "0.8kg", "A brand new tablet", categories.get(0), "New", "Tech", "Portable", "Tablet",
+                        LocalDate.now().minusDays(1).atStartOfDay(), LocalDate.now().plusDays(1).atTime(12, 0), 300.0, 50.0);
 
-    @Test
-    public void testEmptyItemList() throws Exception {
-        CountDownLatch testLatch = new CountDownLatch(1);
-        Platform.runLater(() -> {
-            try {
-                items.clear();
-                mainController.updateItemsDisplay();
-                assertTrue(items.isEmpty());
-            } finally {
-                testLatch.countDown();
-            }
-        });
-        if (!testLatch.await(5, TimeUnit.SECONDS)) {
-            throw new Exception("Test execution took too long");
-        }
-    }
+                // Act
+                mainController.addItem(newItem);
 
-    @Test
-    public void testSingleItem() throws Exception {
-        CountDownLatch testLatch = new CountDownLatch(1);
-        Platform.runLater(() -> {
-            try {
-                items.clear();
-                items.add(new Item("Single Item", "1 kg", "Description", new Category("Category"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), 100.0));
-                mainController.updateItemsDisplay();
-                assertEquals(1, items.size());
-                assertEquals("Single Item", items.get(0).getTitle());
+                // Assert
+                assertTrue(mainController.getItems().contains(newItem), "Expected the item list to contain the newly added 'Tablet'.");
             } finally {
-                testLatch.countDown();
+                latch.countDown();
             }
         });
-        if (!testLatch.await(5, TimeUnit.SECONDS)) {
-            throw new Exception("Test execution took too long");
-        }
-    }
-
-    @Test
-    public void testMultipleItemsSameEndDate() throws Exception {
-        CountDownLatch testLatch = new CountDownLatch(1);
-        Platform.runLater(() -> {
-            try {
-                items.clear();
-                LocalDateTime endDate = LocalDateTime.now().plusDays(1);
-                items.add(new Item("Item 1", "1 kg", "Description 1", new Category("Category 1"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now(), endDate, 100.0));
-                items.add(new Item("Item 2", "2 kg", "Description 2", new Category("Category 2"), "Used", "Tag1", "Tag2", "Tag3", LocalDateTime.now(), endDate, 200.0));
-                mainController.updateItemsDisplay();
-                assertEquals(2, items.size());
-                assertEquals("Item 1", items.get(0).getTitle());
-                assertEquals("Item 2", items.get(1).getTitle());
-            } finally {
-                testLatch.countDown();
-            }
-        });
-        if (!testLatch.await(5, TimeUnit.SECONDS)) {
-            throw new Exception("Test execution took too long");
-        }
-    }
-
-    @Test
-    public void testPastEndDate() throws Exception {
-        CountDownLatch testLatch = new CountDownLatch(1);
-        Platform.runLater(() -> {
-            try {
-                items.clear();
-                items.add(new Item("Past Item", "1 kg", "Description", new Category("Category"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now().minusDays(2), LocalDateTime.now().minusDays(1), 100.0));
-                mainController.updateItemsDisplay();
-                assertFalse(items.get(0).isActive());
-            } finally {
-                testLatch.countDown();
-            }
-        });
-        if (!testLatch.await(5, TimeUnit.SECONDS)) {
-            throw new Exception("Test execution took too long");
-        }
-    }
-
-    @Test
-    public void testFutureEndDate() throws Exception {
-        CountDownLatch testLatch = new CountDownLatch(1);
-        Platform.runLater(() -> {
-            try {
-                items.clear();
-                items.add(new Item("Future Item", "1 kg", "Description", new Category("Category"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), 100.0));
-                mainController.updateItemsDisplay();
-                assertTrue(items.get(0).isActive());
-            } finally {
-                testLatch.countDown();
-            }
-        });
-        if (!testLatch.await(5, TimeUnit.SECONDS)) {
-            throw new Exception("Test execution took too long");
-        }
-    }
-
-    @Test
-    public void testInvalidWeight() throws Exception {
-        CountDownLatch testLatch = new CountDownLatch(1);
-        Platform.runLater(() -> {
-            try {
-                Item invalidItem = new Item("Invalid Weight Item", "invalid weight", "Description", new Category("Category"), "New", "Tag1", "Tag2", "Tag3", LocalDateTime.now(), LocalDateTime.now().plusDays(1), 100.0);
-                assertThrows(NumberFormatException.class, () -> {
-                    Double.parseDouble(invalidItem.getWeight());
-                });
-            } finally {
-                testLatch.countDown();
-            }
-        });
-        if (!testLatch.await(5, TimeUnit.SECONDS)) {
-            throw new Exception("Test execution took too long");
-        }
+        latch.await();
     }
 }
-

@@ -5,6 +5,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import javafx.collections.ObservableList;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
 public class MainView {
     private TabPane tabPane;
     private ComboBox<Category> categoryComboBoxSystemAdmin;
@@ -20,6 +25,13 @@ public class MainView {
     private Button listItemButton;
     private VBox userInterfaceItemsBox;
     private VBox myProfileItemsBox;
+    private VBox concludedAuctionsBox;
+
+    // Error labels
+    private Label categoryErrorLabel;
+    private Label premiumErrorLabel;
+    private Label commissionErrorLabel;
+    private Label listItemErrorLabel;
 
     public MainView(ObservableList<Category> categories) {
         tabPane = new TabPane();
@@ -46,7 +58,23 @@ public class MainView {
 
         setCommissionButton = new Button("Set Commission");
 
-        VBox systemAdminContent = new VBox(10, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), new HBox(10, premiumInput, setPremiumButton), new HBox(10, commissionInput, setCommissionButton));
+        concludedAuctionsBox = new VBox(10);
+        Label concludedAuctionsLabel = new Label("Concluded Auctions:");
+
+        // Initialize error labels
+        categoryErrorLabel = new Label();
+        categoryErrorLabel.setStyle("-fx-text-fill: red;");
+
+        premiumErrorLabel = new Label();
+        premiumErrorLabel.setStyle("-fx-text-fill: red;");
+
+        commissionErrorLabel = new Label();
+        commissionErrorLabel.setStyle("-fx-text-fill: red;");
+
+        listItemErrorLabel = new Label();
+        listItemErrorLabel.setStyle("-fx-text-fill: red;");
+
+        VBox systemAdminContent = new VBox(10, categoryErrorLabel, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), premiumErrorLabel, new HBox(10, premiumInput, setPremiumButton), commissionErrorLabel, new HBox(10, commissionInput, setCommissionButton), concludedAuctionsLabel, concludedAuctionsBox);
         Tab systemAdminTab = new Tab("System Admin", systemAdminContent);
         systemAdminTab.setClosable(false);
 
@@ -60,9 +88,10 @@ public class MainView {
         listItemButton = new Button("List Item for Sale");
 
         userInterfaceItemsBox = new VBox(10);
-        ScrollPane userInterfaceScrollPane = new ScrollPane(userInterfaceItemsBox);        userInterfaceScrollPane.setFitToWidth(true);
+        ScrollPane userInterfaceScrollPane = new ScrollPane(userInterfaceItemsBox);
+        userInterfaceScrollPane.setFitToWidth(true);
 
-        VBox userInterfaceContent = new VBox(10, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton, userInterfaceScrollPane);
+        VBox userInterfaceContent = new VBox(10, listItemErrorLabel, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton, userInterfaceScrollPane);
         Tab userInterfaceTab = new Tab("User Interface", userInterfaceContent);
         userInterfaceTab.setClosable(false);
 
@@ -132,5 +161,26 @@ public class MainView {
 
     public VBox getMyProfileItemsBox() {
         return myProfileItemsBox;
+    }
+
+    public VBox getConcludedAuctionsBox() {
+        return concludedAuctionsBox;
+    }
+
+    // Getters for error labels
+    public Label getCategoryErrorLabel() {
+        return categoryErrorLabel;
+    }
+
+    public Label getPremiumErrorLabel() {
+        return premiumErrorLabel;
+    }
+
+    public Label getCommissionErrorLabel() {
+        return commissionErrorLabel;
+    }
+
+    public Label getListItemErrorLabel() {
+        return listItemErrorLabel;
     }
 }
