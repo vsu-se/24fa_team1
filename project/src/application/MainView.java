@@ -16,6 +16,9 @@ public class MainView {
     private Button setPremiumButton;
     private TextField commissionInput;
     private Button setCommissionButton;
+    private DatePicker changeTimePicker;
+    private Button changeTimeButton;
+    private Button resumeTimeButton;
     private Label buyerPremiumLabel;
     private Label sellerCommissionLabel;
     private Button listItemButton;
@@ -58,6 +61,13 @@ public class MainView {
         categoryComboBoxConcludedAuctions = new ComboBox<>(categories);
         categoryComboBoxConcludedAuctions.setPromptText("Select Category");
         
+        changeTimePicker = new DatePicker();
+        changeTimePicker.setPromptText("Select time for testing");
+        
+        changeTimeButton = new Button("Change Time");
+        
+        resumeTimeButton = new Button("Resume Time");
+        
         concludedAuctionsBox = new VBox(10);
         Label concludedAuctionsLabel = new Label("Concluded Auctions:");
 
@@ -74,7 +84,7 @@ public class MainView {
         listItemErrorLabel = new Label();
         listItemErrorLabel.setStyle("-fx-text-fill: red;");
 
-        VBox systemAdminContent = new VBox(10, categoryErrorLabel, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), premiumErrorLabel, new HBox(10, premiumInput, setPremiumButton), commissionErrorLabel, new HBox(10, commissionInput, setCommissionButton), concludedAuctionsLabel, categoryComboBoxConcludedAuctions, concludedAuctionsBox);
+        VBox systemAdminContent = new VBox(10, categoryErrorLabel, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), premiumErrorLabel, new HBox(10, premiumInput, setPremiumButton), commissionErrorLabel, new HBox(10, commissionInput, setCommissionButton), new HBox(10, changeTimePicker, changeTimeButton, resumeTimeButton), concludedAuctionsLabel, categoryComboBoxConcludedAuctions, concludedAuctionsBox);
         Tab systemAdminTab = new Tab("System Admin", systemAdminContent);
         systemAdminTab.setClosable(false);
 
