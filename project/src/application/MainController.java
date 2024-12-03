@@ -37,6 +37,18 @@ public class MainController {
         categories = FXCollections.observableArrayList();
         items = FXCollections.observableArrayList();
 
+        // Load state from the text file if available
+        PersistenceUtil.SystemState loadedState = PersistenceUtil.loadState();
+        if (loadedState != null) {
+            categories.setAll(loadedState.getCategories());
+            items.setAll(loadedState.getItems());
+            buyerPremium = loadedState.getBuyerPremium();
+            sellerCommission = loadedState.getSellerCommission();
+            System.out.println("System state loaded successfully.");
+        } else {
+            System.out.println("No saved state found, initializing with default values.");
+        }
+
         // Initialize the scheduler
         scheduler = Executors.newScheduledThreadPool(1);
 
@@ -45,6 +57,7 @@ public class MainController {
             while (change.next()) {
                 if (change.wasAdded() || change.wasRemoved()) {
                     updateProfileItemsDisplay();
+                    saveState(); // Save the state whenever items are added or removed
                 }
             }
         });
@@ -58,6 +71,7 @@ public class MainController {
                 categories.add(newCategory);
                 view.getCategoryInput().clear();
                 view.getCategoryErrorLabel().setText(""); // Clear error message
+                saveState(); // Save state after adding a category
             } else {
                 view.getCategoryErrorLabel().setText("Category already exists or name is empty.");
             }
@@ -76,6 +90,7 @@ public class MainController {
                 view.getPremiumInput().clear();
                 view.getBuyerPremiumLabel().setText("Buyer's Premium: " + buyerPremium + "%");
                 view.getPremiumErrorLabel().setText(""); // Clear error message
+                saveState(); // Save state after setting buyer premium
             } catch (NumberFormatException e) {
                 view.getPremiumErrorLabel().setText("Invalid premium value. Please enter a non-negative number.");
             }
@@ -94,6 +109,7 @@ public class MainController {
                 view.getCommissionInput().clear();
                 view.getSellerCommissionLabel().setText("Seller's Commission: " + sellerCommission + "%");
                 view.getCommissionErrorLabel().setText(""); // Clear error message
+                saveState(); // Save state after setting seller commission
             } catch (NumberFormatException e) {
                 view.getCommissionErrorLabel().setText("Invalid commission value. Please enter a non-negative number.");
             }
@@ -133,6 +149,11 @@ public class MainController {
         updateProfileItemsDisplay();
     }
 
+    // Save the system state using PersistenceUtil
+    private void saveState() {
+        PersistenceUtil.saveState(categories, items, buyerPremium, sellerCommission);
+    }
+
     public void scheduleNextUpdate() {
         if (scheduledFuture != null && !scheduledFuture.isDone()) {
             scheduledFuture.cancel(false);
@@ -168,7 +189,7 @@ public class MainController {
         scheduleNextUpdate();
     }
 
-private boolean isDuplicateCategory(String categoryName) {
+    private boolean isDuplicateCategory(String categoryName) {
         for (Category category : categories) {
             if (category.getName().equalsIgnoreCase(categoryName)) {
                 return true;
@@ -196,6 +217,7 @@ private boolean isDuplicateCategory(String categoryName) {
     public void addItem(Item item) {
         items.add(item);
         scheduleNextUpdate(); // Reschedule when a new item is added
+        saveState(); // Save state after adding an item
     }
 
     public void updateItemsDisplay() {
@@ -224,7 +246,7 @@ private boolean isDuplicateCategory(String categoryName) {
                         try {
                             double bidAmount = Double.parseDouble(bidAmountInput.getText());
                             if (item.placeBid(bidAmount)) {
-                            	item.setHasBidder(true);
+                                item.setHasBidder(true);
                                 updateItemsDisplay();
                                 updateProfileItemsDisplay();
                                 
@@ -257,15 +279,15 @@ private boolean isDuplicateCategory(String categoryName) {
                 new Label("Active: " + (item.isActive() ? "Yes" : "No")),
                 new Label("Current Bid: $" + item.getCurrentBid())
             );
-            
+
             view.getMyProfileItemsBox().getChildren().add(itemBoxProfile);
         }
-        
+
         view.getMyProfileItemsBox().getChildren().add(new Label("Current Bids: "));
-        
+
         for (Item item : items) {
-        	if(item.hasBidder()) {
-        		HBox itemBoxProfile = new HBox(10);
+            if(item.hasBidder()) {
+                HBox itemBoxProfile = new HBox(10);
                 itemBoxProfile.getChildren().add(new Label("Title: " + item.getTitle()));
                 if (item.getBuyItNowPrice() != null) {
                     itemBoxProfile.getChildren().add(new Label("Buy It Now Price: $" + item.getBuyItNowPrice()));
@@ -275,8 +297,8 @@ private boolean isDuplicateCategory(String categoryName) {
                     new Label("Active: " + (item.isActive() ? "Yes" : "No")),
                     new Label("Current Bid: $" + item.getCurrentBid())
                 );
-                view.getMyProfileItemsBox().getChildren().add(itemBoxProfile);	
-        	}
+                view.getMyProfileItemsBox().getChildren().add(itemBoxProfile);    
+            }
         }        
     }
 
