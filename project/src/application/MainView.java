@@ -10,6 +10,7 @@ public class MainView {
     private ComboBox<Category> categoryComboBoxSystemAdmin;
     private ComboBox<Category> categoryComboBoxUserInterface;
     private TextField categoryInput;
+    private TextArea displayTimeArea;
     private Button addButton;
     private TextField premiumInput;
     private Button setPremiumButton;
@@ -23,6 +24,12 @@ public class MainView {
     private VBox concludedAuctionsBox;
     private VBox sellerReportBox;
     private VBox buyerReportBox;
+    private DatePicker changeTimePicker;
+    private TextField timeField;
+    private Button changeTimeButton;
+    private Button realTimeButton;
+    private Button pauseTimeButton;
+    private Button unpauseTimeButton;
 
     // Error labels
     private Label categoryErrorLabel;
@@ -35,6 +42,11 @@ public class MainView {
         tabPane = new TabPane();
 
         // System Admin Tab
+        displayTimeArea = new TextArea();
+        displayTimeArea.setMaxWidth(250);
+        displayTimeArea.setMaxHeight(30);
+        displayTimeArea.setEditable(false);
+
         categoryComboBoxSystemAdmin = new ComboBox<>(categories);
         categoryComboBoxSystemAdmin.setPromptText("Category");
 
@@ -58,6 +70,21 @@ public class MainView {
 
         concludedAuctionsBox = new VBox(10);
         Label concludedAuctionsLabel = new Label("Concluded Auctions:");
+        //clock
+        changeTimePicker = new DatePicker();
+        changeTimePicker.setPromptText("Select time for testing");
+
+        timeField= new TextField();
+        timeField.setPromptText("hh:mm:ss");
+
+        changeTimeButton = new Button("Change Time");
+
+        realTimeButton = new Button("Resume Real Time");
+
+        pauseTimeButton = new Button("Pause Time");
+
+        unpauseTimeButton= new Button("Unpause Time");
+
 
         // Initialize error labels
         categoryErrorLabel = new Label();
@@ -72,7 +99,7 @@ public class MainView {
         listItemErrorLabel = new Label();
         listItemErrorLabel.setStyle("-fx-text-fill: red;");
 
-        VBox systemAdminContent = new VBox(10, categoryErrorLabel, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), premiumErrorLabel, new HBox(10, premiumInput, setPremiumButton), commissionErrorLabel, new HBox(10, commissionInput, setCommissionButton), concludedAuctionsLabel, concludedAuctionsBox);
+        VBox systemAdminContent = new VBox(10, categoryErrorLabel, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), premiumErrorLabel, new HBox(10, premiumInput, setPremiumButton), commissionErrorLabel, new HBox(10, commissionInput, setCommissionButton), new HBox(10, changeTimePicker, timeField, changeTimeButton, realTimeButton, pauseTimeButton, unpauseTimeButton), concludedAuctionsLabel, concludedAuctionsBox);
         Tab systemAdminTab = new Tab("System Admin", systemAdminContent);
         systemAdminTab.setClosable(false);
 
@@ -212,4 +239,34 @@ public class MainView {
     public int getNumMyBids() {
         return numMyBids;
     }
+    public Button getChangeTimeButton() {
+        return changeTimeButton;
+    }
+
+    public Button getResumeTimeButton() {
+        return realTimeButton;
+    }
+
+    public TextField getTimeField() {
+        return timeField;
+    }
+
+    public DatePicker getChangeTimePicker() {
+        return changeTimePicker;
+    }
+
+    public Button getPauseTimeButton() {
+        return pauseTimeButton;
+    }
+
+    public Button getUnpauseTimeButton() {
+        return unpauseTimeButton;
+    }
+
+    public TextArea getDisplayTimeArea() {
+        return displayTimeArea;
+    }
+
+
+
 }

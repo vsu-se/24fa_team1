@@ -14,9 +14,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.application.Platform;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -31,9 +33,13 @@ public class MainController {
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> scheduledFuture;
     private TextField currentBidInput;
+    private SystemClock clock;
+    private Category allAuctions = new Category("All Auctions");
 
-    public MainController(MainView view) {
+
+    public MainController(MainView view, SystemClock clock) {
         this.view = view;
+        this.clock = clock;
         categories = FXCollections.observableArrayList();
         items = FXCollections.observableArrayList();
 
@@ -111,11 +117,80 @@ public class MainController {
                 ItemView itemView = new ItemView(categories);
                 Tab createItemTab = new Tab("Create Item", itemView.getLayout());
                 createItemTab.setClosable(true);
-                new ItemController(itemView, categories, view.getTabPane(), createItemTab, items, MainController.this);
+                new ItemController(itemView, categories, view.getTabPane(), createItemTab, items, MainController.this, clock);
                 view.getTabPane().getTabs().add(createItemTab);
                 view.getTabPane().getSelectionModel().select(createItemTab);
             }
         });
+        view.getChangeTimeButton().setOnAction(event -> {
+            clearErrorMessages();
+            try {
+                LocalDate date = view.getChangeTimePicker().getValue();
+
+                String timeString = view.getTimeField().getText();
+                LocalTime time = LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm:ss"));
+
+                clock.setTime(LocalDateTime.of(date, time));
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                view.getCategoryErrorLabel().setText("Time changed.");
+
+                scheduleNextUpdate();
+            } catch (Exception e) {
+                view.getCategoryErrorLabel().setText("Please enter a valid time in the format yyyy-MM-dd HH:mm:ss.");
+                return;
+            }
+        });
+        //Set up event handler for resume real time button
+        view.getResumeTimeButton().setOnAction(event -> {
+            clearErrorMessages();
+            clock.setTime(LocalDateTime.now());
+            scheduleNextUpdate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            view.getCategoryErrorLabel().setText("Time resumed. It is now " + clock.getTime().format(formatter));
+            clock.setIsPaused(false);
+        });
+        // Set up event handler for the list item button
+        view.getListItemButton().setOnAction(event -> {
+            clearErrorMessages();
+            if (categories.isEmpty()) {
+                view.getListItemErrorLabel().setText("Please add a category in the System Admin tab before listing an item.");
+            } else {
+                view.getListItemErrorLabel().setText(""); // Clear error message
+                ItemView itemView = new ItemView(categories);
+                Tab createItemTab = new Tab("Create Item", itemView.getLayout());
+                createItemTab.setClosable(true);
+                new ItemController(itemView, categories, view.getTabPane(), createItemTab, items, MainController.this, clock);
+                view.getTabPane().getTabs().add(createItemTab);
+                view.getTabPane().getSelectionModel().select(createItemTab);
+            }
+        });
+        view.getPauseTimeButton().setOnAction(event -> {
+            clearErrorMessages();
+            clock.setIsPaused(true);
+            view.getCategoryErrorLabel().setText("Time has been paused.");
+            updateItemsDisplay();
+        });
+
+        // Set up event handler for the unpause button
+        view.getUnpauseTimeButton().setOnAction(event -> {
+            clearErrorMessages();
+            clock.setIsPaused(false);
+            view.getCategoryErrorLabel().setText("Time has been unpaused.");
+            updateItemsDisplay();
+        });
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                view.getDisplayTimeArea().setText("Current Time: " + clock.getTime().format(formatter));
+            }
+        };
+        timer.scheduleAtFixedRate(task,  0,  1000);
+
+
+
 
         // Add listener to the category combo box in the user interface tab
         view.getCategoryComboBoxUserInterface().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -144,7 +219,7 @@ public class MainController {
 
         Item nextExpiringItem = getNextExpiringItem();
         if (nextExpiringItem != null) {
-            long delay = nextExpiringItem.getEndDate().toEpochSecond(ZoneOffset.UTC) - LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+            long delay = nextExpiringItem.getEndDate().toEpochSecond(ZoneOffset.UTC) - clock.getTime().toEpochSecond(ZoneOffset.UTC);
             if (delay > 0) {
                 scheduledFuture = scheduler.schedule(this::checkAndUpdateItems, delay, TimeUnit.SECONDS);
             } else {
@@ -385,6 +460,15 @@ public class MainController {
         );
     }
 
+    public void setBuyerPremiumForTest(double buyerPremium) {
+        this.buyerPremium = buyerPremium;
+    }
+
+    public void setSellerCommissionForTest(double sellerCommission) {
+        this.sellerCommission = sellerCommission;
+    }
+
+
 
 
 
@@ -400,5 +484,16 @@ public class MainController {
         if (scheduler != null) {
             scheduler.shutdown();
         }
+    }
+    public void setTime(LocalDateTime time) {
+        this.clock.setTime(time);
+    }
+
+    public LocalDateTime getTime() {
+        return clock.getTime();
+    }
+
+    public SystemClock getClock() {
+        return clock;
     }
 }

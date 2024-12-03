@@ -17,8 +17,9 @@ public class Item {
     private Double currentBid;
     private boolean active;
     private boolean hasBidder;
+    private SystemClock clock;
 
-    public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice, Double initialBid) {
+    public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice, Double initialBid, SystemClock clock  ) {
         this.title = title;
         this.weight = weight;
         this.description = description;
@@ -33,6 +34,7 @@ public class Item {
         this.currentBid = 0.0;
         this.active = true;
         this.currentBid = initialBid;
+        this.clock= clock;
     }
 
     // Getters and setters for all fields
@@ -137,10 +139,11 @@ public class Item {
     }
 
     public void checkAndSetInactive() {
-        if (LocalDateTime.now().isAfter(endDate)) {
+        if (clock.getTime().isAfter(endDate)) {
             active = false;
         }
     }
+
 
     public boolean placeBid(double bidAmount) {
         if (bidAmount > currentBid) {
@@ -164,6 +167,7 @@ public class Item {
             return 0.0;
         }
     }
+
 
     public boolean hasBidder() {
         return hasBidder;

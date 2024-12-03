@@ -15,7 +15,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         MainView view = new MainView(null);
-        controller = new MainController(view);
+        SystemClock clock = new SystemClock();
+        controller = new MainController(view, clock);
 
         view.getListItemButton().setOnAction(event -> {
             if (controller.getCategories().isEmpty()) {
@@ -27,7 +28,7 @@ public class Main extends Application {
             Tab createItemTab = new Tab("Create Item", itemView.getLayout());
             createItemTab.setClosable(true);
 
-            new ItemController(itemView, controller.getCategories(), view.getTabPane(), createItemTab, controller.getItems(), controller);
+            new ItemController(itemView, controller.getCategories(), view.getTabPane(), createItemTab, controller.getItems(), controller, clock);
 
             view.getTabPane().getTabs().add(createItemTab);
             view.getTabPane().getSelectionModel().select(createItemTab);
