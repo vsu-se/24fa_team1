@@ -15,9 +15,14 @@ import javafx.scene.layout.HBox;
 import javafx.application.Platform;
 
 import java.time.Clock;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -28,7 +33,7 @@ public class MainController {
 	private ObservableList<Category> concludedCategories;
     private ObservableList<Item> items;
     private MainView view;
-    private double buyerPremium;
+    private double buyersPremium;
     private double sellerCommission;
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> scheduledFuture;
@@ -39,6 +44,8 @@ public class MainController {
     public MainController(MainView view, SystemClock clock) {
         this.view = view;
         this.clock = clock;
+        buyersPremium = 0.00;
+        sellerCommission = 0.00;
         categories = FXCollections.observableArrayList();
         concludedCategories = FXCollections.observableArrayList();
         items = FXCollections.observableArrayList();
@@ -79,9 +86,9 @@ public class MainController {
                 if (premiumValue < 0) {
                     throw new NumberFormatException("Negative value");
                 }
-                buyerPremium = premiumValue;
+                buyersPremium = premiumValue;
                 view.getPremiumInput().clear();
-                view.getBuyerPremiumLabel().setText("Buyer's Premium: " + buyerPremium + "%");
+                view.getBuyerPremiumLabel().setText("Buyer's Premium: " + buyersPremium + "%");
                 view.getPremiumErrorLabel().setText(""); // Clear error message
             } catch (NumberFormatException e) {
                 view.getPremiumErrorLabel().setText("Invalid premium value. Please enter a non-negative number.");
@@ -105,6 +112,37 @@ public class MainController {
                 view.getCommissionErrorLabel().setText("Invalid commission value. Please enter a non-negative number.");
             }
         });
+        
+        //Set up event handler for change time button
+        view.getChangeTimeButton().setOnAction(event -> {
+            clearErrorMessages();
+            try {
+            	LocalDate date = view.getChangeTimePicker().getValue();
+            	
+            	String timeString = view.getTimeField().getText();
+            	LocalTime time = LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm:ss"));
+            	
+                clock.setTime(LocalDateTime.of(date, time));
+                
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                view.getCategoryErrorLabel().setText("Time changed.");
+                
+                scheduleNextUpdate();
+            } catch (Exception e) {
+                view.getCategoryErrorLabel().setText("Please enter a valid time in the format yyyy-MM-dd HH:mm:ss.");
+                return;
+            }
+        });
+        
+        //Set up event handler for resume real time button
+        view.getResumeTimeButton().setOnAction(event -> {
+            clearErrorMessages();
+            clock.setTime(LocalDateTime.now());
+            scheduleNextUpdate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            view.getCategoryErrorLabel().setText("Time resumed. It is now " + clock.getTime().format(formatter));
+            clock.setIsPaused(false);
+        });
 
         // Set up event handler for the list item button
         view.getListItemButton().setOnAction(event -> {
@@ -120,6 +158,22 @@ public class MainController {
                 view.getTabPane().getTabs().add(createItemTab);
                 view.getTabPane().getSelectionModel().select(createItemTab);
             }
+        });
+        
+        // Set up event handler for the pause button
+        view.getPauseTimeButton().setOnAction(event -> {
+            clearErrorMessages();
+            clock.setIsPaused(true);
+            view.getCategoryErrorLabel().setText("Time has been paused.");
+            updateItemsDisplay();
+        });
+        
+        // Set up event handler for the unpause button
+        view.getUnpauseTimeButton().setOnAction(event -> {
+            clearErrorMessages();
+            clock.setIsPaused(false);
+            view.getCategoryErrorLabel().setText("Time has been unpaused.");
+            updateItemsDisplay();
         });
 
         // Add listener to the category combo box in the user interface tab
@@ -144,6 +198,16 @@ public class MainController {
         concludedCategories.addAll(categories);
         view.getCategoryComboBoxConcludedAuctions().setItems(concludedCategories);
         
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+			@Override
+			public void run() {
+				view.getDisplayTimeArea().setText("Current Time: " + clock.getTime().format(formatter));
+			}
+		};
+		timer.scheduleAtFixedRate(task,  0,  1000);
 
         // Initial display update
         updateProfileItemsDisplay();
@@ -198,7 +262,7 @@ private boolean isDuplicateCategory(String categoryName) {
     }
 
     public double getBuyerPremium() {
-        return buyerPremium;
+        return buyersPremium;
     }
 
     public double getSellerCommission() {
@@ -304,23 +368,53 @@ private boolean isDuplicateCategory(String categoryName) {
     public void updateConcludedAuctionsDisplay() {
         view.getConcludedAuctionsBox().getChildren().clear();
         Category selectedCategory = view.getCategoryComboBoxConcludedAuctions().getValue();
+        
+        double totalOfWinningBids = 0.00;
+        double totalShippingCosts = 0.00;
+        double totalBuyersPremiums = 0.00;
+        double totalPaidByBuyers = 0.00;
+        double totalWeight = 0.00;
+        double totalSellersCommissions = 0.00;
+        double totalSellersProfit = 0.00;
+         
         for (Item item : items) {
-            if (!item.isActive() && !item.isActive() && (item.getCategory().equals(selectedCategory) || selectedCategory.equals(allAuctions))) {
+            if (!item.isActive() && selectedCategory != null && (item.getCategory().equals(selectedCategory) || selectedCategory.equals(allAuctions))) {
+            	totalOfWinningBids += item.getCurrentBid();
+            	totalShippingCosts += item.getShippingCost();
+            	totalBuyersPremiums += item.getBuyersPremium(buyersPremium);
+            	totalPaidByBuyers += item.getBuyersPremium(buyersPremium) + item.getCurrentBid();
+            	totalWeight += Double.parseDouble(item.getWeight());
+            	totalSellersCommissions += item.getSellersCommission(sellerCommission);
+            	totalSellersProfit += item.getCurrentBid();
+            	
                 HBox itemBox = new HBox(10);
-                itemBox.getChildren().add(new Label("Title: " + item.getTitle()));
+                itemBox.getChildren().add(new Label("Item Name: " + item.getTitle()));
                 if (item.getBuyItNowPrice() != null) {
                     itemBox.getChildren().add(new Label("Buy It Now Price: $" + item.getBuyItNowPrice()));
                 }
                 itemBox.getChildren().addAll(
+                	new Label("Winning Bid: $" + item.getCurrentBid()),
                     new Label("Weight: " + item.getWeight()),
-                    new Label("Active: " + (item.isActive() ? "Yes" : "No")),
-                    new Label("Current Bid: $" + item.getCurrentBid()),
                     new Label("End-date: " + item.getEndDate())
                 );
                 view.getConcludedAuctionsBox().getChildren().add(itemBox);
                 itemBox.toBack();
             }
         }
+        
+        HBox itemBox = new HBox(10);
+        itemBox.getChildren().addAll(
+        		new Label("TOTAL:"), 
+                new Label("Winning Bid/BIN: $" + totalOfWinningBids),
+                new Label("Shipping Costs: $" + totalShippingCosts),
+                new Label("Buyers Premiums: $" + totalBuyersPremiums),
+                new Label("Paid by Buyers: $" + totalPaidByBuyers),
+                new Label("Seller's Commissions: $" + totalSellersCommissions),
+                new Label("Seller's Profit: $" + totalSellersProfit),
+                new Label("Weight: " + totalWeight)
+            );
+        view.getConcludedAuctionsBox().getChildren().add(itemBox);
+        itemBox.toBack();
     }
 
     private void clearErrorMessages() {

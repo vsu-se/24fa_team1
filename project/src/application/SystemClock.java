@@ -8,13 +8,16 @@ public class SystemClock {
 	Timer timer;
 	TimerTask task;
 	LocalDateTime currentTime;
+	boolean isPaused = false;
 	public SystemClock() {
 		timer = new Timer();
 		currentTime = LocalDateTime.now();
 		TimerTask task = new TimerTask() {
 			@Override
 			public void run() {
-				currentTime = currentTime.plusSeconds(1);
+				if(!isPaused) {
+					currentTime = currentTime.plusSeconds(1);
+				}
 			}
 		};
 		timer.scheduleAtFixedRate(task,  0,  1000);
@@ -27,5 +30,8 @@ public class SystemClock {
 	public void setTime(LocalDateTime now) {
 		currentTime = now;
 	}
-
+	
+	public void setIsPaused(boolean isPaused) {
+		this.isPaused = isPaused;
+	}
 }

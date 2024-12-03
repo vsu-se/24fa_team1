@@ -10,6 +10,7 @@ public class MainView {
     private ComboBox<Category> categoryComboBoxSystemAdmin;
     private ComboBox<Category> categoryComboBoxUserInterface;
     private ComboBox<Category> categoryComboBoxConcludedAuctions;
+    private TextArea displayTimeArea;
     private TextField categoryInput;
     private Button addButton;
     private TextField premiumInput;
@@ -17,8 +18,11 @@ public class MainView {
     private TextField commissionInput;
     private Button setCommissionButton;
     private DatePicker changeTimePicker;
+    private TextField timeField;
     private Button changeTimeButton;
-    private Button resumeTimeButton;
+    private Button realTimeButton;
+    private Button pauseTimeButton;
+    private Button unpauseTimeButton;
     private Label buyerPremiumLabel;
     private Label sellerCommissionLabel;
     private Button listItemButton;
@@ -37,24 +41,30 @@ public class MainView {
         tabPane = new TabPane();
 
         // System Admin Tab
+        
+        displayTimeArea = new TextArea();
+        displayTimeArea.setMaxWidth(250);
+        displayTimeArea.setMaxHeight(30);
+        displayTimeArea.setEditable(false);
+        
         categoryComboBoxSystemAdmin = new ComboBox<>(categories);
         categoryComboBoxSystemAdmin.setPromptText("Category");
 
         categoryInput = new TextField();
         categoryInput.setPromptText("Enter category name");
-        categoryInput.setMaxWidth(2 * 400 / 3);
+        categoryInput.setMaxWidth(400);
 
         addButton = new Button("Add Category");
 
         premiumInput = new TextField();
         premiumInput.setPromptText("Enter buyer's premium (%)");
-        premiumInput.setMaxWidth(2 * 400 / 3);
+        premiumInput.setMaxWidth(400);
 
         setPremiumButton = new Button("Set Premium");
 
         commissionInput = new TextField();
         commissionInput.setPromptText("Enter seller's commission (%)");
-        commissionInput.setMaxWidth(2 * 400 / 3);
+        commissionInput.setMaxWidth(400);
 
         setCommissionButton = new Button("Set Commission");
         
@@ -64,9 +74,16 @@ public class MainView {
         changeTimePicker = new DatePicker();
         changeTimePicker.setPromptText("Select time for testing");
         
+        timeField= new TextField();
+        timeField.setPromptText("hh:mm:ss");
+        
         changeTimeButton = new Button("Change Time");
         
-        resumeTimeButton = new Button("Resume Time");
+        realTimeButton = new Button("Resume Real Time");
+        
+        pauseTimeButton = new Button("Pause Time");
+        
+        unpauseTimeButton= new Button("Unpause Time");
         
         concludedAuctionsBox = new VBox(10);
         Label concludedAuctionsLabel = new Label("Concluded Auctions:");
@@ -84,7 +101,7 @@ public class MainView {
         listItemErrorLabel = new Label();
         listItemErrorLabel.setStyle("-fx-text-fill: red;");
 
-        VBox systemAdminContent = new VBox(10, categoryErrorLabel, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), premiumErrorLabel, new HBox(10, premiumInput, setPremiumButton), commissionErrorLabel, new HBox(10, commissionInput, setCommissionButton), new HBox(10, changeTimePicker, changeTimeButton, resumeTimeButton), concludedAuctionsLabel, categoryComboBoxConcludedAuctions, concludedAuctionsBox);
+        VBox systemAdminContent = new VBox(10, categoryErrorLabel, displayTimeArea, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), premiumErrorLabel, new HBox(10, premiumInput, setPremiumButton), commissionErrorLabel, new HBox(10, commissionInput, setCommissionButton), new HBox(10, changeTimePicker, timeField, changeTimeButton, realTimeButton, pauseTimeButton, unpauseTimeButton), concludedAuctionsLabel, categoryComboBoxConcludedAuctions, concludedAuctionsBox);
         Tab systemAdminTab = new Tab("System Admin", systemAdminContent);
         systemAdminTab.setClosable(false);
 
@@ -92,8 +109,8 @@ public class MainView {
         categoryComboBoxUserInterface = new ComboBox<>(categories);
         categoryComboBoxUserInterface.setPromptText("Category");
 
-        buyerPremiumLabel = new Label("Buyer's Premium: Not set");
-        sellerCommissionLabel = new Label("Seller's Commission: Not set");
+        buyerPremiumLabel = new Label("Buyer's Premium: 0.00%");
+        sellerCommissionLabel = new Label("Seller's Commission: 0.00%");
 
         listItemButton = new Button("List Item for Sale");
 
@@ -205,5 +222,33 @@ public class MainView {
 	
 	public int getNumMyBids() {
 		return numMyBids;
+	}
+
+	public Button getChangeTimeButton() {
+		return changeTimeButton;
+	}
+	
+	public Button getResumeTimeButton() {
+		return realTimeButton;
+	}
+
+	public TextField getTimeField() {
+		return timeField;
+	}
+
+	public DatePicker getChangeTimePicker() {
+		return changeTimePicker;
+	}
+
+	public Button getPauseTimeButton() {
+		return pauseTimeButton;
+	}
+	
+	public Button getUnpauseTimeButton() {
+		return unpauseTimeButton;
+	}
+	
+	public TextArea getDisplayTimeArea() {
+		return displayTimeArea;
 	}
 }

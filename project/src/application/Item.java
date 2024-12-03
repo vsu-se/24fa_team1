@@ -159,4 +159,16 @@ public class Item {
     public void setHasBidder(boolean hasBidder) {
     	this.hasBidder = hasBidder;
     }
+    
+    public double getSellersCommission(double sellersCommissionPercent) {
+    	return currentBid * (sellersCommissionPercent / 100);
+    }
+    
+    public double getShippingCost() {
+    	return 10.00; //FIXME WHAT IS THIS SUPPOSED TO BE? DOES USER SPECIFY??
+    }
+    
+    public double getBuyersPremium(double buyersPremiumPercent) {
+    	return currentBid * (buyersPremiumPercent / 100);
+    }
 }
