@@ -1,6 +1,9 @@
 package application;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class Item {
     private String title;
@@ -18,6 +21,7 @@ public class Item {
     private boolean active;
     private boolean hasBidder;
     private SystemClock clock;
+    private List<Bid> bidHistory;
 
     public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice, Double initialBid, SystemClock clock  ) {
         this.title = title;
@@ -35,6 +39,7 @@ public class Item {
         this.active = true;
         this.currentBid = initialBid;
         this.clock= clock;
+        this.bidHistory = new ArrayList<>();
     }
 
     // Getters and setters for all fields
@@ -152,6 +157,21 @@ public class Item {
         }
         return false;
     }
+        public List<Bid> getBidHistory() {
+            return bidHistory;
+        }
+        public String generateBidHistoryReport() {
+            StringBuilder report = new StringBuilder();
+            report.append("Bid History Report:\n");
+            report.append("Bid Amount\tDate/Time\t\tUser Name\n");
+
+            bidHistory.stream()
+                    .sorted(Comparator.comparingDouble(Bid::getAmount).reversed())
+                    .forEach(bid -> report.append(String.format("$%.2f\t\t%s\t%s\n", bid.getAmount(), bid.getDateTime(), bid.getUsername())));
+
+            return report.toString();
+        }
+
 
     public double calculateShippingCost() {
         double weightValue;
