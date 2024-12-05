@@ -154,8 +154,17 @@ public class Item {
     }
 
     public double calculateShippingCost() {
-        double weightValue = Double.parseDouble(weight.split(" ")[0]);
-        String weightUnit = weight.split(" ")[1];
+        double weightValue;
+        String weightUnit;
+        try {
+            // Split the weight string into value and unit
+            String[] parts = weight.split(" ");
+            weightValue = Double.parseDouble(parts[0]);
+            weightUnit = parts[1];
+        } catch (Exception e) {
+            // Handle the case where the weight string is not in the expected format
+            return 0.0;
+        }
         double costPerKg = 5.0; // Example cost per kg
         double costPerLb = 2.5; // Example cost per lb
 

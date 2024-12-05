@@ -58,6 +58,7 @@ public class ItemController {
                     view.getCreateItemErrorLabel().setText("Please enter a valid number for the weight.");
                     return;
                 }
+                String combinedWeight = weight + " " + weightUnit;
 
                 LocalDateTime startDate = LocalDateTime.now();
                 LocalDateTime endDateTime;
@@ -95,7 +96,7 @@ public class ItemController {
                     return;
                 }
 
-                Item newItem = new Item(title, weight, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice, bidAmount, mainController.getClock());
+                Item newItem = new Item(title, combinedWeight, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice, bidAmount, mainController.getClock());
                 items.add(newItem);
 
                 // Clear error message
