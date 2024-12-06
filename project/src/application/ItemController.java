@@ -96,6 +96,8 @@ public class ItemController {
                     return;
                 }
 
+
+
                 Item newItem = new Item(title, combinedWeight, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice, bidAmount, mainController.getClock());
                 items.add(newItem);
 
@@ -110,5 +112,6 @@ public class ItemController {
                 mainController.scheduleNextUpdate();
             }
         });
+
     }
 }

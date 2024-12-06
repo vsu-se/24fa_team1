@@ -53,9 +53,11 @@ public class MainController {
                     updateProfileItemsDisplay();
                     generateSellerReport();
                     generateBuyerReport();
+
                 }
             }
         });
+
 
         // Set up event handler for the add button
         view.getAddButton().setOnAction(event -> {
@@ -190,6 +192,28 @@ public class MainController {
         timer.scheduleAtFixedRate(task,  0,  1000);
 
 
+        view.getDisplayBidHistoryButton().setOnAction(event -> {
+            Item selectedItem = view.getSelectedItem(); // Assuming this method returns the selected item
+            if (selectedItem != null) {
+                StringBuilder report = new StringBuilder();
+
+                // Add the number of bids to the report
+                report.append("Number of Bids: ").append(selectedItem.getBidHistory().size()).append("\n");
+
+                // Add the bid history to the report
+                String bidHistoryReport = selectedItem.generateBidHistoryReport();
+                report.append(bidHistoryReport);
+
+                // Show the report in the bid history area (assuming it's a TextArea)
+                view.getBidHistoryArea().setText(report.toString());
+            } else {
+                view.getBidHistoryArea().setText("No item selected.");
+            }
+        });
+
+
+
+
 
 
         // Add listener to the category combo box in the user interface tab
@@ -308,6 +332,7 @@ public class MainController {
                                 item.setHasBidder(true);
                                 updateItemsDisplay();
                                 updateProfileItemsDisplay();
+                                updateBidHistory("Bid placed: $" + bidAmount);
 
                                 view.getListItemErrorLabel().setText("Bid placed successfully!");
                             } else {
@@ -323,7 +348,11 @@ public class MainController {
                 }
             }
         }
+
+
     }
+
+
 
     public void updateProfileItemsDisplay() {
         view.getMyProfileItemsBox().getChildren().clear();
@@ -467,6 +496,19 @@ public class MainController {
     public void setSellerCommissionForTest(double sellerCommission) {
         this.sellerCommission = sellerCommission;
     }
+    private void updateBidHistory(String message) {
+        Item selectedItem = view.getSelectedItem();
+        if (selectedItem != null) {
+            // Add the new bid message to the liveBidHistoryBox
+            Label newBidLabel = new Label(message);
+            view.getLiveBidHistoryBox().getChildren().add(newBidLabel); // Ensure liveBidHistoryBox is accessible in the view
+
+            // Update bid history display in the UI
+            String report = selectedItem.generateBidHistoryReport();
+            view.getBidHistoryArea().setText(report);
+        }
+    }
+
 
 
 
