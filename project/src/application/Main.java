@@ -17,7 +17,7 @@ public class Main extends Application {
         MainView view = new MainView(null);
         SystemClock clock = new SystemClock();
         controller = new MainController(view, clock);
-
+        view.setupSaveOptionsTab(controller);
         view.getListItemButton().setOnAction(event -> {
             if (controller.getCategories().isEmpty()) {
                 view.getListItemErrorLabel().setText("Please add a category in the System Admin tab before listing an item.");
@@ -44,6 +44,9 @@ public class Main extends Application {
     @Override
     public void stop() {
         if (controller != null) {
+            // Save categories before shutting down
+            controller.saveCategoriesText("categories.txt");
+
             controller.shutdownScheduler();
         }
     }

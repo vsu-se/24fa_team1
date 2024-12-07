@@ -14,9 +14,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.application.Platform;
 
+import java.io.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -192,6 +194,8 @@ public class MainController {
         timer.scheduleAtFixedRate(task,  0,  1000);
 
 
+
+
         view.getDisplayBidHistoryButton().setOnAction(event -> {
             Item selectedItem = view.getSelectedItem(); // Assuming this method returns the selected item
             if (selectedItem != null) {
@@ -210,6 +214,8 @@ public class MainController {
                 view.getBidHistoryArea().setText("No item selected.");
             }
         });
+
+
 
 
 
@@ -509,6 +515,29 @@ public class MainController {
         }
     }
 
+    // Method to save categories as text
+    public void saveCategoriesText(String filename) {
+        try (FileWriter file = new FileWriter(filename)) {
+            for (Category category : categories) {
+                file.write(category + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadCategoriesText(String filename) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (!isDuplicateCategory(line)) {
+                    categories.add(new Category(line));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 

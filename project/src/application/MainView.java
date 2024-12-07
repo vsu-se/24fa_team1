@@ -31,6 +31,8 @@ public class MainView {
     private Button realTimeButton;
     private Button pauseTimeButton;
     private Button unpauseTimeButton;
+    private Button saveTextButton;
+
 
 
     private VBox liveBidHistoryBox;
@@ -86,7 +88,7 @@ public class MainView {
         changeTimePicker = new DatePicker();
         changeTimePicker.setPromptText("Select time for testing");
 
-        timeField= new TextField();
+        timeField = new TextField();
         timeField.setPromptText("hh:mm:ss");
 
         changeTimeButton = new Button("Change Time");
@@ -95,7 +97,7 @@ public class MainView {
 
         pauseTimeButton = new Button("Pause Time");
 
-        unpauseTimeButton= new Button("Unpause Time");
+        unpauseTimeButton = new Button("Unpause Time");
 
         bidHistory = FXCollections.observableArrayList();
         bidHistoryListView = new ListView<>(bidHistory);
@@ -117,7 +119,6 @@ public class MainView {
         VBox systemAdminContent = new VBox(10, categoryErrorLabel, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), premiumErrorLabel, new HBox(10, premiumInput, setPremiumButton), commissionErrorLabel, new HBox(10, commissionInput, setCommissionButton), new HBox(10, changeTimePicker, timeField, changeTimeButton, realTimeButton, pauseTimeButton, unpauseTimeButton), concludedAuctionsLabel, concludedAuctionsBox);
         Tab systemAdminTab = new Tab("System Admin", systemAdminContent);
         systemAdminTab.setClosable(false);
-
 
 
         // User Interface Tab
@@ -175,7 +176,29 @@ public class MainView {
         myProfileTab.setClosable(false);
 
         tabPane.getTabs().addAll(systemAdminTab, userInterfaceTab, myProfileTab);
+
+        // Save Buttons
     }
+
+void setupSaveOptionsTab(MainController controller) {
+    Button saveTextButton = new Button("Save Categories as Text");
+
+
+    saveTextButton.setOnAction(event -> controller.saveCategoriesText("categories.txt"));
+
+    VBox layout = new VBox(10, saveTextButton);
+    Tab saveTab = new Tab("Save Options", layout);
+    saveTab.setClosable(false);
+    tabPane.getTabs().add(saveTab);
+
+}
+
+
+
+    public Button getSaveTextButton() {
+        return saveTextButton;
+    }
+
 
     public TabPane getTabPane() {
         return tabPane;
