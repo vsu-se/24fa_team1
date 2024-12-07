@@ -18,6 +18,7 @@ public class Main extends Application {
         SystemClock clock = new SystemClock();
         controller = new MainController(view, clock);
         view.setupSaveOptionsTab(controller);
+         view.setupLoadOptionsTab(controller);
         view.getListItemButton().setOnAction(event -> {
             if (controller.getCategories().isEmpty()) {
                 view.getListItemErrorLabel().setText("Please add a category in the System Admin tab before listing an item.");

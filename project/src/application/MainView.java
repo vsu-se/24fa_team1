@@ -181,7 +181,7 @@ public class MainView {
     }
 
 void setupSaveOptionsTab(MainController controller) {
-    Button saveTextButton = new Button("Save Categories as Text");
+    Button saveTextButton = new Button("Save Categories");
 
 
     saveTextButton.setOnAction(event -> controller.saveCategoriesText("categories.txt"));
@@ -190,6 +190,16 @@ void setupSaveOptionsTab(MainController controller) {
     Tab saveTab = new Tab("Save Options", layout);
     saveTab.setClosable(false);
     tabPane.getTabs().add(saveTab);
+
+}
+void setupLoadOptionsTab(MainController controller){
+        Button loadTextButton = new Button("Load Categories");
+
+        loadTextButton.setOnAction(event -> controller.loadCategoriesText("categories.txt"));
+        VBox layout = new VBox(10, loadTextButton);
+        Tab loadTab = new Tab("Load Options", layout);
+        loadTab.setClosable(false);
+        tabPane.getTabs().add(loadTab);
 
 }
 
