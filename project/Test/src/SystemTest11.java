@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import application.*;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +18,8 @@ import javafx.application.Application;
 
 
 public class SystemTest11 extends Application {
-    private static ObservableList<Item> items;    private static MainController mainController;
+    private static ObservableList<Item> items;
+    private static MainController mainController;
     private static MainView mainView;
     private static final CountDownLatch latch = new CountDownLatch(1);
 
@@ -52,11 +54,138 @@ public class SystemTest11 extends Application {
         }
     }
     @Test
-    public void testGenerateSellerReport() {
+    public void testItemWithZeroInitialBid() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        Platform.runLater(() -> {
+            // Creating an item with an initial bid of zero
+            Category category = new Category("Books");
+            SystemClock clock = new SystemClock();
+            LocalDateTime startDate = LocalDateTime.now();
+            LocalDateTime endDate = LocalDateTime.now().plusDays(7);
+
+            Item item = new Item("Book", "0.5kg", "A rare book", category, "New", "books", "rare", "collectible", startDate, endDate, 100.0,  0.0, clock);
+
+            items.clear();
+            items.add(item);
+
+            mainController.generateSellerReport();
+            assertEquals(1, mainView.getSellerReportBox().getChildren().size());
+            latch.countDown();
+        });
+        latch.await(5, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void testItemWithoutBuyItNowPrice() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        Platform.runLater(() -> {
+            // Creating an item with no "Buy It Now" price
+            Category category = new Category("Home");
+            SystemClock clock = new SystemClock();
+            LocalDateTime startDate = LocalDateTime.now();
+            LocalDateTime endDate = LocalDateTime.now().plusDays(7);
+
+            Item item = new Item("Sofa", "30kg", "A comfy sofa", category, "Used", "furniture", "couch", "livingroom", startDate, endDate, null, 1000.0, clock);
+
+            items.clear();
+            items.add(item);
+
+            mainController.generateSellerReport(); // Generate the report
+
+            // Verify if the item is included in the report despite missing the Buy It Now price
+            assertEquals(1, mainView.getSellerReportBox().getChildren().size());
+            latch.countDown();
+        });
+        latch.await(5, TimeUnit.SECONDS);
+    }
+    @Test
+    public void testItemWithTags() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        Platform.runLater(() -> {
+            // Creating an item with tags
+            Category category = new Category("Sports");
+            SystemClock clock = new SystemClock();
+            LocalDateTime startDate = LocalDateTime.now();
+            LocalDateTime endDate = LocalDateTime.now().plusDays(7);
+
+            Item item = new Item("Football", "1kg", "A professional football", category, "New", "sports", "football", "game", startDate, endDate, 50.0, 40.0, clock);
+
+            items.clear();
+            items.add(item);
+
+            mainController.generateSellerReport(); // Generate the report
+
+            // Check if the item is included in the report
+            assertEquals(1, mainView.getSellerReportBox().getChildren().size());
+            latch.countDown();
+        });
+        latch.await(5, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void testItemWithEmptyBid() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        Platform.runLater(() -> {
+            // Creating an item with an empty bid (initial bid set to zero)
+            Category category = new Category("Electronics");
+            SystemClock clock = new SystemClock();
+            LocalDateTime startDate = LocalDateTime.now();
+            LocalDateTime endDate = LocalDateTime.now().plusDays(7);
+
+            Item item = new Item("Old TV", "10kg", "A used TV in decent condition", category, "Used", "electronics", "tv", "used", startDate, endDate, 0.0, null, clock);
+
+            items.clear();
+            items.add(item);
+
+            mainController.generateSellerReport(); // Generate the report
+
+            // Ensure that the report does not include an item with an empty or zero bid
+            assertTrue(mainView.getSellerReportBox().getChildren().isEmpty());
+
+            latch.countDown();
+        });
+        latch.await(5, TimeUnit.SECONDS);
+    }
+    @Test
+    public void testItemWithCommission() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        Platform.runLater(() -> {
+            Category category = new Category("Art");
+            SystemClock clock = new SystemClock();
+            LocalDateTime startDate = LocalDateTime.now();
+            LocalDateTime endDate = LocalDateTime.now().plusDays(7);
+
+            double specialCommissionRate = 10.0;
+
+            Item item = new Item("Painting", "5kg", "A rare painting", category, "New", "art", "painting", "fineart", startDate, endDate, 5000.0,null, clock);
+
+            items.clear();
+            items.add(item);
+
+            mainController.generateSellerReport(); // Generate the report
+
+            // Check if the report includes the item and calculates the commission correctly
+            // Assuming that the item has a commission of 10% of the winning bid
+            double expectedCommission = 4000.0 * 0.1; // 10% of the winning bid
+            assertTrue(mainView.getSellerReportBox().getChildren().stream()
+                    .anyMatch(node -> node instanceof HBox && ((HBox) node).getChildren().toString().contains("Seller's Commission: $" + expectedCommission)));
+            latch.countDown();
+        });
+        latch.await(5, TimeUnit.SECONDS);
+    }
+
+
+
+
+
+    @Test
+    public void testGenerateSellerReport() throws Exception {
+        CountDownLatch testLatch = new CountDownLatch(1);
+        Platform.runLater(() -> {
+            try {
         // Setup categories
         Category electronics = new Category("Electronics");
         mainController.getCategories().add(electronics);
-
         // Setup items
         Item item1 = new Item("Laptop", "2kg", "High-end gaming laptop", electronics, "New", "Gaming", "Laptop", "Electronics", LocalDateTime.now().minusDays(2), LocalDateTime.now().minusDays(1), 1200.0, 1000.0, mainController.getClock());
         Item item2 = new Item("Phone", "200g", "Latest smartphone", electronics, "New", "Smartphone", "Phone", "Electronics", LocalDateTime.now().minusDays(3), LocalDateTime.now().minusDays(2), 600.0, 500.0, mainController.getClock());
@@ -99,8 +228,12 @@ public class SystemTest11 extends Application {
                 .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Profits:"))
                 .mapToDouble(node -> Double.parseDouble(((Label) node).getText().split("\\$")[1]))
                 .sum());
+            } finally {
+                testLatch.countDown();
+            }
+        });
+        if (!testLatch.await(5, TimeUnit.SECONDS)) {
+            throw new Exception("Test execution took too long");
+        }
     }
-
-
-
-}
+    }
