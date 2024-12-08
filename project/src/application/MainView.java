@@ -35,14 +35,6 @@ public class MainView {
 
 
 
-    private VBox liveBidHistoryBox;
-    private Button displayBidHistoryButton;
-    private TextArea bidHistoryArea;
-    private ListView<Item> itemListView;
-    private ObservableList<String> bidHistory;
-    private ListView<String> bidHistoryListView;
-
-    // Error labels
     private Label categoryErrorLabel;
     private Label premiumErrorLabel;
     private Label commissionErrorLabel;
@@ -57,9 +49,6 @@ public class MainView {
         displayTimeArea.setMaxWidth(250);
         displayTimeArea.setMaxHeight(30);
         displayTimeArea.setEditable(false);
-        displayBidHistoryButton = new Button("Display Bid History");
-        bidHistoryArea = new TextArea();
-        bidHistoryArea.setEditable(false);
 
         categoryComboBoxSystemAdmin = new ComboBox<>(categories);
         categoryComboBoxSystemAdmin.setPromptText("Category");
@@ -99,9 +88,6 @@ public class MainView {
 
         unpauseTimeButton = new Button("Unpause Time");
 
-        bidHistory = FXCollections.observableArrayList();
-        bidHistoryListView = new ListView<>(bidHistory);
-        bidHistoryListView.setItems(bidHistory);
 
         // Initialize error labels
         categoryErrorLabel = new Label();
@@ -142,25 +128,13 @@ public class MainView {
         ScrollPane buyerReportScrollPane = new ScrollPane(buyerReportBox);
         buyerReportScrollPane.setFitToWidth(true);
 
-        liveBidHistoryBox = new VBox(10); // Initialize the VBox for live bid history
-        Label liveBidHistoryLabel = new Label("Live Bid History:");
-
-        ScrollPane liveBidHistoryScrollPane = new ScrollPane(liveBidHistoryBox);
-        liveBidHistoryScrollPane.setFitToWidth(true);
-
-        ObservableList<String> bidHistory = FXCollections.observableArrayList();
-        ListView<String> bidHistoryListView = new ListView<>(bidHistory);
-        liveBidHistoryScrollPane.setContent(bidHistoryListView);
-        bidHistoryListView.setItems(bidHistory);
-        //liveBidHistoryScrollPane.setFitToWidth(true);
 
 
-        userInterfaceContent = new VBox(10, listItemErrorLabel, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton, userInterfaceScrollPane, new Label("Buyer Report:"), buyerReportScrollPane, liveBidHistoryLabel, liveBidHistoryScrollPane);
+        userInterfaceContent = new VBox(10, listItemErrorLabel, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton, userInterfaceScrollPane, new Label("Buyer Report:"), buyerReportScrollPane);
         userInterfaceTab = new Tab("User Interface", userInterfaceContent);
         userInterfaceTab.setClosable(false);
 
-        // Add bid history components to the layout
-        itemListView = new ListView<>();
+
 
         // My Profile Tab
         myProfileItemsBox = new VBox(10);
@@ -197,9 +171,9 @@ void setupLoadOptionsTab(MainController controller){
 
         loadTextButton.setOnAction(event -> controller.loadCategoriesText("categories.txt"));
         VBox layout = new VBox(10, loadTextButton);
-        Tab loadTab = new Tab("Load Options", layout);
-        loadTab.setClosable(false);
-        tabPane.getTabs().add(loadTab);
+        Tab saveTab = new Tab("Save Options", layout);
+        saveTab.setClosable(false);
+        tabPane.getTabs().add(saveTab);
 
 }
 
@@ -328,26 +302,6 @@ void setupLoadOptionsTab(MainController controller){
     public TextArea getDisplayTimeArea() {
         return displayTimeArea;
     }
-    public Button getDisplayBidHistoryButton() {
-        return displayBidHistoryButton;
-    }
-
-    public TextArea getBidHistoryArea() {
-        return bidHistoryArea;
-    }
-    private ListView<Item> getItemListView(){
-        return itemListView;
-    }
-    public Item getSelectedItem(){
-        return itemListView.getSelectionModel().getSelectedItem();
-    }
-    public ObservableList<String> getBidHistory(){
-        return bidHistory;
-    }
-    public VBox getLiveBidHistoryBox() {
-        return liveBidHistoryBox;
-    }
-
 
 
 

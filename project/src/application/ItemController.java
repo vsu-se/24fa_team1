@@ -6,13 +6,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.HBox;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 
 public class ItemController {
     private ItemView view;
@@ -97,7 +95,7 @@ public class ItemController {
                 }
 
 
-
+                System Clock;
                 Item newItem = new Item(title, combinedWeight, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice, bidAmount, mainController.getClock());
                 items.add(newItem);
 

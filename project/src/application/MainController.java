@@ -3,13 +3,9 @@ package application;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.application.Platform;
@@ -18,7 +14,6 @@ import java.io.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -34,7 +29,6 @@ public class MainController {
     private double sellerCommission;
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> scheduledFuture;
-    private TextField currentBidInput;
     private SystemClock clock;
     private Category allAuctions = new Category("All Auctions");
 
@@ -42,6 +36,8 @@ public class MainController {
     public MainController(MainView view, SystemClock clock) {
         this.view = view;
         this.clock = clock;
+        buyerPremium = 0.00;
+        sellerCommission = 0.00;
         categories = FXCollections.observableArrayList();
         items = FXCollections.observableArrayList();
 
@@ -196,24 +192,7 @@ public class MainController {
 
 
 
-        view.getDisplayBidHistoryButton().setOnAction(event -> {
-            Item selectedItem = view.getSelectedItem(); // Assuming this method returns the selected item
-            if (selectedItem != null) {
-                StringBuilder report = new StringBuilder();
 
-                // Add the number of bids to the report
-                report.append("Number of Bids: ").append(selectedItem.getBidHistory().size()).append("\n");
-
-                // Add the bid history to the report
-                String bidHistoryReport = selectedItem.generateBidHistoryReport();
-                report.append(bidHistoryReport);
-
-                // Show the report in the bid history area (assuming it's a TextArea)
-                view.getBidHistoryArea().setText(report.toString());
-            } else {
-                view.getBidHistoryArea().setText("No item selected.");
-            }
-        });
 
 
 
@@ -265,7 +244,7 @@ public class MainController {
                 .orElse(null);
     }
 
-    private void checkAndUpdateItems() {
+    public void checkAndUpdateItems() {
         for (Item item : items) {
             item.checkAndSetInactive();
         }
@@ -338,7 +317,6 @@ public class MainController {
                                 item.setHasBidder(true);
                                 updateItemsDisplay();
                                 updateProfileItemsDisplay();
-                                updateBidHistory("Bid placed: $" + bidAmount);
 
                                 view.getListItemErrorLabel().setText("Bid placed successfully!");
                             } else {
@@ -419,7 +397,7 @@ public class MainController {
         }
     }
 
-    private void generateSellerReport() {
+    public void generateSellerReport() {
         view.getSellerReportBox().getChildren().clear();
 
         double totalWinningBids = 0;
@@ -502,18 +480,8 @@ public class MainController {
     public void setSellerCommissionForTest(double sellerCommission) {
         this.sellerCommission = sellerCommission;
     }
-    private void updateBidHistory(String message) {
-        Item selectedItem = view.getSelectedItem();
-        if (selectedItem != null) {
-            // Add the new bid message to the liveBidHistoryBox
-            Label newBidLabel = new Label(message);
-            view.getLiveBidHistoryBox().getChildren().add(newBidLabel); // Ensure liveBidHistoryBox is accessible in the view
 
-            // Update bid history display in the UI
-            String report = selectedItem.generateBidHistoryReport();
-            view.getBidHistoryArea().setText(report);
-        }
-    }
+
 
     // Method to save categories as text
     public void saveCategoriesText(String filename) {
@@ -567,4 +535,6 @@ public class MainController {
     public SystemClock getClock() {
         return clock;
     }
+
+
 }

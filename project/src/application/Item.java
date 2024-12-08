@@ -23,7 +23,7 @@ public class Item {
     private SystemClock clock;
     private List<Bid> bidHistory;
 
-    public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice, Double initialBid, SystemClock clock  ) {
+    public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice, Double initialBid, SystemClock Clock  ) {
         this.title = title;
         this.weight = weight;
         this.description = description;
