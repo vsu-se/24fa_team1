@@ -1,4 +1,3 @@
-
 package application;
 
 public class Category {
@@ -18,5 +17,15 @@ public class Category {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	public void setBuyerPremium(double buyerPremium) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setSellerCommission(double sellerCommission) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -1,116 +1,57 @@
+
 package application;
 
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.layout.HBox;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
 
 public class ItemController {
-    private ItemView view;
-    private ObservableList<Category> categories;
-    private TabPane tabPane;
-    private Tab createItemTab;
-    private ObservableList<Item> items;
-    private MainController mainController;
+    private final ItemManager itemManager;
+    private final ComboBox<Item> itemComboBox;
+    private final TextField itemNameField;
+    private final TextField itemPriceField;
+    private final Button addItemButton;
 
-    public ItemController(ItemView view, ObservableList<Category> categories, TabPane tabPane, Tab createItemTab, ObservableList<Item> items, MainController mainController) {
-        this.view = view;
-        this.categories = categories;
-        this.tabPane = tabPane;
-        this.createItemTab = createItemTab;
-        this.items = items;
-        this.mainController = mainController;
+    public ItemController(ItemManager itemManager, ComboBox<Item> itemComboBox, TextField itemNameField, TextField itemPriceField, Button addItemButton) {
+        this.itemManager = itemManager;
+        this.itemComboBox = itemComboBox;
+        this.itemNameField = itemNameField;
+        this.itemPriceField = itemPriceField;
+        this.addItemButton = addItemButton;
 
-        view.getCreateItemButton().setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String title = view.getTitleInput().getText();
-                String weight = view.getWeightInput().getText();
-                String weightUnit = view.getWeightUnitComboBox().getValue();
-                String description = view.getDescriptionInput().getText();
-                Category category = view.getCategoryComboBox().getValue();
-                String condition = view.getConditionComboBox().getValue();
-                String tag1 = view.getTag1Input().getText();
-                String tag2 = view.getTag2Input().getText();
-                String tag3 = view.getTag3Input().getText();
-                LocalDate endDate = view.getEndDatePicker().getValue();
-                String endTime = view.getEndTimeInput().getText();
-                String buyItNowPriceText = view.getBuyItNowPriceInput().getText();
+        setupItemManagement();
+    }
 
-                if (title.isEmpty() || weight.isEmpty() || weightUnit == null || description.isEmpty() || category == null || condition == null || endDate == null || endTime.isEmpty()) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please fill in all required fields.");
-                    alert.showAndWait();
-                    return;
-                }
+    private void setupItemManagement() {
+        // Bind ComboBox to the item list
+        itemComboBox.setItems(itemManager.getItems());
 
-                try {
-                    Double.parseDouble(weight);
-                } catch (NumberFormatException e) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please enter a valid number for the weight.");
-                    alert.showAndWait();
-                    return;
-                }
+        // Add item event handler
+        addItemButton.setOnAction(event -> {
+            String itemName = itemNameField.getText();
+            double itemPrice;
 
-                LocalDateTime startDate = LocalDateTime.now();
-                LocalDateTime endDateTime;
-                try {
-                    endDateTime = LocalDateTime.of(endDate, LocalTime.parse(endTime, DateTimeFormatter.ofPattern("HH:mm")));
-                } catch (Exception e) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Please enter a valid end time in the format HH:mm.");
-                    alert.showAndWait();
-                    return;
-                }
+            try {
+                itemPrice = Double.parseDouble(itemPriceField.getText());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid price input.");
+                return;
+            }
 
-                if (endDateTime.isBefore(startDate)) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText(null);
-                    alert.setContentText("The end date and time cannot be before the current date and time.");
-                    alert.showAndWait();
-                    return;
-                }
-
-                Double buyItNowPrice = null;
-                if (!buyItNowPriceText.isEmpty()) {
-                    try {
-                        buyItNowPrice = Double.parseDouble(buyItNowPriceText);
-                    } catch (NumberFormatException e) {
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Warning");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Please enter a valid number for the Buy it now price.");
-                        alert.showAndWait();
-                        return;
-                    }
-                }
-
-                Item newItem = new Item(title, weight + " " + weightUnit, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice);
-                items.add(newItem);
-
-                // Close the "Create Item" tab
-                tabPane.getTabs().remove(createItemTab);
-
-                // Update the items display in the MainController
-                mainController.updateItemsDisplay();
+            Item newItem = new Item(itemName, itemPrice, 0, 0, 0);
+            if (itemManager.addItem(newItem)) {
+                System.out.println("Item added: " + itemName);
+                itemNameField.clear();
+                itemPriceField.clear();
+            } else {
+                System.out.println("Failed to add item: Validation error.");
             }
         });
+    }
+
+    public void updateItemView() {
+        // Refresh item-related views
+        System.out.println("Updating item views...");
     }
 }

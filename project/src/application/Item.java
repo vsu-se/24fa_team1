@@ -15,8 +15,11 @@ public class Item {
     private LocalDateTime endDate;
     private Double buyItNowPrice;
     private Double currentBid;
+    private boolean active;
+    private boolean hasBidder;
+    private SystemClock clock;
 
-    public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice) {
+    public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice, double initialBid, SystemClock clock){
         this.title = title;
         this.weight = weight;
         this.description = description;
@@ -28,10 +31,13 @@ public class Item {
         this.startDate = startDate;
         this.endDate = endDate;
         this.buyItNowPrice = buyItNowPrice;
-        this.currentBid = 0.0; // Initialize current bid to 0.0
+        this.currentBid = 0.0;
+        this.active = true;
+        this.currentBid = initialBid;
+        this.clock = clock;
     }
 
-    // Getters and setters for all fields
+	// Getters and setters for all fields
     public String getTitle() {
         return title;
     }
@@ -129,6 +135,40 @@ public class Item {
     }
 
     public boolean isActive() {
-        return LocalDateTime.now().isBefore(endDate);
+		return active && LocalDateTime.now().isBefore(endDate);
+    }
+    
+    public void checkAndSetInactive() {
+        if (clock.getTime().isAfter(endDate)) {
+            active = false;
+        }
+    }
+    
+    public boolean placeBid(double bidAmount) {
+        if (bidAmount > currentBid) {
+            currentBid = bidAmount;
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean hasBidder() {
+    	return hasBidder;
+    }
+    
+    public void setHasBidder(boolean hasBidder) {
+    	this.hasBidder = hasBidder;
+    }
+    
+    public double getSellersCommission(double sellersCommissionPercent) {
+    	return currentBid * (sellersCommissionPercent / 100);
+    }
+    
+    public double getShippingCost() {
+    	return 10.00; //FIXME WHAT IS THIS SUPPOSED TO BE? DOES USER SPECIFY??
+    }
+    
+    public double getBuyersPremium(double buyersPremiumPercent) {
+    	return currentBid * (buyersPremiumPercent / 100);
     }
 }
