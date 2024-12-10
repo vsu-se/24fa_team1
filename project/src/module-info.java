@@ -4,6 +4,8 @@ module project {
 	requires junit;
 	requires javafx.graphics;
 	requires javafx.swing;
+  
+  //exports application;
 	
 	exports test to javafx.graphics;
 	

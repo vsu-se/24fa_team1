@@ -1,6 +1,7 @@
 package application;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Item {
     private String title;
@@ -18,6 +19,7 @@ public class Item {
     private boolean active;
     private boolean hasBidder;
     private SystemClock clock;
+    private ArrayList<Bid> bidHistory;
 
     public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice, double initialBid, SystemClock clock){
         this.title = title;
@@ -35,6 +37,7 @@ public class Item {
         this.active = true;
         this.currentBid = initialBid;
         this.clock = clock;
+        bidHistory = new ArrayList<>();
     }
 
 	// Getters and setters for all fields
@@ -147,6 +150,10 @@ public class Item {
     public boolean placeBid(double bidAmount) {
         if (bidAmount > currentBid) {
             currentBid = bidAmount;
+            hasBidder = true;
+            Bid newBid = new Bid(bidAmount, clock.getTime(), false);
+            bidHistory.add(newBid);
+
             return true;
         }
         return false;
@@ -170,5 +177,13 @@ public class Item {
     
     public double getBuyersPremium(double buyersPremiumPercent) {
     	return currentBid * (buyersPremiumPercent / 100);
+    }
+    
+    public void addBid(Bid bid) {
+        bidHistory.add(bid);
+    }
+
+    public ArrayList<Bid> getBidHistory(){
+        return bidHistory;
     }
 }

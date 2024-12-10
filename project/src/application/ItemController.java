@@ -57,6 +57,7 @@ public class ItemController {
                     view.getCreateItemErrorLabel().setText("Please enter a valid number for the weight.");
                     return;
                 }
+                String combinedWeight = weight + " " + weightUnit;
 
                 LocalDateTime startDate = mainController.getTime();
                 LocalDateTime endDateTime;
@@ -85,9 +86,7 @@ public class ItemController {
                 double bidAmount;
                 try {
                     bidAmount = Double.parseDouble(bidAmountText);
-                    if (bidAmount >= 0.00) {
-                    	
-                    } else {
+                    if (bidAmount < 0) {
                         view.getCreateItemErrorLabel().setText("Initial bid amount cannot be negative.");
                         return;
                     }
@@ -96,6 +95,8 @@ public class ItemController {
                     return;
                 }
                 
+
+                System Clock;
                 Item newItem = new Item(title, weight, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice, bidAmount, mainController.getClock());
                 items.add(newItem);
 
@@ -110,5 +111,6 @@ public class ItemController {
                 mainController.scheduleNextUpdate();
             }
         });
+        
     }
 }

@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a81bf3fc-1fcf-4215-86ad-94bf431c98b4" name="Changes" comment="Updated SystemTest11">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Test/Test.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/SystemTest11.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/SystemTest11.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/project.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/Bid.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/Bid.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/MainView.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+        <option value="Record" />
+        <option value="Interface" />
+        <option value="Class" />
+        <option value="JavaFXApplication" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;BazilAshfaq&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/vsu-se/24fa_team1.git&quot;,
+    &quot;accountId&quot;: &quot;7c3cebfc-a434-483c-8cb7-3f22bfc00e8f&quot;
+  }
+}</component>
+  <component name="IlluminatedCloudWorkspaceSettings">
+    <option name="projectWorkspaceSettings">
+      <ProjectWorkspaceSettings>
+        <option name="anonymousApexSettings">
+          <AnonymousApexSettings>
+            <option name="savedDocuments">
+              <list>
+                <AnonymousApexSavedDocument>
+                  <option name="name" value="Anonymous Apex 1" />
+                </AnonymousApexSavedDocument>
+              </list>
+            </option>
+          </AnonymousApexSettings>
+        </option>
+      </ProjectWorkspaceSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2pHKIMFi4jsSCaQaQRCVVKDg22w" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Application.SystemTest11.executor": "Run",
+    "Downloaded.Files.Path.Enabled": "false",
+    "JUnit.ItemTest.executor": "Run",
+    "JUnit.SellerReportSystemTest.executor": "Run",
+    "JUnit.SellerReportTest.executor": "Run",
+    "JUnit.SellerReportViewTest.executor": "Run",
+    "JUnit.SystemTest1 (1).executor": "Run",
+    "JUnit.SystemTest1.executor": "Run",
+    "JUnit.SystemTest11.executor": "Run",
+    "JUnit.SystemTest11.testGenerateSellerReport.executor": "Run",
+    "JUnit.SystemTest11.testItemWithCommission.executor": "Run",
+    "JUnit.SystemTest11.testItemWithEmptyBid.executor": "Run",
+    "JUnit.SystemTest11.testItemWithTags.executor": "Run",
+    "JUnit.SystemTest11.testItemWithZeroInitialBid.executor": "Run",
+    "JUnit.SystemTest11.testItemWithoutBuyItNowPrice.executor": "Run",
+    "JUnit.SystemTest11.testSellerReportGenerated.executor": "Run",
+    "JUnit.SystemTest12.executor": "Run",
+    "JUnit.SystemTest16.executor": "Run",
+    "JUnit.SystemTest17.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "create.test.in.the.same.root": "true",
+    "full.screen.before.presentation.mode": "false",
+    "git-widget-placeholder": "Ashfaq1",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/nargi/Downloads/woodstox-core-7.1.0-javadoc.jar",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="application" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\nargi\OneDrive\Documents\GitHub\24fa_team1\project\Test\src" />
+      <recent name="C:\Users\nargi\OneDrive\Documents\GitHub\24fa_team1\project\Tests\src" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="application" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.SystemTest12">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="application.Main" />
+      <module name="project" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="application.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SystemTest11" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="SystemTest11" />
+      <module name="Test" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SystemTest11" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="SystemTest11" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SystemTest11.testItemWithCommission" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="SystemTest11" />
+      <option name="METHOD_NAME" value="testItemWithCommission" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SystemTest12" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="SystemTest12" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Tests" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Tests" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.SystemTest12" />
+        <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.SystemTest11" />
+        <item itemvalue="Application.SystemTest11" />
+        <item itemvalue="JUnit.SystemTest11.testItemWithCommission" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a81bf3fc-1fcf-4215-86ad-94bf431c98b4" name="Changes" comment="" />
+      <created>1732417485507</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1732417485507</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Added EndedAuctions Controller and View">
+      <option name="closed" value="true" />
+      <created>1732668656119</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1732668656119</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Deleted unnecessary file">
+      <option name="closed" value="true" />
+      <created>1732734941027</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1732734941027</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Pulled changes from main">
+      <option name="closed" value="true" />
+      <created>1732841758609</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1732841758609</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Updated ShowConcludedAuctions">
+      <option name="closed" value="true" />
+      <created>1732843629229</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1732843629229</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Updated ShowConcludedAuctions">
+      <option name="closed" value="true" />
+      <created>1732843732834</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1732843732834</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Updated SellerReport to fit in MyProfile tab">
+      <option name="closed" value="true" />
+      <created>1732908097240</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1732908097240</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Added shipping cost">
+      <option name="closed" value="true" />
+      <created>1732914801851</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1732914801851</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Added Buyers Report">
+      <option name="closed" value="true" />
+      <created>1733031012148</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1733031012148</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Added Buyers Report">
+      <option name="closed" value="true" />
+      <created>1733031037892</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1733031037892</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Updated Buyer's Report">
+      <option name="closed" value="true" />
+      <created>1733097163235</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1733097163235</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Pulled changes from main">
+      <option name="closed" value="true" />
+      <created>1733269876213</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1733269876213</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Updated Seller Report format and shipping calculation">
+      <option name="closed" value="true" />
+      <created>1733439629889</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1733439629889</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Added a Bid class">
+      <option name="closed" value="true" />
+      <created>1733440796250</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1733440796250</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Updated Bid History">
+      <option name="closed" value="true" />
+      <created>1733451777905</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1733451777906</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Added saveCategoriesText">
+      <option name="closed" value="true" />
+      <created>1733548456814</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1733548456814</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Added load Options tab">
+      <option name="closed" value="true" />
+      <created>1733550077044</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1733550077044</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Added SystemTest11">
+      <option name="closed" value="true" />
+      <created>1733697244960</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1733697244960</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Updated SystemTest11">
+      <option name="closed" value="true" />
+      <created>1733702246061</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1733702246061</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added EndedAuctions Controller and View" />
+    <MESSAGE value="Deleted unnecessary file" />
+    <MESSAGE value="Updated ShowConcludedAuctions" />
+    <MESSAGE value="Updated SellerReport to fit in MyProfile tab" />
+    <MESSAGE value="Added shipping cost" />
+    <MESSAGE value="Added Buyers Report" />
+    <MESSAGE value="Updated Buyer's Report" />
+    <MESSAGE value="Pulled changes from main" />
+    <MESSAGE value="Updated Seller Report format and shipping calculation" />
+    <MESSAGE value="Added a Bid class" />
+    <MESSAGE value="Updated Bid History" />
+    <MESSAGE value="Added saveCategoriesText" />
+    <MESSAGE value="Added load Options tab" />
+    <MESSAGE value="Added SystemTest11" />
+    <MESSAGE value="Updated SystemTest11" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated SystemTest11" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/SellerReportViewTest_java$SystemTest11.ic" NAME="SystemTest11 Coverage Results" MODIFIED="1733699007130" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+  </component>
+</project>
