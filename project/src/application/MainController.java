@@ -58,6 +58,8 @@ public class MainController {
             while (change.next()) {
                 if (change.wasAdded() || change.wasRemoved()) {
                     updateProfileItemsDisplay();
+                    generateSellerReport();
+                    generateBuyerReport();
                 }
             }
         });
@@ -211,6 +213,8 @@ public class MainController {
 
         // Initial display update
         updateProfileItemsDisplay();
+        generateSellerReport();
+        generateBuyerReport();
     }
 
     public void scheduleNextUpdate() {
@@ -236,7 +240,7 @@ public class MainController {
                 .orElse(null);
     }
 
-    private void checkAndUpdateItems() {
+    public void checkAndUpdateItems() {
         for (Item item : items) {
             item.checkAndSetInactive();
         }
@@ -244,11 +248,13 @@ public class MainController {
             updateItemsDisplay();
             updateProfileItemsDisplay();
             updateConcludedAuctionsDisplay();
+            generateSellerReport();
+            generateBuyerReport();
         });
         scheduleNextUpdate();
     }
 
-private boolean isDuplicateCategory(String categoryName) {
+    private boolean isDuplicateCategory(String categoryName) {
         for (Category category : categories) {
             if (category.getName().equalsIgnoreCase(categoryName)) {
                 return true;
@@ -416,7 +422,89 @@ private boolean isDuplicateCategory(String categoryName) {
         view.getConcludedAuctionsBox().getChildren().add(itemBox);
         itemBox.toBack();
     }
+    public void generateSellerReport() {
+        view.getSellerReportBox().getChildren().clear();
 
+        double totalWinningBids = 0;
+        double totalShippingCosts = 0;
+        double totalSellerCommissions = 0;
+
+        items.sort((item1, item2) -> item2.getEndDate().compareTo(item1.getEndDate()));
+
+        for (Item item : items) {
+            if (!item.isActive() && item.hasBidder()) {
+                double winningBid = item.getCurrentBid();
+                double shippingCost = item.getShippingCost();
+                double sellersCommission = (winningBid * sellerCommission) / 100;
+
+                totalWinningBids += winningBid;
+                totalShippingCosts += shippingCost;
+                totalSellerCommissions += sellersCommission;
+
+                HBox itemBox = new HBox(10);
+                itemBox.getChildren().addAll(
+                        new Label("Name: " + item.getTitle()),
+                        new Label("Price: $" + winningBid),
+                        new Label("Seller's Commission: $" + sellerCommission),
+                        new Label("Shipping: $" + shippingCost)
+                );
+                view.getSellerReportBox().getChildren().add(itemBox);
+            }
+        }
+
+        double totalProfits = totalWinningBids - totalSellerCommissions;
+
+        view.getSellerReportBox().getChildren().addAll(
+                new Label("Total Winning Bids: $" + totalWinningBids),
+                new Label("Total Shipping Costs: $" + totalShippingCosts),
+                new Label("Total Seller’s Commissions: $" + totalSellerCommissions),
+                new Label("Total Profits: $" + totalProfits)
+        );
+    }
+    public void generateBuyerReport() {
+        view.getBuyerReportBox().getChildren().clear();
+
+        double totalAmountBought = 0;
+        double totalBuyerPremiumsPaid = 0;
+        double totalShippingCostPaid = 0;
+
+        items.sort((item1, item2) -> item2.getEndDate().compareTo(item1.getEndDate()));
+
+        for (Item item : items) {
+            if (!item.isActive() && item.hasBidder()) {
+                double price = item.getCurrentBid();
+                double shippingCost = item.getShippingCost();
+                double buyerPremiumAmount = (price * buyerPremium) / 100;
+
+                totalAmountBought += price;
+                totalBuyerPremiumsPaid += buyerPremiumAmount;
+                totalShippingCostPaid += shippingCost;
+
+                HBox itemBox = new HBox(10);
+                itemBox.getChildren().addAll(
+                        new Label("Name: " + item.getTitle()),
+                        new Label("Price: $" + price),
+                        new Label("Buyer's Premium: $" + buyerPremiumAmount),
+                        new Label("Shipping: $" + shippingCost)
+                );
+                view.getBuyerReportBox().getChildren().add(itemBox);
+            }
+        }
+
+        view.getBuyerReportBox().getChildren().addAll(
+                new Label("Total Amount Bought: $" + totalAmountBought),
+                new Label("Total Buyer’s Premiums Paid: $" + totalBuyerPremiumsPaid),
+                new Label("Total Shipping Cost Paid: $" + totalShippingCostPaid)
+        );
+    }
+
+    public void setBuyerPremiumForTest(double buyerPremium) {
+        this.buyerPremium = buyerPremium;
+    }
+
+    public void setSellerCommissionForTest(double sellerCommission) {
+        this.sellerCommission = sellerCommission;
+    }
     private void clearErrorMessages() {
         view.getCategoryErrorLabel().setText("");
         view.getPremiumErrorLabel().setText("");

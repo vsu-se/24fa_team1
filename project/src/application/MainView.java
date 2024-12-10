@@ -1,5 +1,6 @@
 package application;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -29,6 +30,8 @@ public class MainView {
     private VBox userInterfaceItemsBox;
     private VBox myProfileItemsBox;
     private VBox concludedAuctionsBox;
+    private VBox sellerReportBox;
+    private VBox buyerReportBox;
 
     // Error labels
     private Label categoryErrorLabel;
@@ -83,7 +86,7 @@ public class MainView {
         
         pauseTimeButton = new Button("Pause Time");
         
-        unpauseTimeButton= new Button("Unpause Time");
+        unpauseTimeButton = new Button("Unpause Time");
         
         concludedAuctionsBox = new VBox(10);
         Label concludedAuctionsLabel = new Label("Concluded Auctions:");
@@ -118,16 +121,24 @@ public class MainView {
         ScrollPane userInterfaceScrollPane = new ScrollPane(userInterfaceItemsBox);
         userInterfaceScrollPane.setFitToWidth(true);
 
-        VBox userInterfaceContent = new VBox(10, listItemErrorLabel, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton, userInterfaceScrollPane);
-        Tab userInterfaceTab = new Tab("User Interface", userInterfaceContent);
+        userInterfaceContent = new VBox(10, listItemErrorLabel, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton, userInterfaceScrollPane, new Label("Buyer Report:"), buyerReportScrollPane);
+        userInterfaceTab = new Tab("User Interface", userInterfaceContent);
         userInterfaceTab.setClosable(false);
+
+        buyerReportBox = new VBox(10);
+        ScrollPane buyerReportScrollPane = new ScrollPane(buyerReportBox);
+        buyerReportScrollPane.setFitToWidth(true);
 
         // My Profile Tab
         myProfileItemsBox = new VBox(10);
         ScrollPane myProfileScrollPane = new ScrollPane(myProfileItemsBox);
         myProfileScrollPane.setFitToWidth(true);
 
-        VBox myProfileContent = new VBox(10, myProfileScrollPane);
+        sellerReportBox = new VBox(10);
+        ScrollPane sellerReportScrollPane = new ScrollPane(sellerReportBox);
+        sellerReportScrollPane.setFitToWidth(true);
+
+        VBox myProfileContent = new VBox(10, myProfileScrollPane, new Label("Seller Report:"), sellerReportScrollPane);
         Tab myProfileTab = new Tab("My Profile", myProfileContent);
         myProfileTab.setClosable(false);
 
@@ -196,6 +207,13 @@ public class MainView {
 
     public VBox getConcludedAuctionsBox() {
         return concludedAuctionsBox;
+    }
+    
+    public VBox getSellerReportBox() {
+        return sellerReportBox;
+    }
+    public VBox getBuyerReportBox() {
+        return buyerReportBox;
     }
 
     // Getters for error labels
