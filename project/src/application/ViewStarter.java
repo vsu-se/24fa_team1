@@ -1,35 +1,50 @@
-
 package application;
 
+//Will need to be revamped once our classes have been reorganized
+
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Tab;
+import javafx.stage.Stage;
 
 public class ViewStarter extends Application {
 
+    private MainController controller;
+
     @Override
     public void start(Stage primaryStage) {
-        try {
-            // Create sample categories
-            ObservableList<Category> categories = FXCollections.observableArrayList(
-                new Category("Electronics"),
-                new Category("Books"),
-                new Category("Furniture")
-            );
+        MainView view = new MainView(null);
+        SystemClock clock = new SystemClock();
+        controller = new MainController(view, clock);
 
-            // Initialize MainView with valid categories
-            MainView mainView = new MainView(categories);
-            MainController controller = new MainController(mainView, null);
+        view.getListItemButton().setOnAction(event -> {
+            if (controller.getCategories().isEmpty()) {
+                view.getListItemErrorLabel().setText("Please add a category in the System Admin tab before listing an item.");
+                return;
+            }
+            
+            ItemView itemView = new ItemView(controller.getCategories());
+            Tab createItemTab = new Tab("Create Item", itemView.getLayout());
+            createItemTab.setClosable(true);
 
-            // Set up the scene
-            Scene scene = new Scene(mainView.getTabPane(), 600, 400);
-            primaryStage.setTitle("Auction System");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+            new ItemController(itemView, controller.getCategories(), view.getTabPane(), createItemTab, controller.getItems(), controller, clock);
+
+            view.getTabPane().getTabs().add(createItemTab);
+            view.getTabPane().getSelectionModel().select(createItemTab);
+        });
+
+        Scene scene = new Scene(view.getTabPane(), 1000, 800);
+
+        primaryStage.setTitle("Auction System");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    @Override
+    public void stop() {
+        if (controller != null) {
+            controller.shutdownScheduler();
         }
     }
 
