@@ -2,26 +2,26 @@ package application;
 
 import java.time.LocalDateTime;
 
-class Bid {
+public class Bid {
     private double amount;
-    private LocalDateTime dateTime;
-    private String username;
+    private LocalDateTime time;
+    private boolean isBIN;
 
-    public Bid(double amount, LocalDateTime dateTime, String username) {
+    public Bid(double amount, LocalDateTime time, boolean isBIN) {
         this.amount = amount;
-        this.dateTime = dateTime;
-        this.username = username;
+        this.time = time;
+        this.isBIN = isBIN;
     }
 
     public double getAmount() {
         return amount;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getTime() {
+        return time;
     }
 
-    public String getUsername() {
-        return username;
+    public boolean getIsBIN() {
+        return isBIN;
     }
 }

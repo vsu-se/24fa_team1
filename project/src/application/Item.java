@@ -21,7 +21,8 @@ public class Item {
     private boolean active;
     private boolean hasBidder;
     private SystemClock clock;
-    private List<Bid> bidHistory;
+    private ArrayList<Bid> bidHistory;
+
 
     public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice, Double initialBid, SystemClock Clock  ) {
         this.title = title;
@@ -39,7 +40,7 @@ public class Item {
         this.active = true;
         this.currentBid = initialBid;
         this.clock= clock;
-        this.bidHistory = new ArrayList<>();
+        bidHistory = new ArrayList<>();
     }
 
     // Getters and setters for all fields
@@ -153,24 +154,12 @@ public class Item {
     public boolean placeBid(double bidAmount) {
         if (bidAmount > currentBid) {
             currentBid = bidAmount;
+            Bid newBid = new Bid(bidAmount, clock.getTime(), false);
+            bidHistory.add(newBid);
             return true;
         }
         return false;
     }
-        public List<Bid> getBidHistory() {
-            return bidHistory;
-        }
-        public String generateBidHistoryReport() {
-            StringBuilder report = new StringBuilder();
-            report.append("Bid History Report:\n");
-            report.append("Bid Amount\tDate/Time\t\tUser Name\n");
-
-            bidHistory.stream()
-                    .sorted(Comparator.comparingDouble(Bid::getAmount).reversed())
-                    .forEach(bid -> report.append(String.format("$%.2f\t\t%s\t%s\n", bid.getAmount(), bid.getDateTime(), bid.getUsername())));
-
-            return report.toString();
-        }
 
 
     public double calculateShippingCost() {
@@ -195,6 +184,16 @@ public class Item {
         } else {
             return 0.0;
         }
+    }
+    public double getShippingCost(){
+        return calculateShippingCost();
+    }
+    public void addBid(Bid bid) {
+        bidHistory.add(bid);
+    }
+
+    public ArrayList<Bid> getBidHistory(){
+        return bidHistory;
     }
 
 

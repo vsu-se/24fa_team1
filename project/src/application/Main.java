@@ -34,7 +34,7 @@ public class Main extends Application {
             view.getTabPane().getSelectionModel().select(createItemTab);
         });
 
-        Scene scene = new Scene(view.getTabPane(), 800, 600);
+        Scene scene = new Scene(view.getTabPane(), 1000, 800);
 
         primaryStage.setTitle("Auction System");
         primaryStage.setScene(scene);

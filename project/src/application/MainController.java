@@ -20,15 +20,23 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Timer;
+import java.util.Timer;
 
 public class MainController {
     private ObservableList<Category> categories;
+    private ObservableList<Category> concludedCategories;
     private ObservableList<Item> items;
     private MainView view;
     private double buyerPremium;
     private double sellerCommission;
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> scheduledFuture;
+    private TextField currentBidInput;
     private SystemClock clock;
     private Category allAuctions = new Category("All Auctions");
 
@@ -39,6 +47,7 @@ public class MainController {
         buyerPremium = 0.00;
         sellerCommission = 0.00;
         categories = FXCollections.observableArrayList();
+        concludedCategories = FXCollections.observableArrayList();
         items = FXCollections.observableArrayList();
 
         // Initialize the scheduler
@@ -64,6 +73,7 @@ public class MainController {
             if (!categoryName.isEmpty() && !isDuplicateCategory(categoryName)) {
                 Category newCategory = new Category(categoryName);
                 categories.add(newCategory);
+                concludedCategories.add(newCategory);
                 view.getCategoryInput().clear();
                 view.getCategoryErrorLabel().setText(""); // Clear error message
             } else {
@@ -214,6 +224,9 @@ public class MainController {
         // Bind the categories list to the ComboBoxes
         view.getCategoryComboBoxSystemAdmin().setItems(categories);
         view.getCategoryComboBoxUserInterface().setItems(categories);
+        concludedCategories.add(allAuctions);
+        concludedCategories.addAll(categories);
+        view.getCategoryComboBoxConcludedAuctions().setItems(concludedCategories);
 
         // Initial display update
         updateProfileItemsDisplay();
@@ -295,7 +308,18 @@ public class MainController {
         for (Item item : items) {
             if (selectedCategory == null || item.getCategory().equals(selectedCategory)) {
                 if (item.isActive()) {
-                    HBox itemBox = new HBox(10);
+                    Button bidHistoryButton = new Button("Show Bid History");
+                    bidHistoryButton.setOnAction(event -> {
+
+                                BidHistoryView bidHistoryView = new BidHistoryView(item);
+                                Tab bidHistoryTab = new Tab("Bid History", bidHistoryView.getLayout());
+                                bidHistoryTab.setClosable(true);
+
+                                view.getTabPane().getTabs().add(bidHistoryTab);
+                                view.getTabPane().getSelectionModel().select(bidHistoryTab);
+                            });
+                        HBox itemBox = new HBox(10);
+
                     itemBox.getChildren().add(new Label("Title: " + item.getTitle()));
                     if (item.getBuyItNowPrice() != null) {
                         itemBox.getChildren().add(new Label("Buy It Now Price: $" + item.getBuyItNowPrice()));
@@ -359,6 +383,16 @@ public class MainController {
 
         int numMyBids = 0;
         for (Item item : items) {
+            Button bidHistoryButton = new Button("Show Bid History");
+            bidHistoryButton.setOnAction(event -> {
+
+                BidHistoryView bidHistoryView = new BidHistoryView(item);
+                Tab bidHistoryTab = new Tab("Bid History", bidHistoryView.getLayout());
+                bidHistoryTab.setClosable(true);
+
+                view.getTabPane().getTabs().add(bidHistoryTab);
+                view.getTabPane().getSelectionModel().select(bidHistoryTab);
+            });
 
             if(item.hasBidder() && item.isActive()) { //Do not show inactive auctions with a bid.
                 numMyBids++;
@@ -371,7 +405,8 @@ public class MainController {
                         new Label("Weight: " + item.getWeight()),
                         new Label("Active: " + (item.isActive() ? "Yes" : "No")),
                         new Label("Current Bid: $" + item.getCurrentBid()),
-                        new Label("My Bid: $" + item.getCurrentBid()) //currently equal, no profiles yet
+                        new Label("My Bid: $" + item.getCurrentBid()), //currently equal, no profiles yet
+                        bidHistoryButton
                 );
                 view.getMyProfileItemsBox().getChildren().add(itemBoxProfile);
             }
@@ -381,24 +416,71 @@ public class MainController {
 
     private void updateConcludedAuctionsDisplay() {
         view.getConcludedAuctionsBox().getChildren().clear();
+        Category selectedCategory = view.getCategoryComboBoxConcludedAuctions().getValue();
 
-        // Sort items in reverse chronological order by end date
-        items.sort((item1, item2) -> item2.getEndDate().compareTo(item1.getEndDate()));
+        double totalOfWinningBids = 0.00;
+        double totalShippingCosts = 0.00;
+        double totalBuyersPremiums = 0.00;
+        double totalPaidByBuyers = 0.00;
+        double totalWeight = 0.00;
+        double totalSellersCommissions = 0.00;
+        double totalSellersProfit = 0.00;
 
         for (Item item : items) {
-            if (!item.isActive()) {
+            if (!item.isActive() && selectedCategory != null && (item.getCategory().equals(selectedCategory) || selectedCategory.equals(allAuctions))) {
+                totalOfWinningBids += item.getCurrentBid();
+                totalShippingCosts += item.getShippingCost();
+               // totalBuyersPremiums += item.getBuyersPremium(buyersPremium);
+                //totalPaidByBuyers += item.getBuyersPremium(buyersPremium) + item.getCurrentBid();
+                totalWeight += Double.parseDouble(item.getWeight());
+             //   totalSellersCommissions += item.getSellersCommission(sellerCommission);
+                totalSellersProfit += item.getCurrentBid();
+
                 HBox itemBox = new HBox(10);
-                itemBox.getChildren().add(new Label("Date/Time: " + item.getEndDate().toString()));
+
+                Button bidHistoryButton = new Button("Show Bid History");
+
+                bidHistoryButton.setOnAction(event -> {
+
+                    BidHistoryView bidHistoryView = new BidHistoryView(item);
+                    Tab bidHistoryTab = new Tab("Bid History", bidHistoryView.getLayout());
+                    bidHistoryTab.setClosable(true);
+
+                    view.getTabPane().getTabs().add(bidHistoryTab);
+                    view.getTabPane().getSelectionModel().select(bidHistoryTab);
+                });
                 itemBox.getChildren().add(new Label("Item Name: " + item.getTitle()));
-                itemBox.getChildren().add(new Label("Bought: " + (item.getCurrentBid() > 0 ? "Yes" : "No")));
-                itemBox.getChildren().add(new Label("Price: $" + item.getCurrentBid()));
+                if (item.getBuyItNowPrice() != null) {
+                    itemBox.getChildren().add(new Label("Buy It Now Price: $" + item.getBuyItNowPrice()));
+                }
+                itemBox.getChildren().addAll(
+                        new Label("Winning Bid: $" + item.getCurrentBid()),
+                        new Label("Weight: " + item.getWeight()),
+                        new Label("End-date: " + item.getEndDate()),
+                        bidHistoryButton
+                );
                 view.getConcludedAuctionsBox().getChildren().add(itemBox);
+                itemBox.toBack();
             }
         }
+        HBox itemBox = new HBox(10);
+        itemBox.getChildren().addAll(
+                new Label("TOTAL:"),
+                new Label("Winning Bid/BIN: $" + totalOfWinningBids),
+                new Label("Shipping Costs: $" + totalShippingCosts),
+                new Label("Buyers Premiums: $" + totalBuyersPremiums),
+                new Label("Paid by Buyers: $" + totalPaidByBuyers),
+                new Label("Seller's Commissions: $" + totalSellersCommissions),
+                new Label("Seller's Profit: $" + totalSellersProfit),
+                new Label("Weight: " + totalWeight)
+        );
+        view.getConcludedAuctionsBox().getChildren().add(itemBox);
+        itemBox.toBack();
     }
 
     public void generateSellerReport() {
         view.getSellerReportBox().getChildren().clear();
+        Category selectedCategory = view.getCategoryComboBoxConcludedAuctions().getValue();
 
         double totalWinningBids = 0;
         double totalShippingCosts = 0;
@@ -436,7 +518,7 @@ public class MainController {
                 new Label("Total Profits: $" + totalProfits)
         );
     }
-    private void generateBuyerReport() {
+    public void generateBuyerReport() {
         view.getBuyerReportBox().getChildren().clear();
 
         double totalAmountBought = 0;

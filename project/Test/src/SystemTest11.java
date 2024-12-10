@@ -1,3 +1,4 @@
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import application.*;
@@ -14,62 +15,60 @@ import javafx.scene.control.Label;
 import java.time.LocalDateTime;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import javafx.application.Application;
 
 
-public class SystemTest11 extends Application {
-    private static ObservableList<Item> items;
-    private static MainController mainController;
-    private static MainView mainView;
-    private static final CountDownLatch latch = new CountDownLatch(1);
-
-    public void start(Stage stage) throws Exception {
-        latch.countDown();
-    }
+public class SystemTest11{
+    private ObservableList<Item> items;
+    private MainController mainController;
+    private MainView mainView;
+    private ObservableList<Category> categories;
 
     @BeforeAll
     public static void initToolkit() throws Exception {
-        new Thread(() -> Application.launch(SystemTest11.class)).start();
-        if (!latch.await(20, TimeUnit.SECONDS)) {
-            throw new Exception("JavaFX initialization took too long");
-        }
+        CountDownLatch latch = new CountDownLatch(1);
+        Platform.startup(latch::countDown);
+        latch.await(5, TimeUnit.SECONDS);
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
-        CountDownLatch setupLatch = new CountDownLatch(1);
+    public void setUp() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
-            try {
-                SystemClock clock = new SystemClock();
-                mainView = new MainView(FXCollections.observableArrayList());
-                mainController = new MainController(mainView, clock);
-                items = mainController.getItems();
-            } finally {
-                setupLatch.countDown();
-            }
+            categories = FXCollections.observableArrayList();
+            mainView = new MainView(categories);
+            mainController = new MainController(mainView, new SystemClock());
+            items = mainController.getItems();
+            latch.countDown();
         });
-        if (!setupLatch.await(5, TimeUnit.SECONDS)) {
-            throw new Exception("JavaFX setup took too long");
-
-        }
+        latch.await(5, TimeUnit.SECONDS);
     }
+
     @Test
     public void testItemWithZeroInitialBid() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
             // Creating an item with an initial bid of zero
             Category category = new Category("Books");
-            SystemClock clock = new SystemClock();
-            LocalDateTime startDate = LocalDateTime.now();
-            LocalDateTime endDate = LocalDateTime.now().plusDays(7);
+            LocalDateTime startDate = mainController.getTime();
+            LocalDateTime endDate = mainController.getTime().plusDays(7);
 
-            Item item = new Item("Book", "0.5kg", "A rare book", category, "New", "books", "rare", "collectible", startDate, endDate, 100.0,  0.0, clock);
+            Item item = new Item("Book", "0.5kg", "A rare book", category, "New", "books", "rare", "collectible", startDate, endDate, 100.0,  0.0, mainController.getClock());
 
             items.clear();
             items.add(item);
 
+            //Simulate a user placing a bid
+            item.placeBid(101.00);
+
+            //Skip time until item has closed
+            mainController.setTime(LocalDateTime.now().plusDays(8));
+            mainController.scheduleNextUpdate();
+
+            //Generate Report
             mainController.generateSellerReport();
-            assertEquals(1, mainView.getSellerReportBox().getChildren().size());
+
+            assertEquals(5, mainView.getSellerReportBox().getChildren().size());
+            //must be 5, since there are always at least 4 labels (which display totals). Adding an item should add 1 label (4 + 1 = 5) 
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS);
@@ -81,23 +80,31 @@ public class SystemTest11 extends Application {
         Platform.runLater(() -> {
             // Creating an item with no "Buy It Now" price
             Category category = new Category("Home");
-            SystemClock clock = new SystemClock();
             LocalDateTime startDate = LocalDateTime.now();
             LocalDateTime endDate = LocalDateTime.now().plusDays(7);
 
-            Item item = new Item("Sofa", "30kg", "A comfy sofa", category, "Used", "furniture", "couch", "livingroom", startDate, endDate, null, 1000.0, clock);
+            Item item = new Item("Sofa", "30kg", "A comfy sofa", category, "Used", "furniture", "couch", "livingroom", startDate, endDate, null, 1000.0, mainController.getClock());
 
             items.clear();
             items.add(item);
 
+            //Simulate a user placing a bid
+            item.placeBid(1001.00);
+
+            //Skip time until after item has closed
+            mainController.setTime(LocalDateTime.now().plusDays(8));
+            mainController.scheduleNextUpdate();
+
             mainController.generateSellerReport(); // Generate the report
 
             // Verify if the item is included in the report despite missing the Buy It Now price
-            assertEquals(1, mainView.getSellerReportBox().getChildren().size());
+            assertEquals(5, mainView.getSellerReportBox().getChildren().size());
+            //must be 5, since there are always at least 4 labels (which display totals). Adding an item should add 1 label (4 + 1 = 5)
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS);
     }
+
     @Test
     public void testItemWithTags() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
@@ -108,15 +115,23 @@ public class SystemTest11 extends Application {
             LocalDateTime startDate = LocalDateTime.now();
             LocalDateTime endDate = LocalDateTime.now().plusDays(7);
 
-            Item item = new Item("Football", "1kg", "A professional football", category, "New", "sports", "football", "game", startDate, endDate, 50.0, 40.0, clock);
+            Item item = new Item("Football", "1kg", "A professional football", category, "New", "sports", "football", "game", startDate, endDate, 50.0, 40.0, mainController.getClock());
 
             items.clear();
             items.add(item);
 
+            //Simulate a user placing a bid
+            item.placeBid(60.00);
+
+            //Skip time until after item has closed
+            mainController.setTime(LocalDateTime.now().plusDays(8));
+            mainController.scheduleNextUpdate();
+
             mainController.generateSellerReport(); // Generate the report
 
             // Check if the item is included in the report
-            assertEquals(1, mainView.getSellerReportBox().getChildren().size());
+            assertEquals(5, mainView.getSellerReportBox().getChildren().size());
+            //must be 5, since there are always at least 4 labels (which display totals). Adding an item should add 1 label (4 + 1 = 5)
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS);
@@ -128,47 +143,65 @@ public class SystemTest11 extends Application {
         Platform.runLater(() -> {
             // Creating an item with an empty bid (initial bid set to zero)
             Category category = new Category("Electronics");
-            SystemClock clock = new SystemClock();
             LocalDateTime startDate = LocalDateTime.now();
             LocalDateTime endDate = LocalDateTime.now().plusDays(7);
 
-            Item item = new Item("Old TV", "10kg", "A used TV in decent condition", category, "Used", "electronics", "tv", "used", startDate, endDate, 0.0, null, clock);
+            Item item = new Item("Old TV", "10kg", "A used TV in decent condition", category, "Used", "electronics", "tv", "used", startDate, endDate, 0.0, 0.0, mainController.getClock());
 
             items.clear();
             items.add(item);
 
+            //Skip time until after item has closed without placing a bid
+            mainController.setTime(LocalDateTime.now().plusDays(8));
+            mainController.scheduleNextUpdate();
+
             mainController.generateSellerReport(); // Generate the report
 
             // Ensure that the report does not include an item with an empty or zero bid
-            assertTrue(mainView.getSellerReportBox().getChildren().isEmpty());
+            assertEquals(4, mainView.getSellerReportBox().getChildren().size());
+
 
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS);
     }
+
+
     @Test
     public void testItemWithCommission() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
             Category category = new Category("Art");
-            SystemClock clock = new SystemClock();
             LocalDateTime startDate = LocalDateTime.now();
             LocalDateTime endDate = LocalDateTime.now().plusDays(7);
 
             double specialCommissionRate = 10.0;
 
-            Item item = new Item("Painting", "5kg", "A rare painting", category, "New", "art", "painting", "fineart", startDate, endDate, 5000.0,null, clock);
+            Item item = new Item("Painting", "5kg", "A rare painting", category, "New", "art", "painting", "fineart", startDate, endDate, 200.0,200.00, mainController.getClock());
 
             items.clear();
             items.add(item);
+
+            //Simulate an admin changing the seller's commission rate to 10%
+            mainController.setSellerCommissionForTest(10);
+
+            //Simulate a user placing a bid
+            item.placeBid(4000.00);
+
+            double expectedCommission = 4000.0 * 0.1; // 10% of the winning bid
+
+            //Skip time until after item has closed
+            mainController.setTime(LocalDateTime.now().plusDays(8));
+            mainController.scheduleNextUpdate();
 
             mainController.generateSellerReport(); // Generate the report
 
             // Check if the report includes the item and calculates the commission correctly
             // Assuming that the item has a commission of 10% of the winning bid
-            double expectedCommission = 4000.0 * 0.1; // 10% of the winning bid
-            assertTrue(mainView.getSellerReportBox().getChildren().stream()
-                    .anyMatch(node -> node instanceof HBox && ((HBox) node).getChildren().toString().contains("Seller's Commission: $" + expectedCommission)));
+            assertEquals(expectedCommission, mainView.getSellerReportBox().getChildren().stream()
+                    .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Seller’s Commissions:"))
+                    .mapToDouble(node -> Double.parseDouble(((Label) node).getText().split("\\$")[1]))
+                    .sum());
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS);
@@ -183,51 +216,55 @@ public class SystemTest11 extends Application {
         CountDownLatch testLatch = new CountDownLatch(1);
         Platform.runLater(() -> {
             try {
-        // Setup categories
-        Category electronics = new Category("Electronics");
-        mainController.getCategories().add(electronics);
-        // Setup items
-        Item item1 = new Item("Laptop", "2kg", "High-end gaming laptop", electronics, "New", "Gaming", "Laptop", "Electronics", LocalDateTime.now().minusDays(2), LocalDateTime.now().minusDays(1), 1200.0, 1000.0, mainController.getClock());
-        Item item2 = new Item("Phone", "200g", "Latest smartphone", electronics, "New", "Smartphone", "Phone", "Electronics", LocalDateTime.now().minusDays(3), LocalDateTime.now().minusDays(2), 600.0, 500.0, mainController.getClock());
-        mainController.addItem(item1);
-        mainController.addItem(item2);
+                // Setup categories
+                Category electronics = new Category("Electronics");
+                mainController.getCategories().add(electronics);
+                // Setup items
+                Item item1 = new Item("Laptop", "2kg", "High-end gaming laptop", electronics, "New", "Gaming", "Laptop", "Electronics", LocalDateTime.now().minusDays(2), LocalDateTime.now().minusDays(1), 1200.0, 0.0, mainController.getClock());
+                Item item2 = new Item("Phone", "200g", "Latest smartphone", electronics, "New", "Smartphone", "Phone", "Electronics", LocalDateTime.now().minusDays(3), LocalDateTime.now().minusDays(2), 600.0, 0.0, mainController.getClock());
+                mainController.addItem(item1);
+                mainController.addItem(item2);
 
-        // Conclude auctions
-        mainController.checkAndUpdateItems();
+                item1.placeBid(1200);
+                item2.placeBid(300);
 
-        // Generate seller report
-        mainController.generateSellerReport();
 
-        // Assertions to verify the seller report details
-        double expectedTotalWinningBids = 1500.0;
-        double expectedTotalShippingCosts = item1.calculateShippingCost() + item2.calculateShippingCost();
-        double expectedTotalSellerCommissions = (item1.getCurrentBid() * mainController.getSellerCommission() / 100) +
-                (item2.getCurrentBid() * mainController.getSellerCommission() / 100);
-        double expectedTotalProfits = expectedTotalWinningBids - expectedTotalSellerCommissions;
+                //Skip time until after item has closed
+                mainController.setTime(LocalDateTime.now().plusDays(8));
+                mainController.scheduleNextUpdate();
 
-        // Verify the total winning bids
-        assertEquals(expectedTotalWinningBids, mainView.getSellerReportBox().getChildren().stream()
-                .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Winning Bids:"))
-                .mapToDouble(node -> Double.parseDouble(((Label) node).getText().split("\\$")[1]))
-                .sum());
+                mainController.generateSellerReport(); // Generate the report
 
-        // Verify the total shipping costs
-        assertEquals(expectedTotalShippingCosts, mainView.getSellerReportBox().getChildren().stream()
-                .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Shipping Costs:"))
-                .mapToDouble(node -> Double.parseDouble(((Label) node).getText().split("\\$")[1]))
-                .sum());
+                // Assertions to verify the seller report details
+                double expectedTotalWinningBids = 1500.0;
+                double expectedTotalShippingCosts = item1.getShippingCost() + item2.getShippingCost();
+                double expectedTotalSellerCommissions = (item1.getCurrentBid() * mainController.getSellerCommission() / 100) +
+                        (item2.getCurrentBid() * mainController.getSellerCommission() / 100);
+                double expectedTotalProfits = expectedTotalWinningBids - expectedTotalSellerCommissions;
 
-        // Verify the total seller commissions
-        assertEquals(expectedTotalSellerCommissions, mainView.getSellerReportBox().getChildren().stream()
-                .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Seller’s Commissions:"))
-                .mapToDouble(node -> Double.parseDouble(((Label) node).getText().split("\\$")[1]))
-                .sum());
+                // Verify the total winning bids
+                assertEquals(expectedTotalWinningBids, mainView.getSellerReportBox().getChildren().stream()
+                        .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Winning Bids:"))
+                        .mapToDouble(node -> Double.parseDouble(((Label) node).getText().split("\\$")[1]))
+                        .sum());
 
-        // Verify the total profits
-        assertEquals(expectedTotalProfits, mainView.getSellerReportBox().getChildren().stream()
-                .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Profits:"))
-                .mapToDouble(node -> Double.parseDouble(((Label) node).getText().split("\\$")[1]))
-                .sum());
+                // Verify the total shipping costs
+                assertEquals(expectedTotalShippingCosts, mainView.getSellerReportBox().getChildren().stream()
+                        .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Shipping Costs:"))
+                        .mapToDouble(node -> Double.parseDouble(((Label) node).getText().split("\\$")[1]))
+                        .sum());
+
+                // Verify the total seller commissions
+                assertEquals(expectedTotalSellerCommissions, mainView.getSellerReportBox().getChildren().stream()
+                        .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Seller’s Commissions:"))
+                        .mapToDouble(node -> Double.parseDouble(((Label) node).getText().split("\\$")[1]))
+                        .sum());
+
+                // Verify the total profits
+                assertEquals(expectedTotalProfits, mainView.getSellerReportBox().getChildren().stream()
+                        .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Profits:"))
+                        .mapToDouble(node -> Double.parseDouble(((Label) node).getText().split("\\$")[1]))
+                        .sum());
             } finally {
                 testLatch.countDown();
             }
@@ -236,4 +273,4 @@ public class SystemTest11 extends Application {
             throw new Exception("Test execution took too long");
         }
     }
-    }
+}
