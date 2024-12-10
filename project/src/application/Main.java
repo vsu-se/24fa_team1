@@ -15,15 +15,14 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         MainView view = new MainView(null);
         SystemClock clock = new SystemClock();
-        controller = new MainController(view,clock);
-        view.setupSaveOptionsTab(controller);
-         view.setupLoadOptionsTab(controller);
+        controller = new MainController(view, clock);
+
         view.getListItemButton().setOnAction(event -> {
             if (controller.getCategories().isEmpty()) {
                 view.getListItemErrorLabel().setText("Please add a category in the System Admin tab before listing an item.");
                 return;
             }
-
+            
             ItemView itemView = new ItemView(controller.getCategories());
             Tab createItemTab = new Tab("Create Item", itemView.getLayout());
             createItemTab.setClosable(true);
@@ -44,9 +43,6 @@ public class Main extends Application {
     @Override
     public void stop() {
         if (controller != null) {
-            // Save categories before shutting down
-            controller.saveCategoriesText("categories.txt");
-
             controller.shutdownScheduler();
         }
     }

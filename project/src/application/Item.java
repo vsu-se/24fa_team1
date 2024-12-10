@@ -40,7 +40,7 @@ public class Item {
         bidHistory = new ArrayList<>();
     }
 
-    // Getters and setters for all fields
+	// Getters and setters for all fields
     public String getTitle() {
         return title;
     }
@@ -138,15 +138,15 @@ public class Item {
     }
 
     public boolean isActive() {
-        return active && LocalDateTime.now().isBefore(endDate);
+		return active && LocalDateTime.now().isBefore(endDate);
     }
-
+    
     public void checkAndSetInactive() {
         if (clock.getTime().isAfter(endDate)) {
             active = false;
         }
     }
-
+    
     public boolean placeBid(double bidAmount) {
         if (bidAmount > currentBid) {
             currentBid = bidAmount;
@@ -158,27 +158,27 @@ public class Item {
         }
         return false;
     }
-
+    
     public boolean hasBidder() {
-        return hasBidder;
+    	return hasBidder;
     }
-
+    
     public void setHasBidder(boolean hasBidder) {
-        this.hasBidder = hasBidder;
+    	this.hasBidder = hasBidder;
     }
-
+    
     public double getSellersCommission(double sellersCommissionPercent) {
-        return currentBid * (sellersCommissionPercent / 100);
+    	return currentBid * (sellersCommissionPercent / 100);
     }
-
+    
     public double getShippingCost() {
-        return 10.00; //FIXME WHAT IS THIS SUPPOSED TO BE? DOES USER SPECIFY??
+    	return 10.00; //FIXME WHAT IS THIS SUPPOSED TO BE? DOES USER SPECIFY??
     }
-
+    
     public double getBuyersPremium(double buyersPremiumPercent) {
-        return currentBid * (buyersPremiumPercent / 100);
+    	return currentBid * (buyersPremiumPercent / 100);
     }
-
+    
     public void addBid(Bid bid) {
         bidHistory.add(bid);
     }

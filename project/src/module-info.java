@@ -1,11 +1,13 @@
 module project {
-
-    requires org.junit.jupiter.api;
-    requires javafx.graphics;
-    requires javafx.controls;
-
-    exports application;
-
-
-    opens application to javafx.graphics, javafx.fxml;
+	requires javafx.controls;
+	requires org.junit.jupiter.api;
+	requires junit;
+	requires javafx.graphics;
+	requires javafx.swing;
+  
+  //exports application;
+	
+	exports test to javafx.graphics;
+	
+	opens application to javafx.graphics, javafx.fxml;
 }

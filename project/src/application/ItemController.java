@@ -1,4 +1,3 @@
-// ItemController.java
 package application;
 
 import javafx.collections.ObservableList;
@@ -6,11 +5,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.HBox;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 
 public class ItemController {
     private ItemView view;
@@ -58,7 +59,7 @@ public class ItemController {
                 }
                 String combinedWeight = weight + " " + weightUnit;
 
-                LocalDateTime startDate = LocalDateTime.now();
+                LocalDateTime startDate = mainController.getTime();
                 LocalDateTime endDateTime;
                 try {
                     endDateTime = LocalDateTime.of(endDate, LocalTime.parse(endTime, DateTimeFormatter.ofPattern("HH:mm")));
@@ -81,7 +82,7 @@ public class ItemController {
                         return;
                     }
                 }
-
+                
                 double bidAmount;
                 try {
                     bidAmount = Double.parseDouble(bidAmountText);
@@ -93,10 +94,10 @@ public class ItemController {
                     view.getCreateItemErrorLabel().setText("Please enter a valid bid amount.");
                     return;
                 }
-
+                
 
                 System Clock;
-                Item newItem = new Item(title, combinedWeight, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice, bidAmount, mainController.getClock());
+                Item newItem = new Item(title, weight, description, category, condition, tag1, tag2, tag3, startDate, endDateTime, buyItNowPrice, bidAmount, mainController.getClock());
                 items.add(newItem);
 
                 // Clear error message
@@ -110,6 +111,6 @@ public class ItemController {
                 mainController.scheduleNextUpdate();
             }
         });
-
+        
     }
 }
