@@ -18,14 +18,4 @@ public class Category {
 	public String toString() {
 		return name;
 	}
-
-	public void setBuyerPremium(double buyerPremium) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void setSellerCommission(double sellerCommission) {
-		// TODO Auto-generated method stub
-		
-	}
 }

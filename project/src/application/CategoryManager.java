@@ -1,29 +1,25 @@
 
 package application;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CategoryManager {
-    private final ObservableList<Category> categories;
+    private List<Category> categories;
 
     public CategoryManager() {
-        this.categories = FXCollections.observableArrayList();
+        this.categories = new ArrayList<>();
     }
 
-    public ObservableList<Category> getCategories() {
+    public void addCategory(Category category) {
+        categories.add(category);
+    }
+
+    public List<Category> getAllCategories() {
         return categories;
     }
 
-    public boolean addCategory(Category category) {
-        // Inline validation logic
-        if (category == null || category.getName() == null || category.getName().isEmpty()) {
-            return false; // Validation failed
-        }
-        return categories.add(category);
-    }
-
-    public boolean removeCategory(Category category) {
-        return categories.remove(category);
+    public Category findCategoryByName(String name) {
+        return categories.stream().filter(c -> c.getName().equals(name)).findFirst().orElse(null);
     }
 }

@@ -1,57 +1,254 @@
-
 package application;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class MainView {
     private TabPane tabPane;
-    private Label currentTimeLabel;
-    private TextField customTimeField;
-    private Button setTimeButton;
+    private ComboBox<Category> categoryComboBoxSystemAdmin;
+    private ComboBox<Category> categoryComboBoxUserInterface;
+    private ComboBox<Category> categoryComboBoxConcludedAuctions;
+    private TextArea displayTimeArea;
+    private TextField categoryInput;
+    private Button addButton;
+    private TextField premiumInput;
+    private Button setPremiumButton;
+    private TextField commissionInput;
+    private Button setCommissionButton;
+    private DatePicker changeTimePicker;
+    private TextField timeField;
+    private Button changeTimeButton;
     private Button realTimeButton;
+    private Button pauseTimeButton;
+    private Button unpauseTimeButton;
+    private Label buyerPremiumLabel;
+    private Label sellerCommissionLabel;
+    private Button listItemButton;
+    private VBox userInterfaceItemsBox;
+    private VBox myProfileItemsBox;
+    private VBox concludedAuctionsBox;
+
+    // Error labels
+    private Label categoryErrorLabel;
+    private Label premiumErrorLabel;
+    private Label commissionErrorLabel;
+    private Label listItemErrorLabel;
+	private int numMyBids;
 
     public MainView(ObservableList<Category> categories) {
         tabPane = new TabPane();
 
-        // Time Management UI
-        VBox timeManagement = new VBox();
-        currentTimeLabel = new Label("Current Time: ");
-        timeManagement.getChildren().add(currentTimeLabel);
+        // System Admin Tab
+        
+        displayTimeArea = new TextArea();
+        displayTimeArea.setMaxWidth(250);
+        displayTimeArea.setMaxHeight(30);
+        displayTimeArea.setEditable(false);
+        
+        categoryComboBoxSystemAdmin = new ComboBox<>(categories);
+        categoryComboBoxSystemAdmin.setPromptText("Category");
 
-        customTimeField = new TextField();
-        customTimeField.setPromptText("Enter custom time (yyyy-MM-dd HH:mm)");
-        timeManagement.getChildren().add(customTimeField);
+        categoryInput = new TextField();
+        categoryInput.setPromptText("Enter category name");
+        categoryInput.setMaxWidth(400);
 
-        setTimeButton = new Button("Set Custom Time");
-        timeManagement.getChildren().add(setTimeButton);
+        addButton = new Button("Add Category");
 
+        premiumInput = new TextField();
+        premiumInput.setPromptText("Enter buyer's premium (%)");
+        premiumInput.setMaxWidth(400);
+
+        setPremiumButton = new Button("Set Premium");
+
+        commissionInput = new TextField();
+        commissionInput.setPromptText("Enter seller's commission (%)");
+        commissionInput.setMaxWidth(400);
+
+        setCommissionButton = new Button("Set Commission");
+        
+        categoryComboBoxConcludedAuctions = new ComboBox<>(categories);
+        categoryComboBoxConcludedAuctions.setPromptText("Select Category");
+        
+        changeTimePicker = new DatePicker();
+        changeTimePicker.setPromptText("Select time for testing");
+        
+        timeField= new TextField();
+        timeField.setPromptText("hh:mm:ss");
+        
+        changeTimeButton = new Button("Change Time");
+        
         realTimeButton = new Button("Resume Real Time");
-        timeManagement.getChildren().add(realTimeButton);
+        
+        pauseTimeButton = new Button("Pause Time");
+        
+        unpauseTimeButton= new Button("Unpause Time");
+        
+        concludedAuctionsBox = new VBox(10);
+        Label concludedAuctionsLabel = new Label("Concluded Auctions:");
 
-        Tab timeTab = new Tab("Time Management");
-        timeTab.setContent(timeManagement);
-        tabPane.getTabs().add(timeTab);
+        // Initialize error labels
+        categoryErrorLabel = new Label();
+        categoryErrorLabel.setStyle("-fx-text-fill: red;");
+
+        premiumErrorLabel = new Label();
+        premiumErrorLabel.setStyle("-fx-text-fill: red;");
+
+        commissionErrorLabel = new Label();
+        commissionErrorLabel.setStyle("-fx-text-fill: red;");
+
+        listItemErrorLabel = new Label();
+        listItemErrorLabel.setStyle("-fx-text-fill: red;");
+
+        VBox systemAdminContent = new VBox(10, categoryErrorLabel, displayTimeArea, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), premiumErrorLabel, new HBox(10, premiumInput, setPremiumButton), commissionErrorLabel, new HBox(10, commissionInput, setCommissionButton), new HBox(10, changeTimePicker, timeField, changeTimeButton, realTimeButton, pauseTimeButton, unpauseTimeButton), concludedAuctionsLabel, categoryComboBoxConcludedAuctions, concludedAuctionsBox);
+        Tab systemAdminTab = new Tab("System Admin", systemAdminContent);
+        systemAdminTab.setClosable(false);
+
+        // User Interface Tab
+        categoryComboBoxUserInterface = new ComboBox<>(categories);
+        categoryComboBoxUserInterface.setPromptText("Category");
+
+        buyerPremiumLabel = new Label("Buyer's Premium: 0.00%");
+        sellerCommissionLabel = new Label("Seller's Commission: 0.00%");
+
+        listItemButton = new Button("List Item for Sale");
+
+        userInterfaceItemsBox = new VBox(10);
+        ScrollPane userInterfaceScrollPane = new ScrollPane(userInterfaceItemsBox);
+        userInterfaceScrollPane.setFitToWidth(true);
+
+        VBox userInterfaceContent = new VBox(10, listItemErrorLabel, categoryComboBoxUserInterface, buyerPremiumLabel, sellerCommissionLabel, listItemButton, userInterfaceScrollPane);
+        Tab userInterfaceTab = new Tab("User Interface", userInterfaceContent);
+        userInterfaceTab.setClosable(false);
+
+        // My Profile Tab
+        myProfileItemsBox = new VBox(10);
+        ScrollPane myProfileScrollPane = new ScrollPane(myProfileItemsBox);
+        myProfileScrollPane.setFitToWidth(true);
+
+        VBox myProfileContent = new VBox(10, myProfileScrollPane);
+        Tab myProfileTab = new Tab("My Profile", myProfileContent);
+        myProfileTab.setClosable(false);
+
+        tabPane.getTabs().addAll(systemAdminTab, userInterfaceTab, myProfileTab);
     }
 
     public TabPane getTabPane() {
         return tabPane;
     }
 
-    public Label getCurrentTimeLabel() {
-        return currentTimeLabel;
+    public ComboBox<Category> getCategoryComboBoxSystemAdmin() {
+        return categoryComboBoxSystemAdmin;
     }
 
-    public TextField getCustomTimeField() {
-        return customTimeField;
+    public ComboBox<Category> getCategoryComboBoxUserInterface() {
+        return categoryComboBoxUserInterface;
+    }
+    
+    public ComboBox<Category> getCategoryComboBoxConcludedAuctions() {
+        return categoryComboBoxConcludedAuctions;
     }
 
-    public Button getSetTimeButton() {
-        return setTimeButton;
+    public TextField getCategoryInput() {
+        return categoryInput;
     }
 
-    public Button getRealTimeButton() {
-        return realTimeButton;
+    public Button getAddButton() {
+        return addButton;
     }
+
+    public TextField getPremiumInput() {
+        return premiumInput;
+    }
+
+    public Button getSetPremiumButton() {
+        return setPremiumButton;
+    }
+
+    public TextField getCommissionInput() {
+        return commissionInput;
+    }
+
+    public Button getSetCommissionButton() {
+        return setCommissionButton;
+    }
+
+    public Label getBuyerPremiumLabel() {
+        return buyerPremiumLabel;
+    }
+
+    public Label getSellerCommissionLabel() {
+        return sellerCommissionLabel;
+    }
+
+    public Button getListItemButton() {
+        return listItemButton;
+    }
+
+    public VBox getUserInterfaceItemsBox() {
+        return userInterfaceItemsBox;
+    }
+
+    public VBox getMyProfileItemsBox() {
+        return myProfileItemsBox;
+    }
+
+    public VBox getConcludedAuctionsBox() {
+        return concludedAuctionsBox;
+    }
+
+    // Getters for error labels
+    public Label getCategoryErrorLabel() {
+        return categoryErrorLabel;
+    }
+
+    public Label getPremiumErrorLabel() {
+        return premiumErrorLabel;
+    }
+
+    public Label getCommissionErrorLabel() {
+        return commissionErrorLabel;
+    }
+
+    public Label getListItemErrorLabel() {
+        return listItemErrorLabel;
+    }
+
+	public void setNumMyBids(int numMyBids) {
+		this.numMyBids = numMyBids;
+		
+	}
+	
+	public int getNumMyBids() {
+		return numMyBids;
+	}
+
+	public Button getChangeTimeButton() {
+		return changeTimeButton;
+	}
+	
+	public Button getResumeTimeButton() {
+		return realTimeButton;
+	}
+
+	public TextField getTimeField() {
+		return timeField;
+	}
+
+	public DatePicker getChangeTimePicker() {
+		return changeTimePicker;
+	}
+
+	public Button getPauseTimeButton() {
+		return pauseTimeButton;
+	}
+	
+	public Button getUnpauseTimeButton() {
+		return unpauseTimeButton;
+	}
+	
+	public TextArea getDisplayTimeArea() {
+		return displayTimeArea;
+	}
 }

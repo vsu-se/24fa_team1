@@ -20,22 +20,35 @@ public class Auction {
         this.items = new ArrayList<>();
     }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public LocalDateTime getStartTime() { return startTime; }
-    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
-
-    public LocalDateTime getEndTime() { return endTime; }
-    public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
-
-    public boolean isOngoing() {
-        return !concluded && endTime.isAfter(LocalDateTime.now());
+    public String getName() {
+        return name;
     }
 
-    public boolean isConcluded() { return concluded; }
-    public void setConcluded(boolean concluded) { this.concluded = concluded; }
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
 
-    public List<Item> getItems() { return items; }
-    public void addItem(Item item) { items.add(item); }
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public boolean isConcluded() {
+        return concluded;
+    }
+
+    public void setConcluded(boolean concluded) {
+        this.concluded = concluded;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void addItem(Item item) {
+        items.add(item);
+    }
+
+    public void removeItem(Item item) {
+        items.remove(item);
+    }
 }

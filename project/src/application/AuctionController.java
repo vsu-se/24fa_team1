@@ -1,50 +1,53 @@
 
 package application;
 
-import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class AuctionController {
-    private final ItemManager itemManager;
-    private final ComboBox<Auction> auctionComboBox;
-    private final ComboBox<Item> availableItemsComboBox;
-    private final Button startAuctionButton;
-    private final TextField auctionEndTimeField;
+    private List<Auction> auctions;
 
-    public AuctionController(ItemManager itemManager, ComboBox<Auction> auctionComboBox, ComboBox<Item> availableItemsComboBox, Button startAuctionButton, TextField auctionEndTimeField) {
-        this.itemManager = itemManager;
-        this.auctionComboBox = auctionComboBox;
-        this.availableItemsComboBox = availableItemsComboBox;
-        this.startAuctionButton = startAuctionButton;
-        this.auctionEndTimeField = auctionEndTimeField;
-
-        setupAuctionManagement();
+    public AuctionController() {
+        this.auctions = new ArrayList<>();
     }
 
-    private void setupAuctionManagement() {
-        // Populate ComboBox with items available for auction
-        availableItemsComboBox.setItems(itemManager.getItems());
-
-        // Handle auction start event
-        startAuctionButton.setOnAction(event -> {
-            Item selectedItem = availableItemsComboBox.getValue();
-            String endTime = auctionEndTimeField.getText();
-
-            if (selectedItem == null || endTime == null || endTime.isEmpty()) {
-                System.out.println("Invalid auction details.");
-                return;
-            }
-
-            Auction newAuction = new Auction(selectedItem.getName(), selectedItem.getPrice(), endTime);
-            auctionComboBox.getItems().add(newAuction);
-            System.out.println("Auction started for item: " + selectedItem.getName() + " ending at: " + endTime);
-        });
+    // Add a new auction
+    public void addAuction(Auction auction) {
+        auctions.add(auction);
     }
 
-    public void updateAuctionView() {
-        // Refresh auction-related views
-        System.out.println("Updating auction views...");
+    // Get all auctions
+    public List<Auction> getAllAuctions() {
+        return auctions;
+    }
+
+    // Remove an auction
+    public void removeAuction(Auction auction) {
+        auctions.remove(auction);
+    }
+
+    // Find an auction by name
+    public Auction findAuctionByName(String name) {
+        return auctions.stream()
+                .filter(a -> a.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
+    }
+
+    // Sort auctions by their end time
+    public List<Auction> getSortedAuctions() {
+        auctions.sort(Comparator.comparing(Auction::getEndTime));
+        return auctions;
+    }
+
+    // Add an item to an auction
+    public boolean addItemToAuction(String auctionName, Item item) {
+        Auction auction = findAuctionByName(auctionName);
+        if (auction != null) {
+            auction.addItem(item);
+            return true;
+        }
+        return false;
     }
 }

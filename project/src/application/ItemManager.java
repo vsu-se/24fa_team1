@@ -1,30 +1,25 @@
 
 package application;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemManager {
-    private final ObservableList<Item> items;
+    private List<Item> items;
 
     public ItemManager() {
-        this.items = FXCollections.observableArrayList();
+        this.items = new ArrayList<>();
     }
 
-    public ObservableList<Item> getItems() {
+    public void addItem(Item item) {
+        items.add(item);
+    }
+
+    public List<Item> getAllItems() {
         return items;
     }
 
-    public boolean addItem(Item item) {
-        // Inline validation logic
-        if (item == null || item.getName() == null || item.getName().isEmpty() ||
-            item.getPrice() <= 0 || item.getShippingCost() < 0) {
-            return false; // Validation failed
-        }
-        return items.add(item);
-    }
-
-    public boolean removeItem(Item item) {
-        return items.remove(item);
+    public Item findItemByTitle(String title) {
+        return items.stream().filter(i -> i.getTitle().equals(title)).findFirst().orElse(null);
     }
 }

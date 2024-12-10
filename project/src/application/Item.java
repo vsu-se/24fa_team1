@@ -37,6 +37,11 @@ public class Item {
         this.clock = clock;
     }
 
+	public Item(String string, String string2, String string3, Category category2, String string4, String string5,
+			String string6, String string7, Object object, Object object2, double d, double e, boolean b, boolean c) {
+		// TODO Auto-generated constructor stub
+	}
+
 	// Getters and setters for all fields
     public String getTitle() {
         return title;
