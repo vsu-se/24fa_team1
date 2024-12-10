@@ -1,5 +1,4 @@
 
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import application.*;
@@ -18,7 +17,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 
-public class SystemTest11{
+public class SystemTest12 {
     private ObservableList<Item> items;
     private MainController mainController;
     private MainView mainView;
@@ -53,7 +52,7 @@ public class SystemTest11{
             LocalDateTime startDate = mainController.getTime();
             LocalDateTime endDate = mainController.getTime().plusDays(7);
 
-            Item item = new Item("Book", "0.5kg", "A rare book", category, "New", "books", "rare", "collectible", startDate, endDate, 100.0,  0.0, mainController.getClock());
+            Item item = new Item("Book", "0.5kg", "A rare book", category, "New", "books", "rare", "collectible", startDate, endDate, 100.0, 0.00, mainController.getClock());
 
             items.clear();
             items.add(item);
@@ -66,10 +65,9 @@ public class SystemTest11{
             mainController.scheduleNextUpdate();
 
             //Generate Report
-            mainController.generateSellerReport();
+            mainController.generateBuyerReport();
 
-            assertEquals(5, mainView.getSellerReportBox().getChildren().size());
-            //must be 5, since there are always at least 4 labels (which display totals). Adding an item should add 1 label (4 + 1 = 5)
+            assertEquals(4, mainView.getBuyerReportBox().getChildren().size());
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS);
@@ -96,11 +94,11 @@ public class SystemTest11{
             mainController.setTime(LocalDateTime.now().plusDays(8));
             mainController.scheduleNextUpdate();
 
-            mainController.generateSellerReport(); // Generate the report
+            mainController.generateBuyerReport(); // Generate the report
 
             // Verify if the item is included in the report despite missing the Buy It Now price
-            assertEquals(5, mainView.getSellerReportBox().getChildren().size());
-            //must be 5, since there are always at least 4 labels (which display totals). Adding an item should add 1 label (4 + 1 = 5)
+            assertEquals(4, mainView.getBuyerReportBox().getChildren().size());
+
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS);
@@ -128,11 +126,10 @@ public class SystemTest11{
             mainController.setTime(LocalDateTime.now().plusDays(8));
             mainController.scheduleNextUpdate();
 
-            mainController.generateSellerReport(); // Generate the report
+            mainController.generateBuyerReport(); // Generate the report
 
             // Check if the item is included in the report
-            assertEquals(5, mainView.getSellerReportBox().getChildren().size());
-            //must be 5, since there are always at least 4 labels (which display totals). Adding an item should add 1 label (4 + 1 = 5)
+            assertEquals(4, mainView.getBuyerReportBox().getChildren().size());
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS);
@@ -156,10 +153,10 @@ public class SystemTest11{
             mainController.setTime(LocalDateTime.now().plusDays(8));
             mainController.scheduleNextUpdate();
 
-            mainController.generateSellerReport(); // Generate the report
+            mainController.generateBuyerReport(); // Generate the report
 
             // Ensure that the report does not include an item with an empty or zero bid
-            assertEquals(4, mainView.getSellerReportBox().getChildren().size());
+            assertEquals(3, mainView.getBuyerReportBox().getChildren().size());
 
 
             latch.countDown();
@@ -169,49 +166,50 @@ public class SystemTest11{
 
 
     @Test
-    public void testItemWithCommission() throws Exception {
+    public void testItemWithPremium() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
             Category category = new Category("Art");
             LocalDateTime startDate = LocalDateTime.now();
             LocalDateTime endDate = LocalDateTime.now().plusDays(7);
 
-            Item item = new Item("Painting", "5kg", "A rare painting", category, "New", "art", "painting", "fineart", startDate, endDate, 200.0,200.00, mainController.getClock());
+            double specialPremiumRate = 10.0;
+
+            Item item = new Item("Painting", "5kg", "A rare painting", category, "New", "art", "painting", "fineart", startDate, endDate, 200.0, 200.00, mainController.getClock());
 
             items.clear();
             items.add(item);
 
-            //Simulate an admin changing the seller's commission rate to 10%
-            mainController.setSellerCommissionForTest(10);
+            // Simulate an admin changing the Buyer's Premium rate to 10%
+            mainController.setBuyerPremiumForTest(10);
 
-            //Simulate a user placing a bid
+            // Simulate a user placing a bid
             item.placeBid(4000.00);
 
-            double expectedCommission = 4000.0 * 0.1; // 10% of the winning bid
+            double expectedPremium = 4000.0 * 0.1; // 10% of the winning bid
 
-            //Skip time until after item has closed
+            // Skip time until after item has closed
             mainController.setTime(LocalDateTime.now().plusDays(8));
             mainController.scheduleNextUpdate();
 
-            mainController.generateSellerReport(); // Generate the report
+            mainController.generateBuyerReport(); // Generate the report
 
             // Check if the report includes the item and calculates the commission correctly
             // Assuming that the item has a commission of 10% of the winning bid
-            assertEquals(expectedCommission, mainView.getSellerReportBox().getChildren().stream()
-                    .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Seller’s Commissions:"))
+            double actualPremium = mainView.getBuyerReportBox().getChildren().stream()
+                    .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Buyer’s Premiums Paid:"))
                     .mapToDouble(node -> Double.parseDouble(((Label) node).getText().split("\\$")[1]))
-                    .sum());
+                    .sum();
+
+            assertEquals(expectedPremium, actualPremium, 0.01); // Use a tolerance for floating point comparison
             latch.countDown();
         });
-        latch.await(5, TimeUnit.SECONDS);
+        latch.await(4, TimeUnit.SECONDS);
     }
 
 
-
-
-
     @Test
-    public void testGenerateSellerReport() throws Exception {
+    public void testGenerateBuyerReport() throws Exception {
         CountDownLatch testLatch = new CountDownLatch(1);
         Platform.runLater(() -> {
             try {
@@ -227,43 +225,47 @@ public class SystemTest11{
                 item1.placeBid(1200);
                 item2.placeBid(300);
 
-
-                //Skip time until after item has closed
+                // Skip time until after item has closed
                 mainController.setTime(LocalDateTime.now().plusDays(8));
                 mainController.scheduleNextUpdate();
 
-                mainController.generateSellerReport(); // Generate the report
+                mainController.generateBuyerReport(); // Generate the report
 
-                // Assertions to verify the seller report details
+                // Debug: Print out the labels in the report
+                mainView.getBuyerReportBox().getChildren().forEach(node -> {
+                    if (node instanceof Label) {
+                        System.out.println(((Label) node).getText());
+                    }
+                });
+
+                // Assertions to verify the Buyer report details
                 double expectedTotalWinningBids = 1500.0;
                 double expectedTotalShippingCosts = item1.getShippingCost() + item2.getShippingCost();
-                double expectedTotalSellerCommissions = (item1.getCurrentBid() * mainController.getSellerCommission() / 100) +
-                        (item2.getCurrentBid() * mainController.getSellerCommission() / 100);
-                double expectedTotalProfits = expectedTotalWinningBids - expectedTotalSellerCommissions;
+                double expectedTotalBuyerPremiums = (item1.getCurrentBid() * mainController.getBuyerPremium() / 100) +
+                        (item2.getCurrentBid() * mainController.getBuyerPremium() / 100);
+
 
                 // Verify the total winning bids
-                assertEquals(expectedTotalWinningBids, mainView.getSellerReportBox().getChildren().stream()
-                        .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Winning Bids:"))
+                double actualTotalWinningBids = mainView.getBuyerReportBox().getChildren().stream()
+                        .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Amount Bought:"))
                         .mapToDouble(node -> Double.parseDouble(((Label) node).getText().split("\\$")[1]))
-                        .sum());
+                        .sum();
+                assertEquals(expectedTotalWinningBids, actualTotalWinningBids, 0.01);
 
                 // Verify the total shipping costs
-                assertEquals(expectedTotalShippingCosts, mainView.getSellerReportBox().getChildren().stream()
-                        .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Shipping Costs:"))
+                double actualTotalShippingCosts = mainView.getBuyerReportBox().getChildren().stream()
+                        .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Shipping Cost Paid:"))
                         .mapToDouble(node -> Double.parseDouble(((Label) node).getText().split("\\$")[1]))
-                        .sum());
+                        .sum();
+                assertEquals(expectedTotalShippingCosts, actualTotalShippingCosts, 0.01);
 
-                // Verify the total seller commissions
-                assertEquals(expectedTotalSellerCommissions, mainView.getSellerReportBox().getChildren().stream()
-                        .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Seller’s Commissions:"))
+                // Verify the total Buyer Premiums
+                double actualTotalBuyerPremiums = mainView.getBuyerReportBox().getChildren().stream()
+                        .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Buyer’s Premiums Paid:"))
                         .mapToDouble(node -> Double.parseDouble(((Label) node).getText().split("\\$")[1]))
-                        .sum());
+                        .sum();
+                assertEquals(expectedTotalBuyerPremiums, actualTotalBuyerPremiums, 0.01);
 
-                // Verify the total profits
-                assertEquals(expectedTotalProfits, mainView.getSellerReportBox().getChildren().stream()
-                        .filter(node -> node instanceof Label && ((Label) node).getText().startsWith("Total Profits:"))
-                        .mapToDouble(node -> Double.parseDouble(((Label) node).getText().split("\\$")[1]))
-                        .sum());
             } finally {
                 testLatch.countDown();
             }

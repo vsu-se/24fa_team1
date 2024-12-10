@@ -10,7 +10,6 @@ public class MainView {
     private TabPane tabPane;
     private ComboBox<Category> categoryComboBoxSystemAdmin;
     private ComboBox<Category> categoryComboBoxUserInterface;
-    private ComboBox<Category> categoryComboBoxConcludedAuctions;
     private TextField categoryInput;
     private TextArea displayTimeArea;
     private Button addButton;
@@ -72,9 +71,6 @@ public class MainView {
 
         setCommissionButton = new Button("Set Commission");
 
-        categoryComboBoxConcludedAuctions = new ComboBox<>(categories);
-        categoryComboBoxConcludedAuctions.setPromptText("Select Category");
-
         concludedAuctionsBox = new VBox(10);
         Label concludedAuctionsLabel = new Label("Concluded Auctions:");
         //clock
@@ -106,7 +102,7 @@ public class MainView {
         listItemErrorLabel = new Label();
         listItemErrorLabel.setStyle("-fx-text-fill: red;");
 
-        VBox systemAdminContent = new VBox(10, categoryErrorLabel, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), premiumErrorLabel, new HBox(10, premiumInput, setPremiumButton), commissionErrorLabel, new HBox(10, commissionInput, setCommissionButton), new HBox(10, changeTimePicker, timeField, changeTimeButton, realTimeButton, pauseTimeButton, unpauseTimeButton), concludedAuctionsLabel, categoryComboBoxConcludedAuctions, concludedAuctionsBox);
+        VBox systemAdminContent = new VBox(10, categoryErrorLabel, categoryComboBoxSystemAdmin, new HBox(10, categoryInput, addButton), premiumErrorLabel, new HBox(10, premiumInput, setPremiumButton), commissionErrorLabel, new HBox(10, commissionInput, setCommissionButton), new HBox(10, changeTimePicker, timeField, changeTimeButton, realTimeButton, pauseTimeButton, unpauseTimeButton), concludedAuctionsLabel, concludedAuctionsBox);
         Tab systemAdminTab = new Tab("System Admin", systemAdminContent);
         systemAdminTab.setClosable(false);
 
@@ -158,19 +154,19 @@ public class MainView {
         // Save Buttons
     }
 
-void setupSaveOptionsTab(MainController controller) {
-    Button saveTextButton = new Button("Save Categories");
+    void setupSaveOptionsTab(MainController controller) {
+        Button saveTextButton = new Button("Save Categories");
 
 
-    saveTextButton.setOnAction(event -> controller.saveCategoriesText("categories.txt"));
+        saveTextButton.setOnAction(event -> controller.saveCategoriesText("categories.txt"));
 
-    VBox layout = new VBox(10, saveTextButton);
-    Tab saveTab = new Tab("Save Options", layout);
-    saveTab.setClosable(false);
-    tabPane.getTabs().add(saveTab);
+        VBox layout = new VBox(10, saveTextButton);
+        Tab saveTab = new Tab("Save Options", layout);
+        saveTab.setClosable(false);
+        tabPane.getTabs().add(saveTab);
 
-}
-void setupLoadOptionsTab(MainController controller){
+    }
+    void setupLoadOptionsTab(MainController controller){
         Button loadTextButton = new Button("Load Categories");
 
         loadTextButton.setOnAction(event -> controller.loadCategoriesText("categories.txt"));
@@ -179,7 +175,7 @@ void setupLoadOptionsTab(MainController controller){
         saveTab.setClosable(false);
         tabPane.getTabs().add(saveTab);
 
-}
+    }
 
 
 
@@ -198,9 +194,6 @@ void setupLoadOptionsTab(MainController controller){
 
     public ComboBox<Category> getCategoryComboBoxUserInterface() {
         return categoryComboBoxUserInterface;
-    }
-    public ComboBox<Category> getCategoryComboBoxConcludedAuctions() {
-        return categoryComboBoxConcludedAuctions;
     }
 
     public TextField getCategoryInput() {

@@ -2,8 +2,6 @@ package application;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 
 public class Item {
     private String title;
@@ -23,8 +21,7 @@ public class Item {
     private SystemClock clock;
     private ArrayList<Bid> bidHistory;
 
-
-    public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice, Double initialBid, SystemClock Clock  ) {
+    public Item(String title, String weight, String description, Category category, String condition, String tag1, String tag2, String tag3, LocalDateTime startDate, LocalDateTime endDate, Double buyItNowPrice, double initialBid, SystemClock clock){
         this.title = title;
         this.weight = weight;
         this.description = description;
@@ -39,7 +36,7 @@ public class Item {
         this.currentBid = 0.0;
         this.active = true;
         this.currentBid = initialBid;
-        this.clock= clock;
+        this.clock = clock;
         bidHistory = new ArrayList<>();
     }
 
@@ -150,52 +147,17 @@ public class Item {
         }
     }
 
-
     public boolean placeBid(double bidAmount) {
         if (bidAmount > currentBid) {
             currentBid = bidAmount;
+            hasBidder = true;
             Bid newBid = new Bid(bidAmount, clock.getTime(), false);
             bidHistory.add(newBid);
+
             return true;
         }
         return false;
     }
-
-
-    public double calculateShippingCost() {
-        double weightValue;
-        String weightUnit;
-        try {
-            // Split the weight string into value and unit
-            String[] parts = weight.split(" ");
-            weightValue = Double.parseDouble(parts[0]);
-            weightUnit = parts[1];
-        } catch (Exception e) {
-            // Handle the case where the weight string is not in the expected format
-            return 0.0;
-        }
-        double costPerKg = 5.0; // Example cost per kg
-        double costPerLb = 2.5; // Example cost per lb
-
-        if (weightUnit.equals("kg")) {
-            return weightValue * costPerKg;
-        } else if (weightUnit.equals("lb")) {
-            return weightValue * costPerLb;
-        } else {
-            return 0.0;
-        }
-    }
-    public double getShippingCost(){
-        return calculateShippingCost();
-    }
-    public void addBid(Bid bid) {
-        bidHistory.add(bid);
-    }
-
-    public ArrayList<Bid> getBidHistory(){
-        return bidHistory;
-    }
-
 
     public boolean hasBidder() {
         return hasBidder;
@@ -203,5 +165,25 @@ public class Item {
 
     public void setHasBidder(boolean hasBidder) {
         this.hasBidder = hasBidder;
+    }
+
+    public double getSellersCommission(double sellersCommissionPercent) {
+        return currentBid * (sellersCommissionPercent / 100);
+    }
+
+    public double getShippingCost() {
+        return 10.00; //FIXME WHAT IS THIS SUPPOSED TO BE? DOES USER SPECIFY??
+    }
+
+    public double getBuyersPremium(double buyersPremiumPercent) {
+        return currentBid * (buyersPremiumPercent / 100);
+    }
+
+    public void addBid(Bid bid) {
+        bidHistory.add(bid);
+    }
+
+    public ArrayList<Bid> getBidHistory(){
+        return bidHistory;
     }
 }
