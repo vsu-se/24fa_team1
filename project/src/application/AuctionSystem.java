@@ -1,5 +1,4 @@
 import java.time.LocalDateTime;
-import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,6 +29,8 @@ public class AuctionSystem {
 
 	public SystemClock getClock() {
 		return clock;
+	}
+	public SystemClock setClock(SystemClock clock) {return this.clock;
 	}
 	
 	public ObservableList<Auction> getAuctions(){

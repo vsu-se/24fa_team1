@@ -93,7 +93,7 @@ public class AuctionSystemController {
                 .orElse(null);
     }
 
-	private void updateConcludedAuctionsDisplay() { //working?? W
+	void updateConcludedAuctionsDisplay() { //working?? W
 		view.getConcludedAuctionsBox().getChildren().clear();
         String selectedCategory = view.getCategoryComboBoxConcludedAuctions().getValue();
         
