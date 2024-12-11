@@ -92,6 +92,7 @@ public class AuctionStatePersistence {
                                     String[] bidData = line.split("\\|");
                                     Auction lastAuction = auctions.get(auctions.size() - 1);
                                     lastAuction.addBid(new Bid(Double.parseDouble(bidData[1]), LocalDateTime.parse(bidData[2]), Boolean.parseBoolean(bidData[3])));
+                                    lastAuction.setHasBidder(true);
                                 } else if (line.startsWith("END_BID_HISTORY")) {
                                     break;
                                 } else {

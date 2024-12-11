@@ -14,6 +14,8 @@ public class MyProfileView {
 	Tab myProfileTab;
     private VBox myProfileItemsBox;
     private AuctionSystemView parentView;
+    private VBox sellerReportBox;
+    private VBox buyerReportBox;
 
 	public MyProfileView(AuctionSystemView parentView) {
 		myProfileTab = generateTab();
@@ -21,11 +23,20 @@ public class MyProfileView {
 	}
 	
 	private Tab generateTab() {
+		
+		buyerReportBox = new VBox(10);
+        ScrollPane buyerReportScrollPane = new ScrollPane(buyerReportBox);
+        buyerReportScrollPane.setFitToWidth(true);
+        
 		myProfileItemsBox = new VBox(10);
         ScrollPane myProfileScrollPane = new ScrollPane(myProfileItemsBox);
         myProfileScrollPane.setFitToWidth(true);
 
-        VBox myProfileContent = new VBox(10, myProfileScrollPane);
+        sellerReportBox = new VBox(10);
+        ScrollPane sellerReportScrollPane = new ScrollPane(sellerReportBox);
+        sellerReportScrollPane.setFitToWidth(true);
+
+        VBox myProfileContent = new VBox(10, myProfileScrollPane, new Label("Seller Report:"), sellerReportScrollPane, new Label("Buyer Report:"), buyerReportBox);
         Tab myProfileTab = new Tab("My Profile", myProfileContent);
         myProfileTab.setClosable(false);
         
@@ -42,5 +53,12 @@ public class MyProfileView {
     
     public AuctionSystemController getController() {
     	return parentView.getController();
-    }    
+    }
+    
+    public VBox getSellerReportBox() {
+        return sellerReportBox;
+    }
+    public VBox getBuyerReportBox() {
+        return buyerReportBox;
+    }
 }

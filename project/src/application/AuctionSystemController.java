@@ -43,6 +43,8 @@ public class AuctionSystemController {
             while (change.next()) {
                 if (change.wasAdded() || change.wasRemoved()) {
                     updateProfileItemsDisplay();
+                    generateSellerReport();
+                    generateBuyerReport();
                 }
             }
         });
@@ -64,6 +66,8 @@ public class AuctionSystemController {
         
         // Initial display update
         updateProfileItemsDisplay();
+        generateSellerReport();
+        generateBuyerReport();
 	}
 	
 	public void setTimer() {
@@ -90,6 +94,8 @@ public class AuctionSystemController {
         Platform.runLater(() -> {
             updateItemsDisplay();
             updateProfileItemsDisplay();
+            generateSellerReport();
+            generateBuyerReport();
             updateConcludedAuctionsDisplay();
         });
         scheduler.scheduleNextUpdate();
@@ -234,6 +240,8 @@ public class AuctionSystemController {
 		updateItemsDisplay();
 		updateProfileItemsDisplay();
 		updateConcludedAuctionsDisplay();
+		this.generateSellerReport();
+		this.generateBuyerReport();
 		clearErrorMessages();
 		system.getClock().setTime(LocalDateTime.now());
         scheduler.scheduleNextUpdate();
@@ -481,6 +489,83 @@ public class AuctionSystemController {
 	public UpdateScheduler getScheduler() {
 		return scheduler;
 	}
+	
+	public void generateSellerReport() {
+        view.getSellerReportBox().getChildren().clear();
+
+        double totalWinningBids = 0;
+        double totalShippingCosts = 0;
+        double totalSellerCommissions = 0;
+        ObservableList<Auction> auctions = getAuctions();
+        auctions.sort((auction1, auction2) -> auction2.getEndDate().compareTo(auction1.getEndDate()));
+
+        for (Auction auction: auctions) {
+            if (!auction.isActive() && auction.hasBidder()) {
+                double winningBid = auction.getCurrentBid();
+                double shippingCost = auction.getShippingCost();
+                double sellersCommission = (winningBid * system.getSellerCommission()) / 100;
+
+                totalWinningBids += winningBid;
+                totalShippingCosts += shippingCost;
+                totalSellerCommissions += sellersCommission;
+
+                HBox itemBox = new HBox(10);
+                itemBox.getChildren().addAll(
+                        new Label("Name: " + auction.getItem().getTitle()),
+                        new Label("Price: $" + winningBid),
+                        new Label("Seller's Commission: $" + system.getSellerCommission()),
+                        new Label("Shipping: $" + shippingCost)
+                );
+                view.getSellerReportBox().getChildren().add(itemBox);
+            }
+        }
+
+        double totalProfits = totalWinningBids - totalSellerCommissions;
+
+        view.getSellerReportBox().getChildren().addAll(
+                new Label("Total Winning Bids: $" + totalWinningBids),
+                new Label("Total Shipping Costs: $" + totalShippingCosts),
+                new Label("Total Seller’s Commissions: $" + totalSellerCommissions),
+                new Label("Total Profits: $" + totalProfits)
+        );
+    }
+	
+	public void generateBuyerReport() {
+        view.getBuyerReportBox().getChildren().clear();
+
+        double totalAmountBought = 0;
+        double totalBuyerPremiumsPaid = 0;
+        double totalShippingCostPaid = 0;
+        ObservableList<Auction> auctions = getAuctions();
+        auctions.sort((auction1, auction2) -> auction2.getEndDate().compareTo(auction1.getEndDate()));
+
+        for (Auction auction : auctions) {
+            if (!auction.isActive() && auction.hasBidder()) {
+                double price = auction.getCurrentBid();
+                double shippingCost = auction.getShippingCost();
+                double buyerPremiumAmount = (price * system.getBuyersPremium()) / 100;
+
+                totalAmountBought += price;
+                totalBuyerPremiumsPaid += buyerPremiumAmount;
+                totalShippingCostPaid += shippingCost;
+
+                HBox itemBox = new HBox(10);
+                itemBox.getChildren().addAll(
+                        new Label("Name: " + auction.getItem().getTitle()),
+                        new Label("Price: $" + price),
+                        new Label("Buyer's Premium: $" + buyerPremiumAmount),
+                        new Label("Shipping: $" + shippingCost)
+                );
+                view.getBuyerReportBox().getChildren().add(itemBox);
+            }
+        }
+
+        view.getBuyerReportBox().getChildren().addAll(
+                new Label("Total Amount Bought: $" + totalAmountBought),
+                new Label("Total Buyer’s Premiums Paid: $" + totalBuyerPremiumsPaid),
+                new Label("Total Shipping Cost Paid: $" + totalShippingCostPaid)
+        );
+    }
 	
 	
 }

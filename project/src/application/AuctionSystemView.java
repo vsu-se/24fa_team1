@@ -3,6 +3,7 @@ package application;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -21,9 +22,9 @@ public class AuctionSystemView extends Application{
 		adminView = new AdminSettingsView(this);
 		userInterfaceView = new UserInterfaceView(this);
 		myProfileView = new MyProfileView(this);
+		SellerReportView sellerReportView = new SellerReportView(this);
 	    controller = new AuctionSystemController(this);
 	}
-  
   
 	@Override
 	public void start(Stage primaryStage) {
@@ -186,4 +187,14 @@ public class AuctionSystemView extends Application{
 	public AuctionSystemController getController(){
 		return controller;
 	}
+
+	public VBox getSellerReportBox() {
+		return myProfileView.getSellerReportBox();
+	}
+
+	public VBox getBuyerReportBox() {
+		return myProfileView.getBuyerReportBox();
+	}
+
+	
 }
