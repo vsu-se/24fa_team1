@@ -11,10 +11,13 @@ import javafx.collections.ObservableList;
 public class AuctionStatePersistence {
 
     private static final String SAVE_FILE_PATH = "system_state.txt";
+    public static boolean canWrite = true;
 
     // Save the state to a text file
     public static void saveState(ObservableList<String> categories, ObservableList<Auction> auctions, double buyersPremium, double sellerCommission) {
-    	System.out.println("SAVE :)");
+    	if(!canWrite) {
+    		return;
+    	}
         try (PrintWriter writer = new PrintWriter(new FileWriter(SAVE_FILE_PATH))) {
 
             // Save categories

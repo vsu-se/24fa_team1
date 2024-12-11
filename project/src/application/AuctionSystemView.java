@@ -16,15 +16,17 @@ public class AuctionSystemView extends Application{
 	private MyProfileView myProfileView;
 	private TabPane tabPane;
 	private int numMyBids = 0;
-  
-  
-	@Override
-	public void start(Stage primaryStage) {
+	
+	public AuctionSystemView() {
 		adminView = new AdminSettingsView(this);
 		userInterfaceView = new UserInterfaceView(this);
 		myProfileView = new MyProfileView(this);
 	    controller = new AuctionSystemController(this);
-        //SystemClock clock = new SystemClock();
+	}
+  
+  
+	@Override
+	public void start(Stage primaryStage) {
 
 		tabPane = generateTabPane(adminView, userInterfaceView, myProfileView);
 		Scene scene = new Scene(tabPane, 1000, 800);

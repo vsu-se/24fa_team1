@@ -5,10 +5,10 @@ import java.util.TimerTask;
 import java.time.LocalDateTime;
 
 public class SystemClock {
-	Timer timer;
-	TimerTask task;
-	LocalDateTime currentTime;
-	boolean isPaused = false;
+	private Timer timer;
+	private TimerTask task;
+	private LocalDateTime currentTime;
+	private boolean isPaused = false;
 	public SystemClock() {
 		timer = new Timer();
 		currentTime = LocalDateTime.now();
@@ -29,6 +29,10 @@ public class SystemClock {
 	
 	public void setTime(LocalDateTime now) {
 		currentTime = now;
+	}
+	
+	public boolean isPaused() {
+		return isPaused;
 	}
 	
 	public void setIsPaused(boolean isPaused) {

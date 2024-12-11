@@ -29,7 +29,12 @@ public class AuctionSystemController {
 	
 	public AuctionSystemController(AuctionSystemView view) {
 		this.view = view;
-		system = AuctionStatePersistence.loadState();
+		if(AuctionStatePersistence.canWrite) {
+			system = AuctionStatePersistence.loadState();
+		}
+		else {
+			system = new AuctionSystem();
+		}
 		updateConcludedAuctionsDisplay();
 		scheduler = new UpdateScheduler(this);
 		
@@ -51,12 +56,9 @@ public class AuctionSystemController {
             updateConcludedAuctionsDisplay();
         });
         
-        // Bind the categories list to the ComboBoxes, THIS PART IS MESSY I KNOW IM SORRY
-        view.getCategoryComboBoxSystemAdmin().setItems(system.getCategories());
-        view.getCategoryComboBoxUserInterface().setItems(system.getCategories());
-        system.getConcludedCategories().add("All Auctions");
-        system.getConcludedCategories().addAll(system.getCategories());
-        view.getCategoryComboBoxConcludedAuctions().setItems(system.getConcludedCategories());
+        
+        // Bind the categories list to the ComboBoxes
+        updateComboBoxes();
         
         setTimer();
         
@@ -193,7 +195,7 @@ public class AuctionSystemController {
             }
             system.setSellerCommission(commissionValue);
             view.getCommissionInput().clear();
-            view.getSellerCommissionLabel().setText(String.format("Buyer's Premium: %.2f", commissionValue) + "%");
+            view.getSellerCommissionLabel().setText(String.format("Seller's Premium: %.2f", commissionValue) + "%");
             view.getCommissionErrorLabel().setText(""); // Clear error message
         } catch (NumberFormatException e) {
             view.getCommissionErrorLabel().setText("Invalid commission value. Please enter a non-negative number.");
@@ -205,6 +207,8 @@ public class AuctionSystemController {
 		clearErrorMessages();
 		try {
             system.getClock().setTime(LocalDateTime.of(date, time));
+            AuctionStatePersistence.saveState(system.getCategories(), system.getAuctions(), system.getBuyersPremium(), system.getSellerCommission());
+    		AuctionStatePersistence.canWrite = false;
             
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             view.getCategoryErrorLabel().setText("Time changed.");
@@ -221,15 +225,25 @@ public class AuctionSystemController {
 	}
 	
 	public void resumeTime() {
+		AuctionStatePersistence.saveState(system.getCategories(), system.getAuctions(), system.getBuyersPremium(), system.getSellerCommission());
+		AuctionStatePersistence.canWrite = true;
+		system = AuctionStatePersistence.loadState();
+		view.getSellerCommissionLabel().setText(String.format("Seller Commission: %.2f", system.getSellerCommission()) + "%");
+		view.getBuyerPremiumLabel().setText(String.format("Buyer's Premium: %.2f", system.getBuyersPremium()) + "%");
+		updateComboBoxes();
+		updateItemsDisplay();
+		updateProfileItemsDisplay();
+		updateConcludedAuctionsDisplay();
 		clearErrorMessages();
 		system.getClock().setTime(LocalDateTime.now());
         scheduler.scheduleNextUpdate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        view.getCategoryErrorLabel().setText("Time resumed. It is now " + system.getClock().getTime().format(formatter));
+        view.getCategoryErrorLabel().setText("Real time resumed.");
         system.getClock().setIsPaused(false);
 	}
 	
 	public void pauseTime() {
+		AuctionStatePersistence.saveState(system.getCategories(), system.getAuctions(), system.getBuyersPremium(), system.getSellerCommission());
+		AuctionStatePersistence.canWrite = false;
 		clearErrorMessages();
         system.getClock().setIsPaused(true);
         view.getCategoryErrorLabel().setText("Time has been paused.");
@@ -250,7 +264,7 @@ public class AuctionSystemController {
         view.getListItemErrorLabel().setText("");
 	}
 	
-	private void updateItemsDisplay() {
+	public void updateItemsDisplay() {
 		system.getAuctions().sort(Comparator.comparing(Auction::getEndDate));
         view.getUserInterfaceItemsBox().getChildren().clear();
         String selectedCategory = view.getCategoryComboBoxUserInterface().getValue();
@@ -305,6 +319,14 @@ public class AuctionSystemController {
                 }
             }
         }
+	}
+	
+	private void updateComboBoxes() {
+		view.getCategoryComboBoxSystemAdmin().setItems(system.getCategories());
+        view.getCategoryComboBoxUserInterface().setItems(system.getCategories());
+        system.getConcludedCategories().add("All Auctions");
+        system.getConcludedCategories().addAll(system.getCategories());
+        view.getCategoryComboBoxConcludedAuctions().setItems(system.getConcludedCategories());
 	}
 
 	private void updateProfileItemsDisplay() {
