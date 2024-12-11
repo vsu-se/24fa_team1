@@ -34,4 +34,7 @@ public class SystemClock {
 	public void setIsPaused(boolean isPaused) {
 		this.isPaused = isPaused;
 	}
+	public boolean isPaused() {
+		return isPaused;
+	}
 }

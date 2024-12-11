@@ -232,7 +232,7 @@ public class AuctionSystemController {
         updateItemsDisplay();
 	}
 
-	private void clearErrorMessages() {
+	void clearErrorMessages() {
 		view.getCategoryErrorLabel().setText("");
         view.getPremiumErrorLabel().setText("");
         view.getCommissionErrorLabel().setText("");

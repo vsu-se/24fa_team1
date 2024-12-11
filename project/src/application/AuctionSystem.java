@@ -30,8 +30,6 @@ public class AuctionSystem {
 	public SystemClock getClock() {
 		return clock;
 	}
-	public SystemClock setClock(SystemClock clock) {return this.clock;
-	}
 	
 	public ObservableList<Auction> getAuctions(){
 		return auctions;
