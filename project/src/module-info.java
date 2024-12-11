@@ -7,7 +7,7 @@ module project {
   
   //exports application;
 	
-	exports test to javafx.graphics;
+	//exports test to javafx.graphics;
 	
 	opens application to javafx.graphics, javafx.fxml;
 }
