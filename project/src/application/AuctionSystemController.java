@@ -183,7 +183,7 @@ public class AuctionSystemController {
             }
             system.setSellerCommission(commissionValue);
             view.getCommissionInput().clear();
-            view.getSellerCommissionLabel().setText(String.format("Buyer's Premium: %.2f", commissionValue) + "%");
+            view.getSellerCommissionLabel().setText(String.format("Seller's Commission: %.2f", commissionValue) + "%");
             view.getCommissionErrorLabel().setText(""); // Clear error message
         } catch (NumberFormatException e) {
             view.getCommissionErrorLabel().setText("Invalid commission value. Please enter a non-negative number.");

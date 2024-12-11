@@ -8,22 +8,26 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class AuctionSystemView extends Application{
-	
+
 	private AuctionSystemController controller;
 	private AdminSettingsView adminView;
 	private UserInterfaceView userInterfaceView;
 	private MyProfileView myProfileView;
 	private TabPane tabPane;
 	private int numMyBids = 0;
-  
-  
-	@Override
-	public void start(Stage primaryStage) {
+
+	public AuctionSystemView(){
 		adminView = new AdminSettingsView(this);
 		userInterfaceView = new UserInterfaceView(this);
 		myProfileView = new MyProfileView(this);
-	    controller = new AuctionSystemController(this);
-        SystemClock clock = new SystemClock();
+		controller = new AuctionSystemController(this);
+	}
+
+  
+	@Override
+	public void start(Stage primaryStage) {
+
+        //SystemClock clock = new SystemClock();
 
 		tabPane = generateTabPane(adminView, userInterfaceView, myProfileView);
 		Scene scene = new Scene(tabPane, 1000, 800);

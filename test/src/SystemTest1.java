@@ -13,48 +13,50 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SystemTest1 {
     private static boolean isJavaFXInitialized = false;
-    private AuctionSystemView auctionSystemView;
-    private AuctionSystemController auctionSystemController;
+    private AuctionSystemView mockView;
+    private AuctionSystemController controller;
+    private AuctionSystem mockSystem;
+
     private ObservableList<String> categories;
 
     @BeforeAll
     public static void initToolkit() throws Exception {
-        if (!isJavaFXInitialized) {
-            CountDownLatch latch = new CountDownLatch(1);
-            Platform.startup(() -> {
-                latch.countDown();
-            });
-            latch.await(5, TimeUnit.SECONDS); // Wait for JavaFX initialization
-            isJavaFXInitialized = true;
-        }
+        CountDownLatch latch = new CountDownLatch(1);
+        Platform.startup(latch::countDown);
+        latch.await(5, TimeUnit.SECONDS);
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
-            categories = FXCollections.observableArrayList();
-            auctionSystemView = new AuctionSystemView();
-            auctionSystemController = new AuctionSystemController(auctionSystemView);
+            // Initialize the AuctionSystemView
+            mockView = new AuctionSystemView();
+
+            // Initialize the controller with the mockView
+            controller = mockView.getController();
+
+            // Normally you would need to start the JavaFX Application thread for this, but for now we'll assume this runs in a test environment that supports JavaFX
             latch.countDown();
         });
-        latch.await(5, TimeUnit.SECONDS); // Wait for JavaFX initialization
+        latch.await(1, TimeUnit.SECONDS);
     }
+
 
     @Test
     public void testAddCategory() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
             String categoryName = "Electronics";
-            auctionSystemView.getCategoryInput().setText(categoryName);
-            auctionSystemView.getAddButton().fire();
+            mockView.getCategoryInput().setText(categoryName);
+            mockView.getAddButton().fire();
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS); // Wait for JavaFX thread to complete
 
-        assertNotNull(auctionSystemController); // Ensure AuctionSystemController is not null
-        assertEquals(1, auctionSystemController.getCategories().size());
-        assertEquals("Electronics", auctionSystemController.getCategories().get(0));
+        assertNotNull(controller); // Ensure controller is not null
+        assertEquals(1, controller.getCategories().size());
+        assertEquals("Electronics", controller.getCategories().get(0));
     }
 
     @Test
@@ -62,28 +64,28 @@ public class SystemTest1 {
         CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
             String categoryName = "Electronics";
-            auctionSystemController.getCategories().add(categoryName);
-            auctionSystemView.getCategoryInput().setText(categoryName);
-            auctionSystemView.getAddButton().fire();
+            controller.getCategories().add(categoryName);
+            mockView.getCategoryInput().setText(categoryName);
+            mockView.getAddButton().fire();
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS); // Wait for JavaFX thread to complete
 
-        assertNotNull(auctionSystemController); // Ensure AuctionSystemController is not null
-        assertEquals(1, auctionSystemController.getCategories().size());
+        assertNotNull(controller); // Ensure controller is not null
+        assertEquals(1, controller.getCategories().size());
     }
 
     @Test
     public void testAddCategoryEmptyName() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
-            auctionSystemView.getCategoryInput().setText("");
-            auctionSystemView.getAddButton().fire();
+            mockView.getCategoryInput().setText("");
+            mockView.getAddButton().fire();
             latch.countDown();
         });
         latch.await(5, TimeUnit.SECONDS); // Wait for JavaFX thread to complete
 
-        assertNotNull(auctionSystemController); // Ensure AuctionSystemController is not null
-        assertEquals(0, auctionSystemController.getCategories().size());
+        assertNotNull(controller); // Ensure controller is not null
+        assertEquals(0, controller.getCategories().size());
     }
 }
