@@ -38,6 +38,7 @@ public class AuctionSystemControllerTest {
 
     @BeforeEach
     public void setUp() throws InterruptedException {
+    	AuctionStatePersistence.canWrite = false;
         CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
             // Initialize the AuctionSystemView
@@ -137,7 +138,7 @@ public class AuctionSystemControllerTest {
     void testCreateAuction()throws InterruptedException {
     	controller.getAuctions().clear();
     	LocalDateTime endDate = LocalDateTime.now().plusDays(1);
-        Auction auction = new Auction(new Item("Laptop", "2.5 kg", "A powerful laptop", "New"), controller.getCategories().get(0), "tag1", "tag2", "tag3", LocalDateTime.now(), endDate, 1500.0, 500.0, controller.getClock());
+        Auction auction = new Auction(new Item("Laptop", "2.5 kg", "A powerful laptop", "New"), "Electronics", "tag1", "tag2", "tag3", LocalDateTime.now(), endDate, 1500.0, 500.0, controller.getClock());
         controller.addAuction(auction);
         
         Auction createdAuction = controller.getAuctions().get(0);
@@ -145,7 +146,7 @@ public class AuctionSystemControllerTest {
         assertEquals("Laptop", createdAuction.getItem().getTitle());
         assertEquals("2.5 kg", createdAuction.getItem().getWeight());
         assertEquals("A powerful laptop", createdAuction.getItem().getDescription());
-        assertEquals(controller.getCategories().get(0), createdAuction.getCategory());
+        assertEquals("Electronics", createdAuction.getCategory());
         assertEquals("New", createdAuction.getItem().getCondition());
         assertEquals("tag1", createdAuction.getTag1());
         assertEquals("tag2", createdAuction.getTag2());
