@@ -1,5 +1,4 @@
 //Previously MainController, should just be the main controller for the system, I will figure out as I go ig
-package application;
 
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;

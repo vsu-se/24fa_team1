@@ -1,5 +1,4 @@
 //Auction should have an Item, a start time, an end date, bid history, etc.
-package application;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

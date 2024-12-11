@@ -1,5 +1,3 @@
-package application;
-
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;

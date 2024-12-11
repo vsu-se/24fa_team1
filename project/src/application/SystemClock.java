@@ -1,5 +1,5 @@
 //Likely unchanged, might even gain a view + controller tho
-package application;
+
 import java.util.Timer;
 import java.util.TimerTask;
 import java.time.LocalDateTime;

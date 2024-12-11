@@ -1,5 +1,4 @@
 //Just holds item specific info
-package application;
 
 import java.time.LocalDateTime;
 

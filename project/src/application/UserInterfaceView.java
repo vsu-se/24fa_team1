@@ -1,5 +1,4 @@
 //This the view with the create item and bid button yk?
-package application;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
