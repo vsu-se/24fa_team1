@@ -329,7 +329,7 @@ public class AuctionSystemController {
         view.getCategoryComboBoxConcludedAuctions().setItems(system.getConcludedCategories());
 	}
 
-	private void updateProfileItemsDisplay() {
+	public void updateProfileItemsDisplay() {
 		view.getMyProfileItemsBox().getChildren().clear();
         for (Auction auction : system.getAuctions()) {
             HBox itemBoxProfile = new HBox(10);

@@ -119,4 +119,9 @@ public class Auction {
 		bidHistory.add(bid);
 		
 	}
+
+	public void setEndDate(LocalDateTime endDate) {
+		this.endDate = endDate;
+		
+	}
 }
