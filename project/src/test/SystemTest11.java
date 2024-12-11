@@ -207,10 +207,6 @@ public class SystemTest11{
         latch.await(5, TimeUnit.SECONDS);
     }
 
-
-
-
-
     @Test
     public void testGenerateSellerReport() throws Exception {
         CountDownLatch testLatch = new CountDownLatch(1);

@@ -26,7 +26,7 @@ public class AdminSettingsEventHandlers {
         		LocalDate date = view.getChangeTimePicker().getValue();
             	String timeString = view.getTimeField().getText();
             	LocalTime time = LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm:ss"));
-                view.getController().changeTime(date, timeString, time);
+                view.getController().changeTime(date, time);
         	}
         	catch(Exception e){
         		view.getController().changeTimeError();

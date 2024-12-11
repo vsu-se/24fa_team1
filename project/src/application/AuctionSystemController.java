@@ -201,7 +201,7 @@ public class AuctionSystemController {
             }
             system.setSellerCommission(commissionValue);
             view.getCommissionInput().clear();
-            view.getSellerCommissionLabel().setText(String.format("Seller's Premium: %.2f", commissionValue) + "%");
+            view.getSellerCommissionLabel().setText(String.format("Seller's Commission: %.2f", commissionValue) + "%");
             view.getCommissionErrorLabel().setText(""); // Clear error message
         } catch (NumberFormatException e) {
             view.getCommissionErrorLabel().setText("Invalid commission value. Please enter a non-negative number.");
@@ -209,7 +209,7 @@ public class AuctionSystemController {
 		AuctionStatePersistence.saveState(system.getCategories(), system.getAuctions(), system.getBuyersPremium(), system.getSellerCommission());
 	}
 	
-	public void changeTime(LocalDate date, String timeString, LocalTime time) {
+	public void changeTime(LocalDate date, LocalTime time) {
 		clearErrorMessages();
 		try {
             system.getClock().setTime(LocalDateTime.of(date, time));
