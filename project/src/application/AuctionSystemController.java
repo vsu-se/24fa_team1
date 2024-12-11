@@ -477,6 +477,10 @@ public class AuctionSystemController {
 	public ObservableList<Auction> getAuctions() {
 		return system.getAuctions();
 	}
+
+	public UpdateScheduler getScheduler() {
+		return scheduler;
+	}
 	
 	
 }
