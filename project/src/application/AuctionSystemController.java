@@ -570,6 +570,10 @@ public class AuctionSystemController {
 	public Double getSellerCommission() {
 		return system.getSellerCommission();
 	}
+
+	public Double getBuyerPremium() {
+		return system.getBuyersPremium();
+	}
 	
 	
 }
