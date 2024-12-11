@@ -23,7 +23,7 @@ public class AuctionSystemView extends Application{
 		userInterfaceView = new UserInterfaceView(this);
 		myProfileView = new MyProfileView(this);
 	    controller = new AuctionSystemController(this);
-        //SystemClock clock = new SystemClock();
+        SystemClock clock = new SystemClock();
 
 		tabPane = generateTabPane(adminView, userInterfaceView, myProfileView);
 		Scene scene = new Scene(tabPane, 1000, 800);
