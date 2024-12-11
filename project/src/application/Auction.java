@@ -80,6 +80,7 @@ public class Auction {
     public boolean placeBid(double bidAmount) {
         if (bidAmount > currentBid) {
             currentBid = bidAmount;
+            hasBidder = true;
             bidHistory.add(new Bid(bidAmount, clock.getTime(), false));
             return true;
         }

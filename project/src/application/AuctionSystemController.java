@@ -566,6 +566,10 @@ public class AuctionSystemController {
                 new Label("Total Shipping Cost Paid: $" + totalShippingCostPaid)
         );
     }
+
+	public Double getSellerCommission() {
+		return system.getSellerCommission();
+	}
 	
 	
 }
